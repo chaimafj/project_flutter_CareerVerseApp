@@ -305,5 +305,17 @@
   "chatLocalPremiumActive": "Votre Premium est actif : tous les labs Avancés sont débloqués.",
   "chatLocalCareersList": "CareerVerse couvre {count} métiers : {list}.",
   "chatLocalThanks": "Avec plaisir ! Bonne chance pour votre orientation 🚀",
-  "chatLocalUnknown": "Je ne suis pas sûr d’avoir compris. Interrogez-moi sur un métier (par exemple Java, Data Science ou Cloud), votre progression ou la suite à faire."
+  "chatLocalUnknown": "Je ne suis pas sûr d’avoir compris. Interrogez-moi sur un métier (par exemple Java, Data Science ou Cloud), votre progression ou la suite à faire.",
+  "escoMoreCareers": "Plus de métiers avec ESCO",
+  "escoMoreCareersDescription": "Découvrez des métiers du catalogue multilingue ESCO de la Commission européenne.",
+  "escoRemoteSource": "Commission européenne · ESCO",
+  "escoNetworkError": "Impossible de charger les métiers depuis ESCO. Vérifiez votre connexion et réessayez.",
+  "escoRetry": "Réessayer",
+  "escoNoResults": "Aucun autre métier trouvé. Essayez une autre recherche.",
+  "escoNoCareerDescription": "Aucune description n’est disponible pour ce métier.",
+  "escoCareerSkills": "Compétences essentielles",
+  "escoOptionalCareerSkills": "Compétences complémentaires",
+  "escoCareerLabsNote": "Les cours et simulations interactives sont actuellement disponibles pour les 9 métiers CareerVerse du catalogue local.",
+  "escoLoadMore": "Charger plus de métiers",
+  "escoOccupationCode": "Code ESCO : {code}"
 }

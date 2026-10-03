@@ -1121,4 +1121,47 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get chatLocalUnknown =>
       'Je ne suis pas sûr d’avoir compris. Interrogez-moi sur un métier (par exemple Java, Data Science ou Cloud), votre progression ou la suite à faire.';
+
+  @override
+  String get escoMoreCareers => 'Plus de métiers avec ESCO';
+
+  @override
+  String get escoMoreCareersDescription =>
+      'Découvrez des métiers du catalogue multilingue ESCO de la Commission européenne.';
+
+  @override
+  String get escoRemoteSource => 'Commission européenne · ESCO';
+
+  @override
+  String get escoNetworkError =>
+      'Impossible de charger les métiers depuis ESCO. Vérifiez votre connexion et réessayez.';
+
+  @override
+  String get escoRetry => 'Réessayer';
+
+  @override
+  String get escoNoResults =>
+      'Aucun autre métier trouvé. Essayez une autre recherche.';
+
+  @override
+  String get escoNoCareerDescription =>
+      'Aucune description n’est disponible pour ce métier.';
+
+  @override
+  String get escoCareerSkills => 'Compétences essentielles';
+
+  @override
+  String get escoOptionalCareerSkills => 'Compétences complémentaires';
+
+  @override
+  String get escoCareerLabsNote =>
+      'Les cours et simulations interactives sont actuellement disponibles pour les 9 métiers CareerVerse du catalogue local.';
+
+  @override
+  String get escoLoadMore => 'Charger plus de métiers';
+
+  @override
+  String escoOccupationCode(String code) {
+    return 'Code ESCO : $code';
+  }
 }

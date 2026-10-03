@@ -10,6 +10,7 @@ import 'screens/career_lab_detail_screen.dart';
 import 'screens/chat_screen.dart';
 import 'screens/course_screen.dart';
 import 'screens/edit_profile_screen.dart';
+import 'screens/esco_career_detail_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/learning_path_screen.dart';
 import 'screens/login_screen.dart';
@@ -53,6 +54,7 @@ class CareerVerseApp extends StatelessWidget {
             '/register': (context) => const RegisterScreen(),
             '/home': (context) => const HomeScreen(),
             '/career': (context) => const CareerLabDetailScreen(),
+            '/esco-career': (context) => const EscoCareerDetailScreen(),
             '/simulation': (context) => const SimulationScreen(),
             '/results': (context) => const ResultsScreen(),
             '/learning-path': (context) => const LearningPathScreen(),

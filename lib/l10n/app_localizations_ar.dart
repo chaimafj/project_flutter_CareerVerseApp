@@ -1112,4 +1112,45 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get chatLocalUnknown =>
       'لست متأكدًا أنني فهمت. اسألني عن مهنة (مثل Java أو علم البيانات أو Cloud)، أو عن تقدّمك، أو عمّا يجب فعله بعد ذلك.';
+
+  @override
+  String get escoMoreCareers => 'مهن إضافية من ESCO';
+
+  @override
+  String get escoMoreCareersDescription =>
+      'اكتشف مهنًا من تصنيف ESCO متعدد اللغات التابع للمفوضية الأوروبية.';
+
+  @override
+  String get escoRemoteSource => 'المفوضية الأوروبية · ESCO';
+
+  @override
+  String get escoNetworkError =>
+      'تعذر تحميل المهن من ESCO. تحقق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get escoRetry => 'إعادة المحاولة';
+
+  @override
+  String get escoNoResults => 'لم يتم العثور على مهن إضافية. جرّب بحثًا آخر.';
+
+  @override
+  String get escoNoCareerDescription => 'لا يوجد وصف متاح لهذه المهنة.';
+
+  @override
+  String get escoCareerSkills => 'المهارات الأساسية';
+
+  @override
+  String get escoOptionalCareerSkills => 'مهارات إضافية';
+
+  @override
+  String get escoCareerLabsNote =>
+      'الدروس والمحاكاة التفاعلية متاحة حاليًا للمهن التسع الموجودة في كتالوج CareerVerse المحلي.';
+
+  @override
+  String get escoLoadMore => 'عرض المزيد من المهن';
+
+  @override
+  String escoOccupationCode(String code) {
+    return 'رمز ESCO: $code';
+  }
 }

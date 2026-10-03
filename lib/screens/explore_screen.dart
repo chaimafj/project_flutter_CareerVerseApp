@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
 import '../l10n/l10n.dart';
 import '../models/career.dart';
+import '../models/esco_occupation.dart';
 import '../providers/app_state.dart';
+import '../services/esco_career_service.dart';
 import '../widgets/career_ui.dart';
 
 const _categories = <String, List<String>>{
@@ -37,14 +41,138 @@ String _categoryLabel(AppLocalizations loc, String key) => switch (key) {
 
 /// "Explore" tab: search careers and browse them by category.
 class CareerExplorerScreen extends StatefulWidget {
-  const CareerExplorerScreen({super.key});
+  const CareerExplorerScreen({super.key, this.escoService});
+
+  final EscoCareerService? escoService;
 
   @override
   State<CareerExplorerScreen> createState() => _CareerExplorerScreenState();
 }
 
 class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
+  late final EscoCareerService _escoService =
+      widget.escoService ?? EscoCareerService();
+  Timer? _searchDebounce;
   String _query = '';
+  String? _searchLanguage;
+  List<EscoOccupation> _escoResults = const [];
+  EscoApiException? _escoError;
+  int _escoTotal = 0;
+  int _escoOffset = 0;
+  bool _isSearchingEsco = false;
+  bool _isLoadingMoreEsco = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final language = Localizations.localeOf(context).languageCode;
+    if (_searchLanguage != language) {
+      _searchLanguage = language;
+      if (_query.trim().length >= 2) {
+        _scheduleEscoSearch(_query, language);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String value) {
+    final hasRemoteQuery = value.trim().length >= 2;
+    setState(() {
+      _query = value;
+      _escoError = null;
+      _escoResults = const [];
+      _isSearchingEsco = hasRemoteQuery;
+      _isLoadingMoreEsco = false;
+      _escoTotal = 0;
+      _escoOffset = 0;
+    });
+    _searchDebounce?.cancel();
+    if (!hasRemoteQuery) return;
+    _scheduleEscoSearch(value, Localizations.localeOf(context).languageCode);
+  }
+
+  void _scheduleEscoSearch(String query, String language) {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 350), () {
+      _searchEsco(query.trim(), language);
+    });
+  }
+
+  Future<void> _searchEsco(
+    String query,
+    String language, {
+    int offset = 0,
+  }) async {
+    setState(() {
+      if (offset == 0) {
+        _isSearchingEsco = true;
+        _escoResults = const [];
+        _escoTotal = 0;
+        _escoOffset = 0;
+      } else {
+        _isLoadingMoreEsco = true;
+      }
+      _escoError = null;
+    });
+    try {
+      final page = await _escoService.search(
+        query: query,
+        languageCode: language,
+        offset: offset,
+      );
+      if (!mounted ||
+          query != _query.trim() ||
+          language != _searchLanguage) {
+        return;
+      }
+      final localTitles = careers.map((career) => career.title.toLowerCase());
+      final existingUris = _escoResults.map((occupation) => occupation.uri);
+      final occupations = [
+        for (final result in page.occupations)
+          if (!localTitles.contains(result.title.toLowerCase()) &&
+              !existingUris.contains(result.uri))
+            result,
+      ];
+      setState(() {
+        _escoResults = [..._escoResults, ...occupations];
+        _escoTotal = page.total;
+        _escoOffset = page.nextOffset;
+        _isSearchingEsco = false;
+        _isLoadingMoreEsco = false;
+      });
+    } on EscoApiException catch (error) {
+      if (!mounted ||
+          query != _query.trim() ||
+          language != _searchLanguage) {
+        return;
+      }
+      setState(() {
+        _escoError = error;
+        _isSearchingEsco = false;
+        _isLoadingMoreEsco = false;
+      });
+    }
+  }
+
+  void _retryEscoSearch() {
+    final query = _query.trim();
+    if (query.length >= 2) {
+      _searchEsco(query, Localizations.localeOf(context).languageCode);
+    }
+  }
+
+  void _loadMoreEsco() {
+    final query = _query.trim();
+    final language = Localizations.localeOf(context).languageCode;
+    if (query.length >= 2 && _escoOffset < _escoTotal) {
+      _searchEsco(query, language, offset: _escoOffset);
+    }
+  }
 
   bool _matchesQuery(Career career) {
     final q = _query.trim().toLowerCase();
@@ -81,7 +209,7 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
                   child: TextField(
                     key: const Key('explore-search'),
-                    onChanged: (value) => setState(() => _query = value),
+                    onChanged: _onSearchChanged,
                     decoration: InputDecoration(
                       hintText: loc.exploreSearchHint,
                       prefixIcon: const Icon(Icons.search, color: mutedInk),
@@ -114,7 +242,10 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
             final list = careers
                 .where((c) => ids.contains(c.id) && _matchesQuery(c))
                 .toList();
-            if (list.isEmpty) {
+            if (list.isEmpty &&
+                _escoResults.isEmpty &&
+                !_isSearchingEsco &&
+                _escoError == null) {
               return Center(
                 child: EmptyState(
                   icon: Icons.search_off,
@@ -123,16 +254,163 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
                 ),
               );
             }
-            return ListView.builder(
+            return ListView(
               padding: const EdgeInsets.all(16),
-              itemCount: list.length,
-              itemBuilder: (context, index) => CareerCard(career: list[index]),
+              children: [
+                for (final career in list) CareerCard(career: career),
+                ..._escoSearchContent(context),
+              ],
             );
           }).toList(),
         ),
       ),
     );
   }
+
+  List<Widget> _escoSearchContent(BuildContext context) {
+    if (_query.trim().length < 2) return const [];
+    final loc = context.l10n;
+    if (_isSearchingEsco) {
+      return [
+        const Padding(
+          key: Key('esco-loading'),
+          padding: EdgeInsets.all(24),
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ];
+    }
+    if (_escoError != null && _escoResults.isEmpty) {
+      return [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            children: [
+              Text(loc.escoNetworkError, textAlign: TextAlign.center),
+              TextButton(
+                key: const Key('esco-retry'),
+                onPressed: _retryEscoSearch,
+                child: Text(loc.escoRetry),
+              ),
+            ],
+          ),
+        ),
+      ];
+    }
+    if (_escoResults.isEmpty) {
+      return [Center(child: Text(loc.escoNoResults))];
+    }
+    final content = <Widget>[
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+        child: Text(
+          loc.escoMoreCareers,
+          style: const TextStyle(
+            color: ink,
+            fontSize: 17,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Text(
+          loc.escoMoreCareersDescription,
+          style: const TextStyle(color: mutedInk, fontSize: 12),
+        ),
+      ),
+      for (final (index, occupation) in _escoResults.indexed)
+        EscoOccupationCard(
+          key: Key('esco-result-$index'),
+          occupation: occupation,
+        ),
+    ];
+    if (_escoError != null) {
+      content.add(
+        Center(
+          child: TextButton(
+            key: const Key('esco-retry'),
+            onPressed: _loadMoreEsco,
+            child: Text(loc.escoRetry),
+          ),
+        ),
+      );
+    } else if (_escoOffset < _escoTotal) {
+      content.add(
+        Center(
+          child: TextButton(
+            key: const Key('esco-load-more'),
+            onPressed: _isLoadingMoreEsco ? null : _loadMoreEsco,
+            child: _isLoadingMoreEsco
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(loc.escoLoadMore),
+          ),
+        ),
+      );
+    }
+    return content;
+  }
+}
+
+class EscoOccupationCard extends StatelessWidget {
+  const EscoOccupationCard({super.key, required this.occupation});
+
+  final EscoOccupation occupation;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () => Navigator.of(
+          context,
+        ).pushNamed('/esco-career', arguments: occupation),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEDE8FF),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: const Icon(Icons.work_outline, color: purple),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      occupation.title,
+                      style: const TextStyle(
+                        color: ink,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      context.l10n.escoRemoteSource,
+                      style: const TextStyle(color: mutedInk, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: mutedInk),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class CareerCard extends StatelessWidget {

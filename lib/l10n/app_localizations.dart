@@ -1935,6 +1935,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I\'m not sure I understood. Ask me about a career (for example Java, Data Science or Cloud), your progress or what to do next.'**
   String get chatLocalUnknown;
+
+  /// No description provided for @escoMoreCareers.
+  ///
+  /// In en, this message translates to:
+  /// **'More careers from ESCO'**
+  String get escoMoreCareers;
+
+  /// No description provided for @escoMoreCareersDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover occupations from the European Commission\'s multilingual ESCO catalogue.'**
+  String get escoMoreCareersDescription;
+
+  /// No description provided for @escoRemoteSource.
+  ///
+  /// In en, this message translates to:
+  /// **'European Commission · ESCO'**
+  String get escoRemoteSource;
+
+  /// No description provided for @escoNetworkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load careers from ESCO. Check your connection and try again.'**
+  String get escoNetworkError;
+
+  /// No description provided for @escoRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get escoRetry;
+
+  /// No description provided for @escoNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No additional careers found. Try another search.'**
+  String get escoNoResults;
+
+  /// No description provided for @escoNoCareerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No description is available for this occupation.'**
+  String get escoNoCareerDescription;
+
+  /// No description provided for @escoCareerSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Essential skills'**
+  String get escoCareerSkills;
+
+  /// No description provided for @escoOptionalCareerSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional skills'**
+  String get escoOptionalCareerSkills;
+
+  /// No description provided for @escoCareerLabsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Courses and interactive labs are currently available for the 9 CareerVerse careers in the local catalogue.'**
+  String get escoCareerLabsNote;
+
+  /// No description provided for @escoLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more careers'**
+  String get escoLoadMore;
+
+  /// No description provided for @escoOccupationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'ESCO code: {code}'**
+  String escoOccupationCode(String code);
 }
 
 class _AppLocalizationsDelegate

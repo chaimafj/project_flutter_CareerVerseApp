@@ -305,5 +305,17 @@
   "chatLocalPremiumActive": "اشتراك Premium مفعّل: جميع المختبرات المتقدمة مفتوحة.",
   "chatLocalCareersList": "يغطي CareerVerse {count} مهن: {list}.",
   "chatLocalThanks": "على الرحب والسعة! بالتوفيق في توجيهك 🚀",
-  "chatLocalUnknown": "لست متأكدًا أنني فهمت. اسألني عن مهنة (مثل Java أو علم البيانات أو Cloud)، أو عن تقدّمك، أو عمّا يجب فعله بعد ذلك."
+  "chatLocalUnknown": "لست متأكدًا أنني فهمت. اسألني عن مهنة (مثل Java أو علم البيانات أو Cloud)، أو عن تقدّمك، أو عمّا يجب فعله بعد ذلك.",
+  "escoMoreCareers": "مهن إضافية من ESCO",
+  "escoMoreCareersDescription": "اكتشف مهنًا من تصنيف ESCO متعدد اللغات التابع للمفوضية الأوروبية.",
+  "escoRemoteSource": "المفوضية الأوروبية · ESCO",
+  "escoNetworkError": "تعذر تحميل المهن من ESCO. تحقق من الاتصال وحاول مرة أخرى.",
+  "escoRetry": "إعادة المحاولة",
+  "escoNoResults": "لم يتم العثور على مهن إضافية. جرّب بحثًا آخر.",
+  "escoNoCareerDescription": "لا يوجد وصف متاح لهذه المهنة.",
+  "escoCareerSkills": "المهارات الأساسية",
+  "escoOptionalCareerSkills": "مهارات إضافية",
+  "escoCareerLabsNote": "الدروس والمحاكاة التفاعلية متاحة حاليًا للمهن التسع الموجودة في كتالوج CareerVerse المحلي.",
+  "escoLoadMore": "عرض المزيد من المهن",
+  "escoOccupationCode": "رمز ESCO: {code}"
 }

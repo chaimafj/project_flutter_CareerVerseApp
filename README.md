@@ -8,7 +8,7 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 - **Cloud sync (Cloud Firestore)**: profile, lab results, recommendation history and notifications are saved to the user's Firestore document, so logging in on another device restores everything.
 - **Editable profile**: name, photo (gallery or camera), study level, university, specialty, bio and interests. The profile screen shows how complete it is, your stats and your top skills.
 - **Career explorer**: search, category tabs (Infrastructure / Development / Security) and detail pages (Hero animation) covering salary, education, outlook, typical day and tools.
-  - Careers covered (9): Cloud Engineer, DevOps Engineer, Backend Developer, Cybersecurity Analyst, Flutter Mobile Developer, Java Developer, Data Scientist, AI / ML Engineer and Frontend Web Developer. Explore categories: Development, Mobile & Web, Data & AI, Infrastructure, Security.
+  - The 9 CareerVerse careers have curated courses and interactive labs. Searching also queries the European Commission's multilingual ESCO API for additional occupations; their official descriptions, occupation codes and essential/optional skills are displayed in a separate profile. Search results are paginated. Existing career discovery and simulations remain available offline.
 - **Real simulations**: each career has 3 labs (Beginner → Advanced) of real scenario questions (single and multi-select). The flow is: select answers → *Check answer* → feedback with explanation → *Next question* / *Finish lab*. A timer runs, and there is an exit confirmation.
 - **Real results**: Lottie animation (success / keep practicing), score ring, correct answers, time, comparison with your previous best, per-skill scores and the updated career match.
   - **Next Lab** opens the next lab of the same career. When a career is finished, it moves on to the best-matching unfinished career.
@@ -26,6 +26,12 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
   - **Gemini (AI)** when a `GEMINI_API_KEY` is configured. The assistant sends your profile, your career matches and the catalog as context.
   - **Offline assistant** (keyword-based, no network) otherwise, or automatically when Gemini fails. Such answers are labelled as offline.
   - Conversations are saved on the device per user (last 60 messages) and can be cleared.
+
+### Dynamic career catalogue (ESCO)
+
+In Explore, searches of at least two characters query the public [ESCO web service](https://esco.ec.europa.eu/en/use-esco/use-esco-services-api/esco-web-service-api) in the selected FR / EN / AR language. Results are debounced, paginated and can be opened to view the occupation description, ESCO code and essential/optional skills. No API key is required. The user's search text is sent to the European Commission's ESCO service.
+
+ESCO profiles do not contain CareerVerse's simulations or salary fields. The 9 built-in careers therefore keep their existing locally authored courses/labs and detailed salary information; additional ESCO occupations are informational profiles only. If the network is unavailable, the 9 local careers remain searchable and usable, while ESCO search displays an error and retry action.
 
 ### Chatbot (Gemini, optional)
 
@@ -124,6 +130,7 @@ lib/
 ├── data/catalog.dart           careers, labs and questions (EN source + translated catalogs)
 ├── data/careers/               career packs (Flutter, Java, Data, AI, Frontend)
 ├── data/courses.dart           course for each lab (EN source, code examples, courseFor())
+├── models/esco_occupation.dart ESCO search results and occupation profiles
 ├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content and
 │                               course translations (courses_fr.dart, courses_ar.dart)
 ├── models/                     Career, Lab, LabQuestion, LabResult, UserProfile, AppNotification,
@@ -131,6 +138,7 @@ lib/
 ├── providers/                  AppState (auth, scoring, recommendations), Theme, Locale,
 │                               ChatProvider (conversation, Gemini → offline fallback)
 ├── services/                   AuthService (Firebase/local), FirestoreService (cloud sync),
+│                               EscoCareerService (dynamic occupation search and profiles),
 │                               PaymentService (Stripe test mode),
 │                               ChatService (Gemini), CareerAssistant (offline chatbot),
 │                               NotificationService (FCM + local notifications),
@@ -159,7 +167,7 @@ flutter test
 flutter build apk --debug   # build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors. Other tests check that results survive an app restart in Hive, that legacy data is migrated, that the Lottie files are valid, and that the flow continues when no interstitial is available. The Firebase sync tests use fake Auth/Firestore services: results are written to the cloud, a second device restores them, data created offline is uploaded, auth errors are mapped, a Google profile is imported, and tapping a notification opens the results. The Premium tests use a fake payment service: Advanced labs stay locked until payment, failed or cancelled payments grant nothing, a second payment extends the period, expired Premium locks labs again, transactions are restored on another device, live Stripe keys are refused, and the paywall flow unlocks and starts the lab. The course tests check that every lab has a course with the same structure in the three languages, that read courses persist, sync and reset, and that the flow learning path → course → summary → lab works. The chatbot tests check the offline assistant in the three languages (recommendations, career salary, next step, progress, unknown questions), the Gemini client with a mocked HTTP server (request, parsing, errors), the fallback to the offline assistant when Gemini fails, per-user persistence, and the chat screen flow.
+The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors. Other tests check that results survive an app restart in Hive, that legacy data is migrated, that the Lottie files are valid, and that the flow continues when no interstitial is available. The Firebase sync tests use fake Auth/Firestore services: results are written to the cloud, a second device restores them, data created offline is uploaded, auth errors are mapped, a Google profile is imported, and tapping a notification opens the results. The Premium tests use a fake payment service: Advanced labs stay locked until payment, failed or cancelled payments grant nothing, a second payment extends the period, expired Premium locks labs again, transactions are restored on another device, live Stripe keys are refused, and the paywall flow unlocks and starts the lab. The course tests check that every lab has a course with the same structure in the three languages, that read courses persist, sync and reset, and that the flow learning path → course → summary → lab works. The chatbot tests check the offline assistant in the three languages (recommendations, career salary, next step, progress, unknown questions), the Gemini client with a mocked HTTP server (request, parsing, errors), the fallback to the offline assistant when Gemini fails, per-user persistence, and the chat screen flow. ESCO tests cover localized search results, occupation descriptions/skills, HTTP and JSON errors, plus searching and opening a dynamic occupation profile.
 
 ## Limitations
 

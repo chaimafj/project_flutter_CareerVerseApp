@@ -1113,4 +1113,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get chatLocalUnknown =>
       'I\'m not sure I understood. Ask me about a career (for example Java, Data Science or Cloud), your progress or what to do next.';
+
+  @override
+  String get escoMoreCareers => 'More careers from ESCO';
+
+  @override
+  String get escoMoreCareersDescription =>
+      'Discover occupations from the European Commission\'s multilingual ESCO catalogue.';
+
+  @override
+  String get escoRemoteSource => 'European Commission · ESCO';
+
+  @override
+  String get escoNetworkError =>
+      'Could not load careers from ESCO. Check your connection and try again.';
+
+  @override
+  String get escoRetry => 'Retry';
+
+  @override
+  String get escoNoResults =>
+      'No additional careers found. Try another search.';
+
+  @override
+  String get escoNoCareerDescription =>
+      'No description is available for this occupation.';
+
+  @override
+  String get escoCareerSkills => 'Essential skills';
+
+  @override
+  String get escoOptionalCareerSkills => 'Optional skills';
+
+  @override
+  String get escoCareerLabsNote =>
+      'Courses and interactive labs are currently available for the 9 CareerVerse careers in the local catalogue.';
+
+  @override
+  String get escoLoadMore => 'Load more careers';
+
+  @override
+  String escoOccupationCode(String code) {
+    return 'ESCO code: $code';
+  }
 }
