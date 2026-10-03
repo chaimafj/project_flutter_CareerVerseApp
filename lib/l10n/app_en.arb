@@ -169,6 +169,8 @@
   "categoryInfrastructure": "Infrastructure",
   "categoryDevelopment": "Development",
   "categorySecurity": "Security",
+  "categoryMobileWeb": "Mobile & Web",
+  "categoryDataAi": "Data & AI",
   "noCareerFound": "No career found",
   "noCareerFoundMessage": "Try another keyword, e.g. \"AWS\" or \"Docker\".",
   "labsProgress": "{done}/{total} labs",

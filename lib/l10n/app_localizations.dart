@@ -610,6 +610,18 @@ abstract class AppLocalizations {
   /// **'Security'**
   String get categorySecurity;
 
+  /// No description provided for @categoryMobileWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile & Web'**
+  String get categoryMobileWeb;
+
+  /// No description provided for @categoryDataAi.
+  ///
+  /// In en, this message translates to:
+  /// **'Data & AI'**
+  String get categoryDataAi;
+
   /// No description provided for @noCareerFound.
   ///
   /// In en, this message translates to:

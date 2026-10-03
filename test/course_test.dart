@@ -1,7 +1,5 @@
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/data/courses.dart';
-import 'package:careerverseapp/l10n/courses_ar.dart';
-import 'package:careerverseapp/l10n/courses_fr.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/screens/learning_path_screen.dart';
 import 'package:careerverseapp/services/local_store.dart';
@@ -23,10 +21,13 @@ void main() {
     final labIds = [
       for (final career in careers) ...career.labs.map((lab) => lab.id),
     ];
-    expect(labIds, hasLength(12));
+    expect(labIds, hasLength(27));
     for (final id in labIds) {
-      final en = coursesEn[id]!;
-      for (final translated in [coursesFr[id]!, coursesAr[id]!]) {
+      final en = coursesByLanguage['en']![id]!;
+      for (final translated in [
+        coursesByLanguage['fr']![id]!,
+        coursesByLanguage['ar']![id]!,
+      ]) {
         expect(translated.labId, id);
         expect(translated.sections.length, en.sections.length, reason: id);
         expect(translated.takeaways.length, en.takeaways.length, reason: id);
@@ -39,7 +40,7 @@ void main() {
           expect(translated.sections[i].body, isNotEmpty);
         }
       }
-      expect(courseExamples[id], hasLength(en.sections.length), reason: id);
+      expect(allCourseExamples[id], hasLength(en.sections.length), reason: id);
     }
   });
 
@@ -47,11 +48,14 @@ void main() {
     addTearDown(() => setCatalogLanguage('en'));
     setCatalogLanguage('fr');
     final course = courseFor('cloud-1')!;
-    expect(course.intro, coursesFr['cloud-1']!.intro);
+    expect(course.intro, coursesByLanguage['fr']!['cloud-1']!.intro);
     expect(course.sections.any((s) => s.example != null), isTrue);
     expect(course.minutes, greaterThanOrEqualTo(3));
     setCatalogLanguage('ar');
-    expect(courseFor('cloud-1')!.intro, coursesAr['cloud-1']!.intro);
+    expect(
+      courseFor('cloud-1')!.intro,
+      coursesByLanguage['ar']!['cloud-1']!.intro,
+    );
     expect(courseFor('unknown'), isNull);
   });
 

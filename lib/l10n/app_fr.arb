@@ -85,6 +85,8 @@
   "categoryInfrastructure": "Infrastructure",
   "categoryDevelopment": "Développement",
   "categorySecurity": "Sécurité",
+  "categoryMobileWeb": "Mobile & Web",
+  "categoryDataAi": "Data & IA",
   "noCareerFound": "Aucun métier trouvé",
   "noCareerFoundMessage": "Essayez un autre mot-clé, par ex. « AWS » ou « Docker ».",
   "labsProgress": "{done}/{total} labs",

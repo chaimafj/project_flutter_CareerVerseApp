@@ -8,15 +8,29 @@ import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 
 const _categories = <String, List<String>>{
-  'All': ['cloud', 'devops', 'backend', 'cyber'],
+  'All': [
+    'cloud',
+    'devops',
+    'backend',
+    'cyber',
+    'flutter',
+    'java',
+    'frontend',
+    'data',
+    'ai',
+  ],
+  'Development': ['backend', 'java', 'flutter', 'frontend'],
+  'Mobile & Web': ['flutter', 'frontend'],
+  'Data & AI': ['data', 'ai'],
   'Infrastructure': ['cloud', 'devops'],
-  'Development': ['backend', 'devops'],
   'Security': ['cyber', 'cloud'],
 };
 
 String _categoryLabel(AppLocalizations loc, String key) => switch (key) {
   'Infrastructure' => loc.categoryInfrastructure,
   'Development' => loc.categoryDevelopment,
+  'Mobile & Web' => loc.categoryMobileWeb,
+  'Data & AI' => loc.categoryDataAi,
   'Security' => loc.categorySecurity,
   _ => loc.all,
 };

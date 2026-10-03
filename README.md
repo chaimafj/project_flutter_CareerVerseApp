@@ -8,13 +8,13 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 - **Cloud sync (Cloud Firestore)**: profile, lab results, recommendation history and notifications are saved to the user's Firestore document, so logging in on another device restores everything.
 - **Editable profile**: name, photo (gallery or camera), study level, university, specialty, bio and interests. The profile screen shows how complete it is, your stats and your top skills.
 - **Career explorer**: search, category tabs (Infrastructure / Development / Security) and detail pages (Hero animation) covering salary, education, outlook, typical day and tools.
-  - Careers covered: Cloud Engineer, DevOps Engineer, Backend Developer and Cybersecurity Analyst.
+  - Careers covered (9): Cloud Engineer, DevOps Engineer, Backend Developer, Cybersecurity Analyst, Flutter Mobile Developer, Java Developer, Data Scientist, AI / ML Engineer and Frontend Web Developer. Explore categories: Development, Mobile & Web, Data & AI, Infrastructure, Security.
 - **Real simulations**: each career has 3 labs (Beginner → Advanced) of real scenario questions (single and multi-select). The flow is: select answers → *Check answer* → feedback with explanation → *Next question* / *Finish lab*. A timer runs, and there is an exit confirmation.
 - **Real results**: Lottie animation (success / keep practicing), score ring, correct answers, time, comparison with your previous best, per-skill scores and the updated career match.
   - **Next Lab** opens the next lab of the same career. When a career is finished, it moves on to the best-matching unfinished career.
 - **Recommendations**: the top match, all matches with explanations, and a history of past recommendations.
 - **Progress & learning path**: completed labs per career, skill averages, full attempt history and a timeline for each career.
-- **Courses before every lab**: each step of the learning path is *Course → Lab*. The 12 courses (FR/EN/AR) have an introduction, 3 lessons (explanation, key points and a code or command example) and a summary. "Finish and start the lab" marks the course as read and opens the lab. The course can be reopened from the career detail or the results screen. Read courses are saved offline (Hive) and in Firestore (`users/{uid}/courses`).
+- **Courses before every lab**: each step of the learning path is *Course → Lab*. The 27 courses (FR/EN/AR) have an introduction, 3 lessons (explanation, key points and a code or command example) and a summary. "Finish and start the lab" marks the course as read and opens the lab. The course can be reopened from the career detail or the results screen. Read courses are saved offline (Hive) and in Firestore (`users/{uid}/courses`).
 - **Notifications center**: finishing a lab creates "Your recommendations are ready!". Tapping it opens the matching results. Notifications can be marked as read or cleared.
 - **Push notifications (firebase_messaging)**: received in the foreground (shown as a local notification) and in the background. Finishing a lab also shows a system notification; tapping any notification opens the related results screen. Push can be turned off in Settings.
 - **Settings**: light/dark theme, FR / EN / AR languages with RTL support, reset progress and logout. All of these are saved with SharedPreferences.
@@ -85,6 +85,7 @@ On iOS, Stripe requires iOS 13+ (already required by Firebase).
 
 - Interface strings come from Flutter `gen-l10n`: `lib/l10n/app_en.arb` (template), `app_fr.arb` and `app_ar.arb`. They are accessed with `context.l10n.key`, and plurals use ICU syntax.
 - Career content is written in English in `data/catalog.dart`. It is translated through `lib/l10n/content_fr.dart` and `content_ar.dart`, and `setCatalogLanguage()` selects the active catalog.
+- Newer careers are self-contained `CareerPack`s in `data/careers/<id>_career.dart` (career, interests, FR/AR translations, courses and examples), registered in `careerPacks` (`catalog.dart`). To add a career, write a pack, add it to `careerPacks` and to an Explore category, and add a test calling `checkCareerPack()`.
 - Stored values (skills, levels, interests) stay in English and are displayed with `tc()`, so results remain valid after a language change.
 - To add a string, add it to all three ARB files, then run `flutter gen-l10n` (or `flutter pub get`).
 
@@ -101,6 +102,7 @@ On iOS, Stripe requires iOS 13+ (already required by Firebase).
 lib/
 ├── main.dart / app.dart        providers + named routes
 ├── data/catalog.dart           careers, labs and questions (EN source + translated catalogs)
+├── data/careers/               career packs (Flutter, Java, Data, AI, Frontend)
 ├── data/courses.dart           course for each lab (EN source, code examples, courseFor())
 ├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content and
 │                               course translations (courses_fr.dart, courses_ar.dart)

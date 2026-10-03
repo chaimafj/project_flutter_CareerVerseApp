@@ -295,6 +295,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get categorySecurity => 'Sécurité';
 
   @override
+  String get categoryMobileWeb => 'Mobile & Web';
+
+  @override
+  String get categoryDataAi => 'Data & IA';
+
+  @override
   String get noCareerFound => 'Aucun métier trouvé';
 
   @override

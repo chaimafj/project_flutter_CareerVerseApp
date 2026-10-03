@@ -288,6 +288,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categorySecurity => 'الأمن';
 
   @override
+  String get categoryMobileWeb => 'الجوال والويب';
+
+  @override
+  String get categoryDataAi => 'البيانات والذكاء الاصطناعي';
+
+  @override
   String get noCareerFound => 'لم يتم العثور على مهنة';
 
   @override

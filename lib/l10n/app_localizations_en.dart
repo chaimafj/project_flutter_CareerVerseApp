@@ -290,6 +290,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categorySecurity => 'Security';
 
   @override
+  String get categoryMobileWeb => 'Mobile & Web';
+
+  @override
+  String get categoryDataAi => 'Data & AI';
+
+  @override
   String get noCareerFound => 'No career found';
 
   @override

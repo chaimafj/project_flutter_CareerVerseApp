@@ -816,10 +816,16 @@ const courseExamples = <String, List<String?>>{
   ],
 };
 
-const _coursesByLanguage = <String, Map<String, Course>>{
-  'en': coursesEn,
-  'fr': coursesFr,
-  'ar': coursesAr,
+/// Courses by language: the base courses plus those of every career pack.
+final coursesByLanguage = <String, Map<String, Course>>{
+  'en': {...coursesEn, for (final pack in careerPacks) ...pack.coursesEn},
+  'fr': {...coursesFr, for (final pack in careerPacks) ...pack.coursesFr},
+  'ar': {...coursesAr, for (final pack in careerPacks) ...pack.coursesAr},
+};
+
+final allCourseExamples = <String, List<String?>>{
+  ...courseExamples,
+  for (final pack in careerPacks) ...pack.courseExamples,
 };
 
 final _resolved = <String, Course?>{};
@@ -829,9 +835,10 @@ final _resolved = <String, Course?>{};
 Course? courseFor(String labId) =>
     _resolved.putIfAbsent('$catalogLanguage/$labId', () {
       final course =
-          _coursesByLanguage[catalogLanguage]?[labId] ?? coursesEn[labId];
+          coursesByLanguage[catalogLanguage]?[labId] ??
+          coursesByLanguage['en']![labId];
       if (course == null) return null;
-      final examples = courseExamples[labId] ?? const [];
+      final examples = allCourseExamples[labId] ?? const [];
       return Course(
         labId: course.labId,
         intro: course.intro,

@@ -85,6 +85,8 @@
   "categoryInfrastructure": "البنية التحتية",
   "categoryDevelopment": "التطوير",
   "categorySecurity": "الأمن",
+  "categoryMobileWeb": "الجوال والويب",
+  "categoryDataAi": "البيانات والذكاء الاصطناعي",
   "noCareerFound": "لم يتم العثور على مهنة",
   "noCareerFoundMessage": "جرّب كلمة أخرى، مثل \"AWS\" أو \"Docker\".",
   "labsProgress": "{done}/{total} مختبرات",

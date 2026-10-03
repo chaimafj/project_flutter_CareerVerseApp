@@ -1,6 +1,4 @@
 import 'package:careerverseapp/data/catalog.dart';
-import 'package:careerverseapp/l10n/content_ar.dart';
-import 'package:careerverseapp/l10n/content_fr.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/services/local_store.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +33,14 @@ void main() {
 
   test('all career content is translated in French and Arabic', () {
     final content = englishContent();
-    expect(content.where((s) => !contentFr.containsKey(s)), isEmpty);
-    expect(content.where((s) => !contentAr.containsKey(s)), isEmpty);
+    expect(
+      content.where((s) => !catalogTranslations['fr']!.containsKey(s)),
+      isEmpty,
+    );
+    expect(
+      content.where((s) => !catalogTranslations['ar']!.containsKey(s)),
+      isEmpty,
+    );
   });
 
   test('catalog follows the selected language', () {
@@ -44,13 +48,13 @@ void main() {
     final english = careers.first;
     setCatalogLanguage('fr');
     expect(careers.first.id, english.id);
-    expect(careers.first.title, contentFr[english.title]);
+    expect(careers.first.title, catalogTranslations['fr']![english.title]);
     expect(
       careers.first.labs.first.questions.first.prompt,
-      contentFr[english.labs.first.questions.first.prompt],
+      catalogTranslations['fr']![english.labs.first.questions.first.prompt],
     );
     setCatalogLanguage('ar');
-    expect(careers.first.title, contentAr[english.title]);
+    expect(careers.first.title, catalogTranslations['ar']![english.title]);
   });
 
   testWidgets('app is displayed in French', (tester) async {

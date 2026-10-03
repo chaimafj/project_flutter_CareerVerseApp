@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import '../l10n/content_ar.dart';
 import '../l10n/content_fr.dart';
 import '../models/career.dart';
+import '../models/career_pack.dart';
+import 'careers/ai_career.dart';
+import 'careers/data_career.dart';
+import 'careers/flutter_career.dart';
+import 'careers/frontend_career.dart';
+import 'careers/java_career.dart';
 
 /// Career catalog used by the whole app. Salaries are indicative gross yearly
 /// ranges for France (junior → confirmed), based on public job-market surveys.
-const _careersEn = <Career>[
+const _baseCareersEn = <Career>[
   Career(
     id: 'cloud',
     title: 'Cloud Engineer',
@@ -806,6 +812,20 @@ const _careersEn = <Career>[
   ),
 ];
 
+/// Careers defined as self-contained packs (career, translations, courses).
+const careerPacks = <CareerPack>[
+  flutterPack,
+  javaPack,
+  dataPack,
+  aiPack,
+  frontendPack,
+];
+
+final _careersEn = <Career>[
+  ..._baseCareersEn,
+  for (final pack in careerPacks) pack.career,
+];
+
 const allInterests = [
   'Cloud',
   'DevOps',
@@ -817,6 +837,9 @@ const allInterests = [
   'Problem solving',
   'Teamwork',
   'Design',
+  'Mobile',
+  'Web',
+  'AI',
 ];
 
 const studyLevels = [
@@ -830,17 +853,21 @@ const studyLevels = [
 ];
 
 /// Interests that make a user naturally fit each career.
-const careerInterests = <String, List<String>>{
+final careerInterests = <String, List<String>>{
   'cloud': ['Cloud', 'Networks', 'Automation', 'Problem solving'],
   'devops': ['DevOps', 'Automation', 'Cloud', 'Teamwork'],
   'backend': ['Programming', 'Data', 'Problem solving', 'Design'],
   'cyber': ['Security', 'Networks', 'Problem solving', 'Data'],
+  for (final pack in careerPacks) pack.career.id: pack.interests,
 };
 
-const _translations = <String, Map<String, String>>{
-  'fr': contentFr,
-  'ar': contentAr,
+/// Catalog translations by language: the base content plus every pack.
+final catalogTranslations = <String, Map<String, String>>{
+  'fr': {...contentFr, for (final pack in careerPacks) ...pack.contentFr},
+  'ar': {...contentAr, for (final pack in careerPacks) ...pack.contentAr},
 };
+
+Map<String, Map<String, String>> get _translations => catalogTranslations;
 
 String _language = 'en';
 final _localizedCatalogs = <String, List<Career>>{};
