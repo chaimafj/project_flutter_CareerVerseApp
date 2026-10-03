@@ -649,5 +649,226 @@
         "type": "int"
       }
     }
-  }
+  },
+  "chatTitle": "CareerVerse Assistant",
+  "chatShort": "Assistant",
+  "chatModeAi": "AI · Gemini",
+  "chatModeLocal": "Offline assistant",
+  "chatHint": "Ask about careers, labs, your progress…",
+  "chatWelcome": "Hi {name}! I'm your career assistant. Ask me which career suits you, what a job pays, or what to do next.",
+  "@chatWelcome": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSuggestRecommend": "Which career suits me?",
+  "chatSuggestNext": "What should I do next?",
+  "chatSuggestProgress": "How am I doing?",
+  "chatSuggestCareer": "Tell me about the Data Scientist job",
+  "chatClear": "Clear conversation",
+  "chatThinking": "Thinking…",
+  "chatFallbackNotice": "Gemini is unavailable: answer from the offline assistant.",
+  "chatSend": "Send",
+  "chatOpenCareer": "Open {career}",
+  "@chatOpenCareer": {
+    "placeholders": {
+      "career": {
+        "type": "String"
+      }
+    }
+  },
+  "chatStartLab": "Start: {lab}",
+  "@chatStartLab": {
+    "placeholders": {
+      "lab": {
+        "type": "String"
+      }
+    }
+  },
+  "chatReadCourse": "Course: {course}",
+  "@chatReadCourse": {
+    "placeholders": {
+      "course": {
+        "type": "String"
+      }
+    }
+  },
+  "chatOpenRecommendations": "My recommendations",
+  "chatOpenPremium": "See Premium",
+  "chatLocalGreeting": "Hello {name}! 👋 How can I help you with your career orientation?",
+  "@chatLocalGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalHelp": "I can recommend careers for your profile, describe a career (salary, skills, studies, outlook), tell you how you are doing and suggest your next course or lab. Try one of the suggestions below.",
+  "chatLocalRecommendIntro": "Based on your interests and lab results, here are your best matches:",
+  "chatLocalRecommendLine": "{rank}. {career}: {score}% match",
+  "@chatLocalRecommendLine": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      },
+      "career": {
+        "type": "String"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "chatLocalRecommendTip": "Do a lab in each career to make these results more accurate.",
+  "chatLocalProgress": "You have completed {done} of {total} labs ({minutes} min of practice).",
+  "@chatLocalProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "chatLocalAverage": "Your average score is {score}%.",
+  "@chatLocalAverage": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "chatLocalStrongest": "Your strongest skill: {skill}.",
+  "@chatLocalStrongest": {
+    "placeholders": {
+      "skill": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalNoProgress": "You haven't completed a lab yet. Let's start with one!",
+  "chatLocalNextCourse": "Next step in {career}: read the course “{course}”, then do its lab.",
+  "@chatLocalNextCourse": {
+    "placeholders": {
+      "course": {
+        "type": "String"
+      },
+      "career": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalNextLab": "Next step in {career}: start the lab “{lab}”.",
+  "@chatLocalNextLab": {
+    "placeholders": {
+      "lab": {
+        "type": "String"
+      },
+      "career": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalPathDone": "You have completed every lab of {career}! Try another career to compare.",
+  "@chatLocalPathDone": {
+    "placeholders": {
+      "career": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalSalary": "Average salary for {career}: {salary}.",
+  "@chatLocalSalary": {
+    "placeholders": {
+      "career": {
+        "type": "String"
+      },
+      "salary": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalTools": "Key tools: {tools}.",
+  "@chatLocalTools": {
+    "placeholders": {
+      "tools": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalSkills": "Skills tested in the labs: {skills}.",
+  "@chatLocalSkills": {
+    "placeholders": {
+      "skills": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalEducation": "Studies: {education}",
+  "@chatLocalEducation": {
+    "placeholders": {
+      "education": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalOutlook": "Outlook: {outlook}",
+  "@chatLocalOutlook": {
+    "placeholders": {
+      "outlook": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalLabs": "{count} labs to practise (Beginner → Advanced), each with a course.",
+  "@chatLocalLabs": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatLocalDaily": "A typical day: {tasks}.",
+  "@chatLocalDaily": {
+    "placeholders": {
+      "tasks": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalCareerProgress": "Your progress: {done}/{total} labs, average {score}%.",
+  "@chatLocalCareerProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "chatLocalPremium": "Premium unlocks the Advanced labs of every career. Payment uses Stripe in test mode (card 4242 4242 4242 4242, no real charge).",
+  "chatLocalPremiumActive": "Your Premium is active: all Advanced labs are unlocked.",
+  "chatLocalCareersList": "CareerVerse covers {count} careers: {list}.",
+  "@chatLocalCareersList": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "chatLocalThanks": "You're welcome! Good luck with your orientation 🚀",
+  "chatLocalUnknown": "I'm not sure I understood. Ask me about a career (for example Java, Data Science or Cloud), your progress or what to do next."
 }

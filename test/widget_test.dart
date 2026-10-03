@@ -1,5 +1,7 @@
 import 'package:careerverseapp/app.dart';
 import 'package:careerverseapp/data/catalog.dart';
+import 'package:careerverseapp/providers/chat_provider.dart';
+import 'package:careerverseapp/services/chat_service.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/providers/locale_provider.dart';
 import 'package:careerverseapp/providers/theme_provider.dart';
@@ -35,6 +37,7 @@ Widget buildApp(
   SharedPreferences prefs,
   AppState appState, {
   PaymentService payments = const UnavailablePaymentService(),
+  ChatService chat = const UnavailableChatService(),
 }) => MultiProvider(
   providers: [
     Provider.value(value: AdService(enabled: false)),
@@ -49,6 +52,7 @@ Widget buildApp(
     ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
     ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
     ChangeNotifierProvider.value(value: appState),
+    ChangeNotifierProvider(create: (_) => ChatProvider(prefs, service: chat)),
   ],
   child: const CareerVerseApp(),
 );

@@ -931,4 +931,185 @@ class AppLocalizationsAr extends AppLocalizations {
   String coursesDone(int done, int total) {
     return '$done/$total دروس مقروءة';
   }
+
+  @override
+  String get chatTitle => 'مساعد CareerVerse';
+
+  @override
+  String get chatShort => 'المساعد';
+
+  @override
+  String get chatModeAi => 'ذكاء اصطناعي · Gemini';
+
+  @override
+  String get chatModeLocal => 'مساعد دون اتصال';
+
+  @override
+  String get chatHint => 'اسأل عن المهن أو المختبرات أو تقدّمك…';
+
+  @override
+  String chatWelcome(String name) {
+    return 'مرحبًا $name! أنا مساعدك في التوجيه المهني. اسألني عن المهنة التي تناسبك، أو عن راتب مهنة ما، أو عمّا يجب فعله بعد ذلك.';
+  }
+
+  @override
+  String get chatSuggestRecommend => 'ما المهنة التي تناسبني؟';
+
+  @override
+  String get chatSuggestNext => 'ماذا أفعل بعد ذلك؟';
+
+  @override
+  String get chatSuggestProgress => 'كيف هو تقدّمي؟';
+
+  @override
+  String get chatSuggestCareer => 'حدّثني عن مهنة عالم البيانات';
+
+  @override
+  String get chatClear => 'مسح المحادثة';
+
+  @override
+  String get chatThinking => 'جارٍ التفكير…';
+
+  @override
+  String get chatFallbackNotice =>
+      'Gemini غير متاح: الإجابة من المساعد دون اتصال.';
+
+  @override
+  String get chatSend => 'إرسال';
+
+  @override
+  String chatOpenCareer(String career) {
+    return 'فتح $career';
+  }
+
+  @override
+  String chatStartLab(String lab) {
+    return 'ابدأ: $lab';
+  }
+
+  @override
+  String chatReadCourse(String course) {
+    return 'الدرس: $course';
+  }
+
+  @override
+  String get chatOpenRecommendations => 'توصياتي';
+
+  @override
+  String get chatOpenPremium => 'عرض Premium';
+
+  @override
+  String chatLocalGreeting(String name) {
+    return 'مرحبًا $name! 👋 كيف يمكنني مساعدتك في توجيهك المهني؟';
+  }
+
+  @override
+  String get chatLocalHelp =>
+      'يمكنني أن أوصي بمهن تناسب ملفك، وأن أصف مهنة (الراتب، المهارات، الدراسة، الآفاق)، وأن أخبرك بتقدّمك وأقترح درسك أو مختبرك التالي. جرّب أحد الاقتراحات أدناه.';
+
+  @override
+  String get chatLocalRecommendIntro =>
+      'بناءً على اهتماماتك ونتائجك في المختبرات، هذه أفضل المهن المناسبة لك:';
+
+  @override
+  String chatLocalRecommendLine(int rank, String career, int score) {
+    return '$rank. $career: توافق $score%';
+  }
+
+  @override
+  String get chatLocalRecommendTip =>
+      'أنجز مختبرًا في كل مهنة لتصبح هذه النتائج أدق.';
+
+  @override
+  String chatLocalProgress(int done, int total, int minutes) {
+    return 'أكملت $done من $total مختبرات ($minutes دقيقة من التدريب).';
+  }
+
+  @override
+  String chatLocalAverage(int score) {
+    return 'متوسط نتيجتك $score%.';
+  }
+
+  @override
+  String chatLocalStrongest(String skill) {
+    return 'أقوى مهاراتك: $skill.';
+  }
+
+  @override
+  String get chatLocalNoProgress => 'لم تُكمل أي مختبر بعد. لنبدأ بواحد!';
+
+  @override
+  String chatLocalNextCourse(String course, String career) {
+    return 'الخطوة التالية في $career: اقرأ الدرس «$course» ثم أنجز مختبره.';
+  }
+
+  @override
+  String chatLocalNextLab(String lab, String career) {
+    return 'الخطوة التالية في $career: ابدأ المختبر «$lab».';
+  }
+
+  @override
+  String chatLocalPathDone(String career) {
+    return 'أكملت جميع مختبرات $career! جرّب مهنة أخرى للمقارنة.';
+  }
+
+  @override
+  String chatLocalSalary(String career, String salary) {
+    return 'متوسط الراتب لمهنة $career: $salary.';
+  }
+
+  @override
+  String chatLocalTools(String tools) {
+    return 'الأدوات الأساسية: $tools.';
+  }
+
+  @override
+  String chatLocalSkills(String skills) {
+    return 'المهارات المقيَّمة في المختبرات: $skills.';
+  }
+
+  @override
+  String chatLocalEducation(String education) {
+    return 'الدراسة: $education';
+  }
+
+  @override
+  String chatLocalOutlook(String outlook) {
+    return 'الآفاق: $outlook';
+  }
+
+  @override
+  String chatLocalLabs(int count) {
+    return '$count مختبرات للتدرّب (مبتدئ ← متقدم)، ولكل منها درس.';
+  }
+
+  @override
+  String chatLocalDaily(String tasks) {
+    return 'يوم نموذجي: $tasks.';
+  }
+
+  @override
+  String chatLocalCareerProgress(int done, int total, int score) {
+    return 'تقدّمك: $done/$total مختبرات، بمتوسط $score%.';
+  }
+
+  @override
+  String get chatLocalPremium =>
+      'يفتح Premium المختبرات المتقدمة لكل المهن. يتم الدفع عبر Stripe في وضع الاختبار (البطاقة 4242 4242 4242 4242، دون أي خصم حقيقي).';
+
+  @override
+  String get chatLocalPremiumActive =>
+      'اشتراك Premium مفعّل: جميع المختبرات المتقدمة مفتوحة.';
+
+  @override
+  String chatLocalCareersList(int count, String list) {
+    return 'يغطي CareerVerse $count مهن: $list.';
+  }
+
+  @override
+  String get chatLocalThanks => 'على الرحب والسعة! بالتوفيق في توجيهك 🚀';
+
+  @override
+  String get chatLocalUnknown =>
+      'لست متأكدًا أنني فهمت. اسألني عن مهنة (مثل Java أو علم البيانات أو Cloud)، أو عن تقدّمك، أو عمّا يجب فعله بعد ذلك.';
 }

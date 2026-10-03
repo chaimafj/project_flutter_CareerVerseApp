@@ -930,4 +930,187 @@ class AppLocalizationsEn extends AppLocalizations {
   String coursesDone(int done, int total) {
     return '$done/$total courses read';
   }
+
+  @override
+  String get chatTitle => 'CareerVerse Assistant';
+
+  @override
+  String get chatShort => 'Assistant';
+
+  @override
+  String get chatModeAi => 'AI · Gemini';
+
+  @override
+  String get chatModeLocal => 'Offline assistant';
+
+  @override
+  String get chatHint => 'Ask about careers, labs, your progress…';
+
+  @override
+  String chatWelcome(String name) {
+    return 'Hi $name! I\'m your career assistant. Ask me which career suits you, what a job pays, or what to do next.';
+  }
+
+  @override
+  String get chatSuggestRecommend => 'Which career suits me?';
+
+  @override
+  String get chatSuggestNext => 'What should I do next?';
+
+  @override
+  String get chatSuggestProgress => 'How am I doing?';
+
+  @override
+  String get chatSuggestCareer => 'Tell me about the Data Scientist job';
+
+  @override
+  String get chatClear => 'Clear conversation';
+
+  @override
+  String get chatThinking => 'Thinking…';
+
+  @override
+  String get chatFallbackNotice =>
+      'Gemini is unavailable: answer from the offline assistant.';
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String chatOpenCareer(String career) {
+    return 'Open $career';
+  }
+
+  @override
+  String chatStartLab(String lab) {
+    return 'Start: $lab';
+  }
+
+  @override
+  String chatReadCourse(String course) {
+    return 'Course: $course';
+  }
+
+  @override
+  String get chatOpenRecommendations => 'My recommendations';
+
+  @override
+  String get chatOpenPremium => 'See Premium';
+
+  @override
+  String chatLocalGreeting(String name) {
+    return 'Hello $name! 👋 How can I help you with your career orientation?';
+  }
+
+  @override
+  String get chatLocalHelp =>
+      'I can recommend careers for your profile, describe a career (salary, skills, studies, outlook), tell you how you are doing and suggest your next course or lab. Try one of the suggestions below.';
+
+  @override
+  String get chatLocalRecommendIntro =>
+      'Based on your interests and lab results, here are your best matches:';
+
+  @override
+  String chatLocalRecommendLine(int rank, String career, int score) {
+    return '$rank. $career: $score% match';
+  }
+
+  @override
+  String get chatLocalRecommendTip =>
+      'Do a lab in each career to make these results more accurate.';
+
+  @override
+  String chatLocalProgress(int done, int total, int minutes) {
+    return 'You have completed $done of $total labs ($minutes min of practice).';
+  }
+
+  @override
+  String chatLocalAverage(int score) {
+    return 'Your average score is $score%.';
+  }
+
+  @override
+  String chatLocalStrongest(String skill) {
+    return 'Your strongest skill: $skill.';
+  }
+
+  @override
+  String get chatLocalNoProgress =>
+      'You haven\'t completed a lab yet. Let\'s start with one!';
+
+  @override
+  String chatLocalNextCourse(String course, String career) {
+    return 'Next step in $career: read the course “$course”, then do its lab.';
+  }
+
+  @override
+  String chatLocalNextLab(String lab, String career) {
+    return 'Next step in $career: start the lab “$lab”.';
+  }
+
+  @override
+  String chatLocalPathDone(String career) {
+    return 'You have completed every lab of $career! Try another career to compare.';
+  }
+
+  @override
+  String chatLocalSalary(String career, String salary) {
+    return 'Average salary for $career: $salary.';
+  }
+
+  @override
+  String chatLocalTools(String tools) {
+    return 'Key tools: $tools.';
+  }
+
+  @override
+  String chatLocalSkills(String skills) {
+    return 'Skills tested in the labs: $skills.';
+  }
+
+  @override
+  String chatLocalEducation(String education) {
+    return 'Studies: $education';
+  }
+
+  @override
+  String chatLocalOutlook(String outlook) {
+    return 'Outlook: $outlook';
+  }
+
+  @override
+  String chatLocalLabs(int count) {
+    return '$count labs to practise (Beginner → Advanced), each with a course.';
+  }
+
+  @override
+  String chatLocalDaily(String tasks) {
+    return 'A typical day: $tasks.';
+  }
+
+  @override
+  String chatLocalCareerProgress(int done, int total, int score) {
+    return 'Your progress: $done/$total labs, average $score%.';
+  }
+
+  @override
+  String get chatLocalPremium =>
+      'Premium unlocks the Advanced labs of every career. Payment uses Stripe in test mode (card 4242 4242 4242 4242, no real charge).';
+
+  @override
+  String get chatLocalPremiumActive =>
+      'Your Premium is active: all Advanced labs are unlocked.';
+
+  @override
+  String chatLocalCareersList(int count, String list) {
+    return 'CareerVerse covers $count careers: $list.';
+  }
+
+  @override
+  String get chatLocalThanks =>
+      'You\'re welcome! Good luck with your orientation 🚀';
+
+  @override
+  String get chatLocalUnknown =>
+      'I\'m not sure I understood. Ask me about a career (for example Java, Data Science or Cloud), your progress or what to do next.';
 }

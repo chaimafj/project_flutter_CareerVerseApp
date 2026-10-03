@@ -8,10 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'firebase_options.dart';
 import 'providers/app_state.dart';
+import 'providers/chat_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 import 'services/ad_service.dart';
 import 'services/auth_service.dart';
+import 'services/chat_service.dart';
 import 'services/firestore_service.dart';
 import 'services/local_store.dart';
 import 'services/notification_service.dart';
@@ -54,6 +56,9 @@ Future<void> main() async {
                   cloud: FirestoreService(),
                 )
               : AppState(prefs, store),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(prefs, service: GeminiChatService()),
         ),
       ],
       child: const CareerVerseApp(),

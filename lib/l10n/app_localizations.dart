@@ -1671,6 +1671,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{done}/{total} courses read'**
   String coursesDone(int done, int total);
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CareerVerse Assistant'**
+  String get chatTitle;
+
+  /// No description provided for @chatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant'**
+  String get chatShort;
+
+  /// No description provided for @chatModeAi.
+  ///
+  /// In en, this message translates to:
+  /// **'AI · Gemini'**
+  String get chatModeAi;
+
+  /// No description provided for @chatModeLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline assistant'**
+  String get chatModeLocal;
+
+  /// No description provided for @chatHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about careers, labs, your progress…'**
+  String get chatHint;
+
+  /// No description provided for @chatWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi {name}! I\'m your career assistant. Ask me which career suits you, what a job pays, or what to do next.'**
+  String chatWelcome(String name);
+
+  /// No description provided for @chatSuggestRecommend.
+  ///
+  /// In en, this message translates to:
+  /// **'Which career suits me?'**
+  String get chatSuggestRecommend;
+
+  /// No description provided for @chatSuggestNext.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I do next?'**
+  String get chatSuggestNext;
+
+  /// No description provided for @chatSuggestProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'How am I doing?'**
+  String get chatSuggestProgress;
+
+  /// No description provided for @chatSuggestCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me about the Data Scientist job'**
+  String get chatSuggestCareer;
+
+  /// No description provided for @chatClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear conversation'**
+  String get chatClear;
+
+  /// No description provided for @chatThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking…'**
+  String get chatThinking;
+
+  /// No description provided for @chatFallbackNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Gemini is unavailable: answer from the offline assistant.'**
+  String get chatFallbackNotice;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get chatSend;
+
+  /// No description provided for @chatOpenCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {career}'**
+  String chatOpenCareer(String career);
+
+  /// No description provided for @chatStartLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Start: {lab}'**
+  String chatStartLab(String lab);
+
+  /// No description provided for @chatReadCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Course: {course}'**
+  String chatReadCourse(String course);
+
+  /// No description provided for @chatOpenRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'My recommendations'**
+  String get chatOpenRecommendations;
+
+  /// No description provided for @chatOpenPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'See Premium'**
+  String get chatOpenPremium;
+
+  /// No description provided for @chatLocalGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello {name}! 👋 How can I help you with your career orientation?'**
+  String chatLocalGreeting(String name);
+
+  /// No description provided for @chatLocalHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'I can recommend careers for your profile, describe a career (salary, skills, studies, outlook), tell you how you are doing and suggest your next course or lab. Try one of the suggestions below.'**
+  String get chatLocalHelp;
+
+  /// No description provided for @chatLocalRecommendIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your interests and lab results, here are your best matches:'**
+  String get chatLocalRecommendIntro;
+
+  /// No description provided for @chatLocalRecommendLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{rank}. {career}: {score}% match'**
+  String chatLocalRecommendLine(int rank, String career, int score);
+
+  /// No description provided for @chatLocalRecommendTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Do a lab in each career to make these results more accurate.'**
+  String get chatLocalRecommendTip;
+
+  /// No description provided for @chatLocalProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'You have completed {done} of {total} labs ({minutes} min of practice).'**
+  String chatLocalProgress(int done, int total, int minutes);
+
+  /// No description provided for @chatLocalAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your average score is {score}%.'**
+  String chatLocalAverage(int score);
+
+  /// No description provided for @chatLocalStrongest.
+  ///
+  /// In en, this message translates to:
+  /// **'Your strongest skill: {skill}.'**
+  String chatLocalStrongest(String skill);
+
+  /// No description provided for @chatLocalNoProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t completed a lab yet. Let\'s start with one!'**
+  String get chatLocalNoProgress;
+
+  /// No description provided for @chatLocalNextCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Next step in {career}: read the course “{course}”, then do its lab.'**
+  String chatLocalNextCourse(String course, String career);
+
+  /// No description provided for @chatLocalNextLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Next step in {career}: start the lab “{lab}”.'**
+  String chatLocalNextLab(String lab, String career);
+
+  /// No description provided for @chatLocalPathDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You have completed every lab of {career}! Try another career to compare.'**
+  String chatLocalPathDone(String career);
+
+  /// No description provided for @chatLocalSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Average salary for {career}: {salary}.'**
+  String chatLocalSalary(String career, String salary);
+
+  /// No description provided for @chatLocalTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Key tools: {tools}.'**
+  String chatLocalTools(String tools);
+
+  /// No description provided for @chatLocalSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Skills tested in the labs: {skills}.'**
+  String chatLocalSkills(String skills);
+
+  /// No description provided for @chatLocalEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Studies: {education}'**
+  String chatLocalEducation(String education);
+
+  /// No description provided for @chatLocalOutlook.
+  ///
+  /// In en, this message translates to:
+  /// **'Outlook: {outlook}'**
+  String chatLocalOutlook(String outlook);
+
+  /// No description provided for @chatLocalLabs.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} labs to practise (Beginner → Advanced), each with a course.'**
+  String chatLocalLabs(int count);
+
+  /// No description provided for @chatLocalDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'A typical day: {tasks}.'**
+  String chatLocalDaily(String tasks);
+
+  /// No description provided for @chatLocalCareerProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress: {done}/{total} labs, average {score}%.'**
+  String chatLocalCareerProgress(int done, int total, int score);
+
+  /// No description provided for @chatLocalPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium unlocks the Advanced labs of every career. Payment uses Stripe in test mode (card 4242 4242 4242 4242, no real charge).'**
+  String get chatLocalPremium;
+
+  /// No description provided for @chatLocalPremiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Premium is active: all Advanced labs are unlocked.'**
+  String get chatLocalPremiumActive;
+
+  /// No description provided for @chatLocalCareersList.
+  ///
+  /// In en, this message translates to:
+  /// **'CareerVerse covers {count} careers: {list}.'**
+  String chatLocalCareersList(int count, String list);
+
+  /// No description provided for @chatLocalThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re welcome! Good luck with your orientation 🚀'**
+  String get chatLocalThanks;
+
+  /// No description provided for @chatLocalUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not sure I understood. Ask me about a career (for example Java, Data Science or Cloud), your progress or what to do next.'**
+  String get chatLocalUnknown;
 }
 
 class _AppLocalizationsDelegate

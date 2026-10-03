@@ -1,4 +1,6 @@
 {
   "STRIPE_PUBLISHABLE_KEY": "pk_test_REPLACE_ME",
-  "STRIPE_SECRET_KEY": "sk_test_REPLACE_ME"
+  "STRIPE_SECRET_KEY": "sk_test_REPLACE_ME",
+  "GEMINI_API_KEY": "",
+  "GEMINI_MODEL": "gemini-2.5-flash"
 }

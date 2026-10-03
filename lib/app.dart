@@ -7,6 +7,7 @@ import 'providers/app_state.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/career_lab_detail_screen.dart';
+import 'screens/chat_screen.dart';
 import 'screens/course_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/home_screen.dart';
@@ -61,6 +62,7 @@ class CareerVerseApp extends StatelessWidget {
             '/notifications': (context) => const NotificationsScreen(),
             '/edit-profile': (context) => const EditProfileScreen(),
             '/premium': (context) => const PremiumScreen(),
+            '/chat': (context) => const ChatScreen(),
           },
         );
       },

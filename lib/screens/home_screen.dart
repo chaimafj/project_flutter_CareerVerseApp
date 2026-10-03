@@ -58,6 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: IndexedStack(index: _selectedIndex, children: pages),
+      floatingActionButton: _selectedIndex == 0 || _selectedIndex == 2
+          ? FloatingActionButton.extended(
+              key: const Key('open-chat'),
+              heroTag: 'chat',
+              backgroundColor: purple,
+              foregroundColor: Colors.white,
+              onPressed: () => Navigator.of(context).pushNamed('/chat'),
+              icon: const Icon(Icons.smart_toy_outlined),
+              label: Text(loc.chatShort),
+            )
+          : null,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -707,6 +718,11 @@ class CareerDrawer extends StatelessWidget {
                     Icons.auto_awesome,
                     loc.aiRecommendations,
                     () => push('/recommendations'),
+                  ),
+                  _DrawerItem(
+                    Icons.smart_toy_outlined,
+                    loc.chatTitle,
+                    () => push('/chat'),
                   ),
                   _DrawerItem(
                     Icons.route_outlined,
