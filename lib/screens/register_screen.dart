@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../utils/validators.dart';
 import '../widgets/career_ui.dart';
@@ -36,7 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     if (!_acceptTerms) {
-      showError(context, 'Please accept the terms to continue.');
+      showError(context, context.l10n.acceptTermsError);
       return;
     }
     setState(() => _loading = true);
@@ -48,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!mounted) return;
     setState(() => _loading = false);
     if (error != null) {
-      showError(context, error);
+      showError(context, context.l10n.authError(error));
       return;
     }
     Navigator.of(context).pushNamedAndRemoveUntil('/home', (_) => false);
@@ -56,6 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.l10n;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -72,18 +74,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 const Center(child: CareerLogo()),
                 const SizedBox(height: 24),
-                const Text(
-                  'Create your account',
-                  style: TextStyle(
+                Text(
+                  loc.createYourAccount,
+                  style: const TextStyle(
                     color: ink,
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 5),
-                const Text(
-                  'Start exploring careers through real simulations',
-                  style: TextStyle(color: mutedInk, fontSize: 14),
+                Text(
+                  loc.registerSubtitle,
+                  style: const TextStyle(color: mutedInk, fontSize: 14),
                 ),
                 const SizedBox(height: 22),
                 TextFormField(
@@ -92,10 +94,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textCapitalization: TextCapitalization.words,
                   textInputAction: TextInputAction.next,
                   decoration: careerInputDecoration(
-                    label: 'Full name',
+                    label: loc.fullName,
                     icon: Icons.person_outline,
                   ),
-                  validator: AppValidators.name,
+                  validator: AppValidators.name(loc),
                 ),
                 const SizedBox(height: 11),
                 TextFormField(
@@ -104,11 +106,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   decoration: careerInputDecoration(
-                    label: 'Email address',
+                    label: loc.emailAddress,
                     hint: 'you@example.com',
                     icon: Icons.mail_outline,
                   ),
-                  validator: AppValidators.email,
+                  validator: AppValidators.email(loc),
                 ),
                 const SizedBox(height: 11),
                 TextFormField(
@@ -117,8 +119,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: _hidePassword,
                   textInputAction: TextInputAction.next,
                   decoration: careerInputDecoration(
-                    label: 'Password',
-                    hint: 'At least 6 characters',
+                    label: loc.password,
+                    hint: loc.passwordHint,
                     icon: Icons.lock_outline,
                     suffix: IconButton(
                       onPressed: () =>
@@ -132,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
-                  validator: AppValidators.password,
+                  validator: AppValidators.password(loc),
                 ),
                 const SizedBox(height: 11),
                 TextFormField(
@@ -141,11 +143,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: _hidePassword,
                   onFieldSubmitted: (_) => _register(),
                   decoration: careerInputDecoration(
-                    label: 'Confirm password',
+                    label: loc.confirmPassword,
                     icon: Icons.lock_reset,
                   ),
                   validator: (value) => value != _passwordController.text
-                      ? 'Passwords do not match'
+                      ? loc.passwordsDoNotMatch
                       : null,
                 ),
                 const SizedBox(height: 6),
@@ -157,16 +159,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
                   activeColor: purple,
-                  title: const Text(
-                    'I accept the terms of use and privacy policy',
-                    style: TextStyle(color: mutedInk, fontSize: 12),
+                  title: Text(
+                    loc.acceptTerms,
+                    style: const TextStyle(color: mutedInk, fontSize: 12),
                   ),
                 ),
                 const SizedBox(height: 6),
                 _loading
                     ? const Center(child: CircularProgressIndicator())
                     : GradientActionButton(
-                        label: 'Create account',
+                        key: const Key('register-submit'),
+                        label: loc.createAccount,
                         onPressed: _register,
                         icon: Icons.person_add_alt_1,
                       ),
@@ -175,14 +178,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushReplacementNamed('/login'),
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
-                        style: TextStyle(color: mutedInk, fontSize: 12),
+                        style: const TextStyle(color: mutedInk, fontSize: 12),
                         children: [
-                          TextSpan(text: 'Already have an account?   '),
+                          TextSpan(text: '${loc.haveAccount}   '),
                           TextSpan(
-                            text: 'Log In',
-                            style: TextStyle(
+                            text: loc.logIn,
+                            style: const TextStyle(
                               color: blue,
                               fontWeight: FontWeight.w800,
                             ),

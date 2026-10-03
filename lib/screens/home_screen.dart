@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 import '../widgets/user_avatar.dart';
@@ -27,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!context.watch<AppState>().isLoggedIn) {
       return const Scaffold(body: SizedBox.shrink());
     }
-    const labels = ['Home', 'Labs', 'Explore', 'Progress', 'Profile'];
+    final loc = context.l10n;
+    final labels = [loc.home, loc.labs, loc.explore, loc.progress, loc.profile];
     const icons = [
       Icons.home_rounded,
       Icons.science_outlined,
@@ -93,6 +95,7 @@ class HomeDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final loc = context.l10n;
     final profile = state.profile;
     final matches = state.matches;
     final lastResult = state.results.isEmpty ? null : state.results.first;
@@ -124,7 +127,7 @@ class HomeDashboard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      'Hello, ${profile.firstName} 👋',
+                      loc.helloName(profile.firstName),
                       key: const Key('home-greeting'),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -152,11 +155,17 @@ class HomeDashboard extends StatelessWidget {
                   ),
                 ],
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 12, bottom: 14),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 12,
+                  bottom: 14,
+                ),
                 child: Text(
-                  'Explore your career journey',
-                  style: TextStyle(color: Color(0xFFB5C8E8), fontSize: 14),
+                  loc.homeSubtitle,
+                  style: const TextStyle(
+                    color: Color(0xFFB5C8E8),
+                    fontSize: 14,
+                  ),
                 ),
               ),
               InkWell(
@@ -168,16 +177,16 @@ class HomeDashboard extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.search, color: mutedInk, size: 20),
-                      SizedBox(width: 10),
+                      const Icon(Icons.search, color: mutedInk, size: 20),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Search for careers, labs, or skills...',
+                          loc.homeSearchHint,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: mutedInk, fontSize: 12),
+                          style: const TextStyle(color: mutedInk, fontSize: 12),
                         ),
                       ),
                     ],
@@ -197,27 +206,33 @@ class HomeDashboard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Row(
+                          Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.track_changes,
                                 color: Color(0xFF10BDAA),
                                 size: 19,
                               ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Your AI Profile',
-                                style: TextStyle(
-                                  color: ink,
-                                  fontWeight: FontWeight.w800,
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  loc.yourAiProfile,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: ink,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            '${state.totalCompletedLabs}/${state.totalLabs} labs · '
-                            '${state.totalMinutes} min practiced',
+                            loc.labsPracticed(
+                              state.totalCompletedLabs,
+                              state.totalLabs,
+                              state.totalMinutes,
+                            ),
                             style: const TextStyle(
                               color: mutedInk,
                               fontSize: 12,
@@ -234,9 +249,9 @@ class HomeDashboard extends StatelessWidget {
                                   horizontal: 15,
                                 ),
                               ),
-                              child: const Text(
-                                'View progress  →',
-                                style: TextStyle(fontSize: 11),
+                              child: Text(
+                                loc.viewProgress,
+                                style: const TextStyle(fontSize: 11),
                               ),
                             ),
                           ),
@@ -246,7 +261,7 @@ class HomeDashboard extends StatelessWidget {
                     ScoreRing(
                       score: state.averageScore,
                       size: 70,
-                      label: 'avg',
+                      label: loc.avg,
                     ),
                   ],
                 ),
@@ -260,9 +275,7 @@ class HomeDashboard extends StatelessWidget {
             children: [
               if (continueEntry != null) ...[
                 _ContinueCard(
-                  title: lastResult == null
-                      ? 'Start your first lab'
-                      : 'Up next',
+                  title: lastResult == null ? loc.startFirstLab : loc.upNext,
                   career: continueEntry.$1.title,
                   lab: continueEntry.$2.title,
                   color: continueEntry.$1.color,
@@ -272,26 +285,26 @@ class HomeDashboard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
               ],
-              const SectionTitle('Quick access'),
+              SectionTitle(loc.quickAccess),
               const SizedBox(height: 8),
               Row(
                 children: [
                   _QuickTile(
                     icon: Icons.science_outlined,
-                    label: 'Labs',
+                    label: loc.labs,
                     color: purple,
                     onTap: () => onSelectTab(1),
                   ),
                   _QuickTile(
                     icon: Icons.auto_awesome,
-                    label: 'AI Match',
+                    label: loc.aiMatch,
                     color: const Color(0xFF10A37F),
                     onTap: () =>
                         Navigator.of(context).pushNamed('/recommendations'),
                   ),
                   _QuickTile(
                     icon: Icons.route_outlined,
-                    label: 'Path',
+                    label: loc.path,
                     color: blue,
                     onTap: () => Navigator.of(context).pushNamed(
                       '/learning-path',
@@ -300,7 +313,7 @@ class HomeDashboard extends StatelessWidget {
                   ),
                   _QuickTile(
                     icon: Icons.insights_outlined,
-                    label: 'Progress',
+                    label: loc.progress,
                     color: const Color(0xFFF59E0B),
                     onTap: () => onSelectTab(3),
                   ),
@@ -308,8 +321,8 @@ class HomeDashboard extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               SectionTitle(
-                'Recommended careers',
-                action: 'See all',
+                loc.recommendedCareers,
+                action: loc.seeAll,
                 onAction: () =>
                     Navigator.of(context).pushNamed('/recommendations'),
               ),
@@ -327,14 +340,10 @@ class HomeDashboard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              const SectionTitle('Recent activity'),
+              SectionTitle(loc.recentActivity),
               const SizedBox(height: 8),
               if (state.results.isEmpty)
-                const _HintCard(
-                  text:
-                      'No lab completed yet. Your scores and recommendations '
-                      'will appear here.',
-                )
+                _HintCard(text: loc.noActivity)
               else
                 ...state.results.take(3).map((result) {
                   final (career, lab) = findLab(result.labId)!;
@@ -360,7 +369,7 @@ class HomeDashboard extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          timeAgo(result.completedAt),
+                          loc.timeAgo(result.completedAt),
                           style: const TextStyle(fontSize: 11),
                         ),
                         trailing: Text(
@@ -563,7 +572,9 @@ class _MatchCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  match.tested ? 'Based on your labs' : 'Based on interests',
+                  match.tested
+                      ? context.l10n.basedOnLabs
+                      : context.l10n.basedOnInterests,
                   style: const TextStyle(color: mutedInk, fontSize: 10),
                 ),
               ],
@@ -612,6 +623,7 @@ class CareerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final loc = context.l10n;
     final profile = state.profile;
     final navigator = Navigator.of(context);
 
@@ -664,63 +676,66 @@ class CareerDrawer extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  _DrawerItem(Icons.home_rounded, 'Home', () => onNavigate(0)),
+                  _DrawerItem(
+                    Icons.home_rounded,
+                    loc.home,
+                    () => onNavigate(0),
+                  ),
                   _DrawerItem(
                     Icons.science_outlined,
-                    'Career Labs',
+                    loc.careerLabs,
                     () => onNavigate(1),
                   ),
                   _DrawerItem(
                     Icons.explore_outlined,
-                    'Explore careers',
+                    loc.exploreCareers,
                     () => onNavigate(2),
                   ),
                   _DrawerItem(
                     Icons.auto_awesome,
-                    'AI Recommendations',
+                    loc.aiRecommendations,
                     () => push('/recommendations'),
                   ),
                   _DrawerItem(
                     Icons.route_outlined,
-                    'Learning path',
+                    loc.learningPath,
                     () => push('/learning-path', state.matches.first.career.id),
                   ),
                   _DrawerItem(
                     Icons.insights_outlined,
-                    'My progress',
+                    loc.myProgress,
                     () => onNavigate(3),
                   ),
                   _DrawerItem(
                     Icons.notifications_none,
-                    'Notifications',
+                    loc.notifications,
                     () => push('/notifications'),
                     badge: state.unreadCount,
                   ),
                   _DrawerItem(
                     Icons.person_outline,
-                    'Profile',
+                    loc.profile,
                     () => onNavigate(4),
                   ),
                   _DrawerItem(
                     Icons.settings_outlined,
-                    'Settings',
+                    loc.settings,
                     () => push('/settings'),
                   ),
-                  _DrawerItem(Icons.info_outline, 'About', () {
+                  _DrawerItem(Icons.info_outline, loc.about, () {
                     navigator.pop();
                     showAboutDialog(
                       context: context,
                       applicationName: 'CareerVerse',
                       applicationVersion: '1.0.0',
-                      applicationLegalese:
-                          'Discover careers through hands-on simulations.',
+                      applicationLegalese: loc.aboutText,
                     );
                   }),
                 ],
               ),
             ),
             const Divider(color: Color(0xFF1D3466)),
-            _DrawerItem(Icons.logout, 'Log out', () async {
+            _DrawerItem(Icons.logout, loc.logout, () async {
               await context.read<AppState>().logout();
               navigator.pushNamedAndRemoveUntil('/welcome', (_) => false);
             }, color: const Color(0xFFFF8A8A)),

@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../models/user_profile.dart';
 import '../providers/app_state.dart';
 import '../utils/validators.dart';
@@ -69,7 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() => _photoPath = target);
     } catch (error) {
       if (!mounted) return;
-      showError(context, 'Could not load the photo: $error');
+      showError(context, context.l10n.photoLoadError('$error'));
     }
   }
 
@@ -82,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Choose from gallery'),
+              title: Text(context.l10n.chooseFromGallery),
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 _pickPhoto(ImageSource.gallery);
@@ -90,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
-              title: const Text('Take a photo'),
+              title: Text(context.l10n.takePhoto),
               onTap: () {
                 Navigator.of(sheetContext).pop();
                 _pickPhoto(ImageSource.camera);
@@ -99,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             if (_photoPath != null)
               ListTile(
                 leading: const Icon(Icons.delete_outline, color: Colors.red),
-                title: const Text('Remove photo'),
+                title: Text(context.l10n.removePhoto),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
                   setState(() => _photoPath = null);
@@ -127,13 +128,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
     await state.updateProfile(updated);
     if (!mounted) return;
-    showInfo(context, 'Profile updated');
+    showInfo(context, context.l10n.profileUpdated);
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     final profile = context.watch<AppState>().profile;
+    final loc = context.l10n;
     final preview = UserProfile(
       name: _name.text.isEmpty ? profile.name : _name.text,
       email: profile.email,
@@ -146,9 +148,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.editProfileTitle,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
       ),
       body: Form(
@@ -186,17 +188,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               textCapitalization: TextCapitalization.words,
               onChanged: (_) => setState(() {}),
               decoration: careerInputDecoration(
-                label: 'Full name',
+                label: loc.fullName,
                 icon: Icons.person_outline,
               ),
-              validator: AppValidators.name,
+              validator: AppValidators.name(loc),
             ),
             const SizedBox(height: 12),
             TextFormField(
               initialValue: profile.email,
               enabled: false,
               decoration: careerInputDecoration(
-                label: 'Email',
+                label: loc.email,
                 icon: Icons.mail_outline,
               ),
             ),
@@ -207,14 +209,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ? _studyLevel
                   : null,
               decoration: careerInputDecoration(
-                label: 'Study level',
+                label: loc.studyLevel,
                 icon: Icons.school_outlined,
               ),
               items: studyLevels
                   .map(
                     (level) => DropdownMenuItem(
                       value: level,
-                      child: Text(level, overflow: TextOverflow.ellipsis),
+                      child: Text(tc(level), overflow: TextOverflow.ellipsis),
                     ),
                   )
                   .toList(),
@@ -225,7 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               key: const Key('edit-university'),
               controller: _university,
               decoration: careerInputDecoration(
-                label: 'University / School',
+                label: loc.universitySchool,
                 icon: Icons.account_balance_outlined,
               ),
             ),
@@ -234,8 +236,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               key: const Key('edit-specialty'),
               controller: _specialty,
               decoration: careerInputDecoration(
-                label: 'Specialty',
-                hint: 'e.g. Software engineering',
+                label: loc.specialty,
+                hint: loc.specialtyHint,
                 icon: Icons.workspace_premium_outlined,
               ),
             ),
@@ -246,15 +248,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               maxLines: 3,
               maxLength: 200,
               decoration: careerInputDecoration(
-                label: 'Bio',
-                hint: 'Tell us about your goals',
+                label: loc.bio,
+                hint: loc.bioHint,
               ),
             ),
             const SizedBox(height: 8),
-            const SectionTitle('Interests'),
-            const Text(
-              'Used by the AI to compute your career matches.',
-              style: TextStyle(color: mutedInk, fontSize: 12),
+            SectionTitle(loc.interests),
+            Text(
+              loc.interestsHint,
+              style: const TextStyle(color: mutedInk, fontSize: 12),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -264,7 +266,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   .map(
                     (interest) => FilterChip(
                       key: Key('interest-$interest'),
-                      label: Text(interest),
+                      label: Text(tc(interest)),
                       selected: _interests.contains(interest),
                       selectedColor: const Color(0xFFEDE8FF),
                       checkmarkColor: purple,
@@ -282,7 +284,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : GradientActionButton(
                     key: const Key('save-profile'),
-                    label: 'Save changes',
+                    label: loc.saveChanges,
                     icon: Icons.check_rounded,
                     onPressed: _save,
                   ),

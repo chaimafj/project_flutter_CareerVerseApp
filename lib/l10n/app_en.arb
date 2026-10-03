@@ -1,0 +1,330 @@
+{
+  "@@locale": "en",
+  "appName": "CareerVerse",
+  "welcomeBack": "Welcome back",
+  "loginSubtitle": "Sign in to continue your journey",
+  "emailAddress": "Email address",
+  "password": "Password",
+  "forgotPassword": "Forgot password?",
+  "forgotPasswordInfo": "Accounts are stored on this device. Create a new account if you forgot your password.",
+  "logIn": "Log In",
+  "or": "or",
+  "googleSignInInfo": "Google Sign-In requires a Firebase project (google-services.json). Use email sign-in for now.",
+  "continueWithGoogle": "Continue with Google",
+  "noAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+  "validationRequired": "This field is required",
+  "validationNameLength": "Name must contain at least 2 characters",
+  "validationEmail": "Enter a valid email address",
+  "validationPasswordLength": "Password must contain at least 6 characters",
+  "errorEmailTaken": "An account already exists with this email.",
+  "errorNoAccount": "No account found for this email.",
+  "errorWrongPassword": "Incorrect password.",
+  "notifWelcomeTitle": "Welcome to CareerVerse 🎉",
+  "notifWelcomeBody": "Complete your profile and start your first Career Lab to get personalized recommendations.",
+  "notifResultTitle": "Your recommendations are ready!",
+  "notifResultBody": "{lab}: {score}%. Top match: {career} ({topScore}%).",
+  "@notifResultBody": {
+    "placeholders": {
+      "lab": {"type": "String"},
+      "score": {"type": "int"},
+      "career": {"type": "String"},
+      "topScore": {"type": "int"}
+    }
+  },
+  "notifNewBest": "New personal best!",
+  "reasonScored": "You scored {score}% on {done}/{total} labs.",
+  "@reasonScored": {
+    "placeholders": {
+      "score": {"type": "int"},
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "reasonStrongest": "Strongest skill: {skill}.",
+  "@reasonStrongest": {
+    "placeholders": {"skill": {"type": "String"}}
+  },
+  "reasonNotTested": "Not tested yet: try a lab to confirm this match.",
+  "reasonInterests": "Matches your interests: {interests}.",
+  "@reasonInterests": {
+    "placeholders": {"interests": {"type": "String"}}
+  },
+  "timeJustNow": "just now",
+  "timeMinutesAgo": "{count} min ago",
+  "@timeMinutesAgo": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "timeHoursAgo": "{count} h ago",
+  "@timeHoursAgo": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "timeDaysAgo": "{count} d ago",
+  "@timeDaysAgo": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "acceptTermsError": "Please accept the terms to continue.",
+  "createYourAccount": "Create your account",
+  "registerSubtitle": "Start exploring careers through real simulations",
+  "fullName": "Full name",
+  "passwordHint": "At least 6 characters",
+  "confirmPassword": "Confirm password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "acceptTerms": "I accept the terms of use and privacy policy",
+  "createAccount": "Create account",
+  "haveAccount": "Already have an account?",
+  "welcomeTagline": "Explore  ·  Learn  ·  Build\nYour Future",
+  "cybersecurity": "Cybersecurity",
+  "getStarted": "Get Started",
+  "home": "Home",
+  "labs": "Labs",
+  "explore": "Explore",
+  "progress": "Progress",
+  "profile": "Profile",
+  "helloName": "Hello, {name} 👋",
+  "@helloName": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "homeSubtitle": "Explore your career journey",
+  "homeSearchHint": "Search for careers, labs, or skills...",
+  "yourAiProfile": "Your AI Profile",
+  "labsPracticed": "{done}/{total} labs · {minutes} min practiced",
+  "@labsPracticed": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "viewProgress": "View progress  →",
+  "avg": "avg",
+  "startFirstLab": "Start your first lab",
+  "upNext": "Up next",
+  "quickAccess": "Quick access",
+  "aiMatch": "AI Match",
+  "path": "Path",
+  "recommendedCareers": "Recommended careers",
+  "seeAll": "See all",
+  "recentActivity": "Recent activity",
+  "noActivity": "No lab completed yet. Your scores and recommendations will appear here.",
+  "basedOnLabs": "Based on your labs",
+  "basedOnInterests": "Based on interests",
+  "careerLabs": "Career Labs",
+  "exploreCareers": "Explore careers",
+  "aiRecommendations": "AI Recommendations",
+  "learningPath": "Learning path",
+  "myProgress": "My progress",
+  "notifications": "Notifications",
+  "settings": "Settings",
+  "about": "About",
+  "aboutText": "Discover careers through hands-on simulations.",
+  "logout": "Log out",
+  "exploreCareersTitle": "Explore Careers",
+  "exploreSearchHint": "Search careers, tools or labs...",
+  "all": "All",
+  "categoryInfrastructure": "Infrastructure",
+  "categoryDevelopment": "Development",
+  "categorySecurity": "Security",
+  "noCareerFound": "No career found",
+  "noCareerFoundMessage": "Try another keyword, e.g. \"AWS\" or \"Docker\".",
+  "labsProgress": "{done}/{total} labs",
+  "@labsProgress": {
+    "placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "toDo": "To do",
+  "completed": "Completed",
+  "labsCount": "{count} labs",
+  "@labsCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "completedCount": "{done}/{total} completed",
+  "@completedCount": {
+    "placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "noLabHere": "No lab here",
+  "noLabHereMessage": "Change the filters to see more labs.",
+  "start": "Start",
+  "minutesShort": "{minutes} min",
+  "@minutesShort": {
+    "placeholders": {"minutes": {"type": "int"}}
+  },
+  "labsCompletedOf": "{done}/{total} labs completed",
+  "@labsCompletedOf": {
+    "placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "match": "match",
+  "salaryFrance": "Salary (France)",
+  "education": "Education",
+  "aboutTheJob": "About the job",
+  "typicalDay": "A typical day",
+  "toolsYouWillUse": "Tools you will use",
+  "replayFirstLab": "Replay first lab",
+  "startLabNamed": "Start lab: {title}",
+  "@startLabNamed": {
+    "placeholders": {"title": {"type": "String"}}
+  },
+  "continueLabNamed": "Continue: {title}",
+  "@continueLabNamed": {
+    "placeholders": {"title": {"type": "String"}}
+  },
+  "tasksCount": "{count, plural, =1{1 task} other{{count} tasks}}",
+  "@tasksCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "attemptsCount": "{count, plural, =1{1 attempt} other{{count} attempts}}",
+  "@attemptsCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "leaveLabTitle": "Leave the lab?",
+  "leaveLabMessage": "Your progress in this lab will be lost.",
+  "stay": "Stay",
+  "leave": "Leave",
+  "questionOf": "Question {index} of {total}",
+  "@questionOf": {
+    "placeholders": {"index": {"type": "int"}, "total": {"type": "int"}}
+  },
+  "correctCount": "{count} correct",
+  "@correctCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "selectAnswers": "Select {count} answers",
+  "@selectAnswers": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "checkAnswer": "Check answer",
+  "finishLab": "Finish lab",
+  "nextQuestion": "Next question",
+  "scenario": "Scenario",
+  "correct": "Correct!",
+  "notQuite": "Not quite",
+  "resultNotFound": "Result not found",
+  "resultNotFoundMessage": "This result is no longer available.",
+  "labResults": "Lab Results",
+  "labCompleted": "Lab Completed!",
+  "keepPracticing": "Keep practicing!",
+  "overall": "overall",
+  "correctAnswers": "Correct answers",
+  "timeTarget": "Time (target {time})",
+  "@timeTarget": {
+    "placeholders": {"time": {"type": "String"}}
+  },
+  "accuracyWeight": "Accuracy (80%)",
+  "speedWeight": "Speed (20%)",
+  "newPersonalBest": "New personal best! +{gain} pts vs {previous}%.",
+  "@newPersonalBest": {
+    "placeholders": {"gain": {"type": "int"}, "previous": {"type": "int"}}
+  },
+  "stillBest": "Your best on this lab is still {best}%.",
+  "@stillBest": {
+    "placeholders": {"best": {"type": "int"}}
+  },
+  "skillsBreakdown": "Skills breakdown",
+  "matchNow": "{career} match is now {score}%. {done}/{total} labs completed in this career.",
+  "@matchNow": {
+    "placeholders": {
+      "career": {"type": "String"},
+      "score": {"type": "int"},
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "nextLabNamed": "Next Lab: {title}",
+  "@nextLabNamed": {
+    "placeholders": {"title": {"type": "String"}}
+  },
+  "tryCareerLab": "Try {career}: {lab}",
+  "@tryCareerLab": {
+    "placeholders": {"career": {"type": "String"}, "lab": {"type": "String"}}
+  },
+  "viewRecommendations": "View recommendations",
+  "retry": "Retry",
+  "matches": "Matches",
+  "backToHome": "Back to home",
+  "bestMatch": "Best match",
+  "matchesInterestsOnly": "These matches are based only on your interests. Complete labs to get recommendations based on real performance.",
+  "matchesAnalysis": "{count, plural, =1{Analysis of 1 tested career} other{Analysis of {count} tested careers}}: match = 75% lab performance + 25% interests.",
+  "@matchesAnalysis": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "allMatches": "All matches",
+  "recommendationHistory": "Recommendation history",
+  "noRecommendationYet": "No recommendation yet",
+  "noRecommendationYetMessage": "A new recommendation is generated after every completed lab.",
+  "learningPathTitle": "Learning Path",
+  "becomeCareer": "Become a {career}",
+  "@becomeCareer": {
+    "placeholders": {"career": {"type": "String"}}
+  },
+  "pathSteps": "{done} of {total} steps · ~{minutes} min total",
+  "@pathSteps": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
+  "later": "Later",
+  "startThePath": "Start the path",
+  "pathCompleted": "Path completed! Your average on {career} is {average}%. Replay labs to improve it.",
+  "@pathCompleted": {
+    "placeholders": {"career": {"type": "String"}, "average": {"type": "int"}}
+  },
+  "myProgressTitle": "My Progress",
+  "labsDone": "Labs done",
+  "avgScore": "Avg score",
+  "minutes": "Minutes",
+  "careerProgress": "Career progress",
+  "skills": "Skills",
+  "noSkillsYet": "Complete a lab to measure your skills.",
+  "history": "History",
+  "noAttemptsYet": "No attempts yet",
+  "noAttemptsYetMessage": "Your completed labs will be listed here.",
+  "markAllRead": "Mark all as read",
+  "clearAll": "Clear all",
+  "noNotifications": "No notifications",
+  "noNotificationsMessage": "You will be notified when your lab results and recommendations are ready.",
+  "editProfile": "Edit profile",
+  "profileCompleteness": "Profile completeness",
+  "completeProfileHint": "A complete profile improves your recommendations.",
+  "topMatch": "Top match",
+  "aboutMe": "About me",
+  "email": "Email",
+  "studyLevel": "Study level",
+  "university": "University",
+  "specialty": "Specialty",
+  "bio": "Bio",
+  "interests": "Interests",
+  "noInterestsYet": "No interests yet. Add some to personalize your matches.",
+  "topSkills": "Top skills",
+  "noTopSkills": "Complete labs to reveal your strongest skills.",
+  "memberSince": "Member since {date}",
+  "@memberSince": {
+    "placeholders": {"date": {"type": "String"}}
+  },
+  "notSet": "Not set",
+  "editProfileTitle": "Edit Profile",
+  "photoLoadError": "Could not load the photo: {error}",
+  "@photoLoadError": {
+    "placeholders": {"error": {"type": "String"}}
+  },
+  "chooseFromGallery": "Choose from gallery",
+  "takePhoto": "Take a photo",
+  "removePhoto": "Remove photo",
+  "profileUpdated": "Profile updated",
+  "universitySchool": "University / School",
+  "specialtyHint": "e.g. Software engineering",
+  "bioHint": "Tell us about your goals",
+  "interestsHint": "Used by the AI to compute your career matches.",
+  "saveChanges": "Save changes",
+  "theme": "Theme",
+  "darkMode": "Dark mode",
+  "lightMode": "Light mode",
+  "language": "Language",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "resetProgress": "Reset my progress",
+  "resetProgressSubtitle": "Delete all lab results and history",
+  "resetProgressTitle": "Reset progress?",
+  "resetProgressMessage": "All your lab results and recommendations will be deleted.",
+  "progressReset": "Progress reset"
+}

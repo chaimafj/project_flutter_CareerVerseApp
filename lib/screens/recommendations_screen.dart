@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 
@@ -14,15 +15,16 @@ class RecommendationsScreen extends StatelessWidget {
     final matches = state.matches;
     final tested = matches.where((m) => m.tested).length;
     final top = matches.first;
+    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: const Text(
-          'AI Recommendations',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.aiRecommendations,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
       ),
       body: ListView(
@@ -40,13 +42,16 @@ class RecommendationsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.auto_awesome, color: Color(0xFF7CF2D7)),
-                          SizedBox(width: 6),
+                          const Icon(
+                            Icons.auto_awesome,
+                            color: Color(0xFF7CF2D7),
+                          ),
+                          const SizedBox(width: 6),
                           Text(
-                            'Best match',
-                            style: TextStyle(color: Color(0xFF7CF2D7)),
+                            loc.bestMatch,
+                            style: const TextStyle(color: Color(0xFF7CF2D7)),
                           ),
                         ],
                       ),
@@ -62,7 +67,7 @@ class RecommendationsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        top.reason,
+                        loc.matchReason(top),
                         style: const TextStyle(
                           color: Color(0xFFB5C8E8),
                           fontSize: 12,
@@ -91,15 +96,13 @@ class RecommendationsScreen extends StatelessWidget {
             ),
             child: Text(
               tested == 0
-                  ? 'These matches are based only on your interests. Complete '
-                        'labs to get recommendations based on real performance.'
-                  : 'Analysis of $tested tested career${tested > 1 ? 's' : ''}: '
-                        'match = 75% lab performance + 25% interests.',
+                  ? loc.matchesInterestsOnly
+                  : loc.matchesAnalysis(tested),
               style: const TextStyle(color: ink, fontSize: 12, height: 1.4),
             ),
           ),
           const SizedBox(height: 18),
-          const SectionTitle('All matches'),
+          SectionTitle(loc.allMatches),
           const SizedBox(height: 8),
           ...matches.map(
             (match) => Card(
@@ -157,7 +160,7 @@ class RecommendationsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        match.reason,
+                        loc.matchReason(match),
                         style: const TextStyle(color: mutedInk, fontSize: 12),
                       ),
                     ],
@@ -167,13 +170,13 @@ class RecommendationsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const SectionTitle('Recommendation history'),
+          SectionTitle(loc.recommendationHistory),
           const SizedBox(height: 8),
           if (state.recommendationHistory.isEmpty)
-            const EmptyState(
+            EmptyState(
               icon: Icons.history,
-              title: 'No recommendation yet',
-              message: 'A new recommendation is generated after every completed lab.',
+              title: loc.noRecommendationYet,
+              message: loc.noRecommendationYetMessage,
             )
           else
             ...state.recommendationHistory.take(10).map((snapshot) {
@@ -186,7 +189,7 @@ class RecommendationsScreen extends StatelessWidget {
                   style: const TextStyle(color: ink, fontSize: 13),
                 ),
                 subtitle: Text(
-                  timeAgo(snapshot.createdAt),
+                  loc.timeAgo(snapshot.createdAt),
                   style: const TextStyle(fontSize: 11),
                 ),
                 trailing: Text(

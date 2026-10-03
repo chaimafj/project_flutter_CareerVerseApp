@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
@@ -101,16 +102,16 @@ class _SimulationScreenState extends State<SimulationScreen> {
     final leave = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Leave the lab?'),
-        content: const Text('Your progress in this lab will be lost.'),
+        title: Text(context.l10n.leaveLabTitle),
+        content: Text(context.l10n.leaveLabMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Stay'),
+            child: Text(context.l10n.stay),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Leave'),
+            child: Text(context.l10n.leave),
           ),
         ],
       ),
@@ -120,6 +121,7 @@ class _SimulationScreenState extends State<SimulationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.l10n;
     final total = _lab.questions.length;
     final progress = (_index + (_checked ? 1 : 0)) / total;
     final correctSoFar = [
@@ -172,7 +174,7 @@ class _SimulationScreenState extends State<SimulationScreen> {
                               ),
                             ),
                             Text(
-                              '${_career.title} · ${_lab.level}',
+                              '${_career.title} · ${tc(_lab.level)}',
                               style: const TextStyle(
                                 color: Color(0xFFB5C8E8),
                                 fontSize: 12,
@@ -218,7 +220,7 @@ class _SimulationScreenState extends State<SimulationScreen> {
                     child: Row(
                       children: [
                         Text(
-                          'Question ${_index + 1} of $total',
+                          loc.questionOf(_index + 1, total),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,
@@ -227,7 +229,7 @@ class _SimulationScreenState extends State<SimulationScreen> {
                         ),
                         const Spacer(),
                         Text(
-                          '$correctSoFar correct',
+                          loc.correctCount(correctSoFar),
                           style: const TextStyle(
                             color: Color(0xFF7CF2D7),
                             fontSize: 12,
@@ -269,11 +271,11 @@ class _SimulationScreenState extends State<SimulationScreen> {
                     ],
                     Row(
                       children: [
-                        ToolPill(_question.skill, icon: Icons.bolt),
+                        ToolPill(tc(_question.skill), icon: Icons.bolt),
                         const SizedBox(width: 6),
                         if (_question.isMultiple)
                           ToolPill(
-                            'Select ${_question.correct.length} answers',
+                            loc.selectAnswers(_question.correct.length),
                             icon: Icons.checklist,
                           ),
                       ],
@@ -330,10 +332,10 @@ class _SimulationScreenState extends State<SimulationScreen> {
                     : GradientActionButton(
                         key: const Key('sim-action'),
                         label: !_checked
-                            ? 'Check answer'
+                            ? loc.checkAnswer
                             : _isLast
-                            ? 'Finish lab'
-                            : 'Next question',
+                            ? loc.finishLab
+                            : loc.nextQuestion,
                         icon: !_checked
                             ? Icons.check_rounded
                             : _isLast
@@ -374,9 +376,12 @@ class _ScenarioCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Scenario',
-                  style: TextStyle(color: purple, fontWeight: FontWeight.w800),
+                Text(
+                  context.l10n.scenario,
+                  style: const TextStyle(
+                    color: purple,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -496,7 +501,7 @@ class _FeedbackCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                correct ? 'Correct!' : 'Not quite',
+                correct ? context.l10n.correct : context.l10n.notQuite,
                 style: TextStyle(color: color, fontWeight: FontWeight.w800),
               ),
             ],

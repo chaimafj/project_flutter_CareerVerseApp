@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../providers/locale_provider.dart';
 import '../providers/theme_provider.dart';
-import '../utils/app_localizations.dart';
 import '../widgets/form_fields.dart';
+
+const _languageNames = {'fr': 'Français', 'en': 'English', 'ar': 'العربية'};
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -19,11 +21,11 @@ class SettingsScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Confirm'),
+            child: Text(context.l10n.confirm),
           ),
         ],
       ),
@@ -33,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = context.l10n;
     final themeProvider = context.watch<ThemeProvider>();
     final localeProvider = context.watch<LocaleProvider>();
 
@@ -61,7 +63,8 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 for (final code in ['fr', 'en', 'ar'])
                   ChoiceChip(
-                    label: Text(code.toUpperCase()),
+                    key: Key('lang-$code'),
+                    label: Text(_languageNames[code]!),
                     selected: localeProvider.locale.languageCode == code,
                     onSelected: (_) => localeProvider.setLocale(Locale(code)),
                   ),
@@ -76,26 +79,26 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.person_outline),
-            title: const Text('Edit profile'),
+            title: Text(loc.editProfile),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.of(context).pushNamed('/edit-profile'),
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.restart_alt, color: Colors.orange),
-            title: const Text('Reset my progress'),
-            subtitle: const Text('Delete all lab results and history'),
+            title: Text(loc.resetProgress),
+            subtitle: Text(loc.resetProgressSubtitle),
             onTap: () async {
               final state = context.read<AppState>();
               if (!await _confirm(
                 context,
-                'Reset progress?',
-                'All your lab results and recommendations will be deleted.',
+                loc.resetProgressTitle,
+                loc.resetProgressMessage,
               )) {
                 return;
               }
               await state.resetProgress();
-              if (context.mounted) showInfo(context, 'Progress reset');
+              if (context.mounted) showInfo(context, loc.progressReset);
             },
           ),
           ListTile(
@@ -105,8 +108,7 @@ class SettingsScreen extends StatelessWidget {
               context: context,
               applicationName: 'CareerVerse',
               applicationVersion: '1.0.0',
-              applicationLegalese:
-                  'Discover careers through hands-on simulations.',
+              applicationLegalese: loc.aboutText,
             ),
           ),
           ListTile(

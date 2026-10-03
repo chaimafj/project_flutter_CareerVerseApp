@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 
@@ -12,6 +13,7 @@ class ProgressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final skills = state.skillAverages;
+    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
@@ -19,9 +21,9 @@ class ProgressScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'My Progress',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.myProgressTitle,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
       ),
       body: ListView(
@@ -31,7 +33,7 @@ class ProgressScreen extends StatelessWidget {
             children: [
               _Stat(
                 value: '${state.totalCompletedLabs}/${state.totalLabs}',
-                label: 'Labs done',
+                label: loc.labsDone,
                 icon: Icons.science_outlined,
                 color: purple,
               ),
@@ -40,21 +42,21 @@ class ProgressScreen extends StatelessWidget {
                 value: state.averageScore == null
                     ? '--'
                     : '${state.averageScore}%',
-                label: 'Avg score',
+                label: loc.avgScore,
                 icon: Icons.track_changes,
                 color: const Color(0xFF10A37F),
               ),
               const SizedBox(width: 10),
               _Stat(
                 value: '${state.totalMinutes}',
-                label: 'Minutes',
+                label: loc.minutes,
                 icon: Icons.timer_outlined,
                 color: blue,
               ),
             ],
           ),
           const SizedBox(height: 18),
-          const SectionTitle('Career progress'),
+          SectionTitle(loc.careerProgress),
           const SizedBox(height: 8),
           ...careers.map((career) {
             final done = state.completedLabs(career);
@@ -115,12 +117,12 @@ class ProgressScreen extends StatelessWidget {
             );
           }),
           const SizedBox(height: 8),
-          const SectionTitle('Skills'),
+          SectionTitle(loc.skills),
           const SizedBox(height: 8),
           if (skills.isEmpty)
-            const Text(
-              'Complete a lab to measure your skills.',
-              style: TextStyle(color: mutedInk, fontSize: 13),
+            Text(
+              loc.noSkillsYet,
+              style: const TextStyle(color: mutedInk, fontSize: 13),
             )
           else
             Container(
@@ -139,7 +141,7 @@ class ProgressScreen extends StatelessWidget {
                             SizedBox(
                               width: 120,
                               child: Text(
-                                e.key,
+                                tc(e.key),
                                 style: const TextStyle(
                                   color: ink,
                                   fontSize: 12,
@@ -178,13 +180,13 @@ class ProgressScreen extends StatelessWidget {
               ),
             ),
           const SizedBox(height: 18),
-          const SectionTitle('History'),
+          SectionTitle(loc.history),
           const SizedBox(height: 8),
           if (state.results.isEmpty)
-            const EmptyState(
+            EmptyState(
               icon: Icons.history,
-              title: 'No attempts yet',
-              message: 'Your completed labs will be listed here.',
+              title: loc.noAttemptsYet,
+              message: loc.noAttemptsYetMessage,
             )
           else
             ...state.results.map((result) {
@@ -218,7 +220,7 @@ class ProgressScreen extends StatelessWidget {
                   subtitle: Text(
                     '${career.title} · ${result.correct}/${result.total} · '
                     '${formatDuration(result.durationSeconds)} · '
-                    '${timeAgo(result.completedAt)}',
+                    '${loc.timeAgo(result.completedAt)}',
                     style: const TextStyle(fontSize: 11),
                   ),
                   trailing: const Icon(Icons.chevron_right),

@@ -1,32 +1,24 @@
+import 'package:flutter/widgets.dart';
+
+import '../l10n/app_localizations.dart';
+
 class AppValidators {
-  static String? name(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'This field is required';
-    }
-    if (value.trim().length < 2) {
-      return 'Name must contain at least 2 characters';
-    }
+  static FormFieldValidator<String> name(AppLocalizations l) => (value) {
+    if (value == null || value.trim().isEmpty) return l.validationRequired;
+    if (value.trim().length < 2) return l.validationNameLength;
     return null;
-  }
+  };
 
-  static String? email(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'This field is required';
-    }
+  static FormFieldValidator<String> email(AppLocalizations l) => (value) {
+    if (value == null || value.trim().isEmpty) return l.validationRequired;
     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(value.trim())) {
-      return 'Enter a valid email address';
-    }
+    if (!emailRegex.hasMatch(value.trim())) return l.validationEmail;
     return null;
-  }
+  };
 
-  static String? password(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'This field is required';
-    }
-    if (value.length < 6) {
-      return 'Password must contain at least 6 characters';
-    }
+  static FormFieldValidator<String> password(AppLocalizations l) => (value) {
+    if (value == null || value.trim().isEmpty) return l.validationRequired;
+    if (value.length < 6) return l.validationPasswordLength;
     return null;
-  }
+  };
 }

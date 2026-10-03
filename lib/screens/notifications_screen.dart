@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 
@@ -11,39 +12,38 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final notifications = state.notifications;
+    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: const Text(
-          'Notifications',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.notifications,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
         actions: [
           if (state.unreadCount > 0)
             IconButton(
-              tooltip: 'Mark all as read',
+              tooltip: loc.markAllRead,
               onPressed: state.markAllRead,
               icon: const Icon(Icons.done_all),
             ),
           if (notifications.isNotEmpty)
             IconButton(
-              tooltip: 'Clear all',
+              tooltip: loc.clearAll,
               onPressed: state.clearNotifications,
               icon: const Icon(Icons.delete_sweep_outlined),
             ),
         ],
       ),
       body: notifications.isEmpty
-          ? const Center(
+          ? Center(
               child: EmptyState(
                 icon: Icons.notifications_off_outlined,
-                title: 'No notifications',
-                message:
-                    'You will be notified when your lab results and '
-                    'recommendations are ready.',
+                title: loc.noNotifications,
+                message: loc.noNotificationsMessage,
               ),
             )
           : ListView.separated(
@@ -77,7 +77,7 @@ class NotificationsScreen extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      n.title,
+                      loc.notificationTitle(n),
                       style: TextStyle(
                         color: ink,
                         fontWeight: n.read ? FontWeight.w600 : FontWeight.w800,
@@ -85,7 +85,7 @@ class NotificationsScreen extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      '${n.body}\n${timeAgo(n.createdAt)}',
+                      '${loc.notificationBody(n)}\n${loc.timeAgo(n.createdAt)}',
                       style: const TextStyle(fontSize: 12),
                     ),
                     isThreeLine: true,

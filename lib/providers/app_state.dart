@@ -15,15 +15,25 @@ class CareerMatch {
   const CareerMatch({
     required this.career,
     required this.score,
-    required this.reason,
     required this.tested,
+    required this.labsDone,
+    required this.sharedInterests,
+    this.performance,
+    this.strongestSkill,
   });
 
   final Career career;
   final int score;
-  final String reason;
   final bool tested;
+
+  /// Data used by the UI to explain the match in the current language.
+  final int? performance;
+  final int labsDone;
+  final String? strongestSkill;
+  final List<String> sharedInterests;
 }
+
+enum AuthError { emailTaken, noAccount, wrongPassword }
 
 class RecommendationSnapshot {
   const RecommendationSnapshot({
@@ -90,8 +100,8 @@ class AppState extends ChangeNotifier {
   String _newId() =>
       '${DateTime.now().microsecondsSinceEpoch}${_random.nextInt(9999)}';
 
-  /// Returns an error message, or null on success.
-  Future<String?> register({
+  /// Returns an error, or null on success.
+  Future<AuthError?> register({
     required String name,
     required String email,
     required String password,
@@ -99,7 +109,7 @@ class AppState extends ChangeNotifier {
     final key = email.trim().toLowerCase();
     final accounts = _accounts;
     if (accounts.containsKey(key)) {
-      return 'An account already exists with this email.';
+      return AuthError.emailTaken;
     }
     final salt = base64Url.encode(
       List.generate(16, (_) => _random.nextInt(256)),
@@ -117,10 +127,7 @@ class AppState extends ChangeNotifier {
     _notifications = [
       AppNotification(
         id: _newId(),
-        title: 'Welcome to CareerVerse 🎉',
-        body:
-            'Complete your profile and start your first Career Lab to get '
-            'personalized recommendations.',
+        kind: NotificationKind.welcome,
         createdAt: DateTime.now(),
       ),
     ];
@@ -130,12 +137,12 @@ class AppState extends ChangeNotifier {
     return null;
   }
 
-  Future<String?> login(String email, String password) async {
+  Future<AuthError?> login(String email, String password) async {
     final key = email.trim().toLowerCase();
     final account = _accounts[key] as Map<String, dynamic>?;
-    if (account == null) return 'No account found for this email.';
+    if (account == null) return AuthError.noAccount;
     if (_hash(account['salt'] as String, password) != account['hash']) {
-      return 'Incorrect password.';
+      return AuthError.wrongPassword;
     }
     await _prefs.setString(_sessionKey, key);
     _loadUser(key);
@@ -255,11 +262,14 @@ class AppState extends ChangeNotifier {
       0,
       AppNotification(
         id: _newId(),
-        title: 'Your recommendations are ready!',
-        body:
-            '${lab.title}: ${result.overall}%'
-            '${improved ? ' (new personal best)' : ''}. '
-            'Top match: ${top.career.title} (${top.score}%).',
+        kind: NotificationKind.labResult,
+        data: {
+          'labId': lab.id,
+          'score': result.overall,
+          'improved': improved,
+          'topCareerId': top.career.id,
+          'topScore': top.score,
+        },
         createdAt: DateTime.now(),
         resultId: result.id,
       ),
@@ -387,7 +397,10 @@ class AppState extends ChangeNotifier {
         career: career,
         score: score,
         tested: tested,
-        reason: _reason(career, performance, shared),
+        performance: performance,
+        labsDone: completedLabs(career),
+        strongestSkill: tested ? _strongestSkill(career) : null,
+        sharedInterests: shared,
       );
     }).toList();
     list.sort((a, b) {
@@ -398,33 +411,17 @@ class AppState extends ChangeNotifier {
     return list;
   }
 
-  String _reason(Career career, int? performance, List<String> shared) {
-    final parts = <String>[];
-    if (performance != null) {
-      final done = completedLabs(career);
-      final skills = <String, List<int>>{};
-      for (final lab in career.labs) {
-        bestResult(lab.id)?.skillScores.forEach(
-          (skill, score) => skills.putIfAbsent(skill, () => []).add(score),
-        );
-      }
-      final strongest = skills.entries.isEmpty
-          ? null
-          : (skills.entries.toList()
-                  ..sort((a, b) => _avg(b.value).compareTo(_avg(a.value))))
-                .first
-                .key;
-      parts.add(
-        'You scored $performance% on $done/${career.labs.length} labs'
-        '${strongest != null ? ', strongest in $strongest' : ''}.',
+  String? _strongestSkill(Career career) {
+    final skills = <String, List<int>>{};
+    for (final lab in career.labs) {
+      bestResult(lab.id)?.skillScores.forEach(
+        (skill, score) => skills.putIfAbsent(skill, () => []).add(score),
       );
-    } else {
-      parts.add('Not tested yet: try a lab to confirm this match.');
     }
-    if (shared.isNotEmpty) {
-      parts.add('Matches your interests: ${shared.join(', ')}.');
-    }
-    return parts.join(' ');
+    if (skills.isEmpty) return null;
+    final entries = skills.entries.toList()
+      ..sort((a, b) => _avg(b.value).compareTo(_avg(a.value)));
+    return entries.first.key;
   }
 
   double _avg(List<int> values) =>

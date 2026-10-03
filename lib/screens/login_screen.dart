@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
-import '../utils/app_localizations.dart';
 import '../utils/validators.dart';
 import '../widgets/career_ui.dart';
 import '../widgets/form_fields.dart';
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
     setState(() => _loading = false);
     if (error != null) {
-      showError(context, error);
+      showError(context, context.l10n.authError(error));
       return;
     }
     Navigator.of(context).pushNamedAndRemoveUntil('/home', (_) => false);
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = context.l10n;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -74,9 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                const Text(
-                  'Sign in to continue your journey',
-                  style: TextStyle(color: mutedInk, fontSize: 14),
+                Text(
+                  loc.loginSubtitle,
+                  style: const TextStyle(color: mutedInk, fontSize: 14),
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
@@ -85,11 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   decoration: careerInputDecoration(
-                    label: 'Email address',
+                    label: loc.emailAddress,
                     hint: 'you@example.com',
                     icon: Icons.mail_outline,
                   ),
-                  validator: AppValidators.email,
+                  validator: AppValidators.email(loc),
                 ),
                 const SizedBox(height: 11),
                 TextFormField(
@@ -112,41 +112,37 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  validator: AppValidators.password,
+                  validator: AppValidators.password(loc),
                 ),
                 Align(
-                  alignment: Alignment.centerRight,
+                  alignment: AlignmentDirectional.centerEnd,
                   child: TextButton(
-                    onPressed: () => showInfo(
-                      context,
-                      'Accounts are stored on this device. Create a new '
-                      'account if you forgot your password.',
-                    ),
-                    child: const Text(
-                      'Forgot password?',
-                      style: TextStyle(color: blue, fontSize: 11),
+                    onPressed: () => showInfo(context, loc.forgotPasswordInfo),
+                    child: Text(
+                      loc.forgotPassword,
+                      style: const TextStyle(color: blue, fontSize: 11),
                     ),
                   ),
                 ),
                 _loading
                     ? const Center(child: CircularProgressIndicator())
                     : GradientActionButton(
-                        label: 'Log In',
+                        label: loc.logIn,
                         onPressed: _login,
                         icon: Icons.login_rounded,
                       ),
                 const SizedBox(height: 19),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: Divider(color: Color(0xFFDDE5F3))),
+                    const Expanded(child: Divider(color: Color(0xFFDDE5F3))),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
-                        'or',
-                        style: TextStyle(color: mutedInk, fontSize: 12),
+                        loc.or,
+                        style: const TextStyle(color: mutedInk, fontSize: 12),
                       ),
                     ),
-                    Expanded(child: Divider(color: Color(0xFFDDE5F3))),
+                    const Expanded(child: Divider(color: Color(0xFFDDE5F3))),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -154,11 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   height: 45,
                   child: OutlinedButton.icon(
-                    onPressed: () => showInfo(
-                      context,
-                      'Google Sign-In requires a Firebase project '
-                      '(google-services.json). Use email sign-in for now.',
-                    ),
+                    onPressed: () => showInfo(context, loc.googleSignInInfo),
                     icon: const Icon(
                       Icons.g_mobiledata,
                       color: Color(0xFF4285F4),
@@ -184,14 +176,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushReplacementNamed('/register'),
-                    child: const Text.rich(
+                    child: Text.rich(
                       TextSpan(
-                        style: TextStyle(color: mutedInk, fontSize: 12),
+                        style: const TextStyle(color: mutedInk, fontSize: 12),
                         children: [
-                          TextSpan(text: "Don't have an account?   "),
+                          TextSpan(text: '${loc.noAccount}   '),
                           TextSpan(
-                            text: 'Sign Up',
-                            style: TextStyle(
+                            text: loc.signUp,
+                            style: const TextStyle(
                               color: blue,
                               fontWeight: FontWeight.w800,
                             ),

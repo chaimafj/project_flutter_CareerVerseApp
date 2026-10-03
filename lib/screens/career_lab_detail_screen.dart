@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
@@ -17,6 +18,7 @@ class CareerLabDetailScreen extends StatelessWidget {
     final match = state.matches.firstWhere((m) => m.career.id == career.id);
     final current = state.currentLab(career);
     final done = state.completedLabs(career);
+    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
@@ -68,7 +70,7 @@ class CareerLabDetailScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            '$done/${career.labs.length} labs completed',
+                            loc.labsCompletedOf(done, career.labs.length),
                             style: const TextStyle(
                               color: Color(0xFF7CF2D7),
                               fontWeight: FontWeight.w700,
@@ -83,7 +85,7 @@ class CareerLabDetailScreen extends StatelessWidget {
                       size: 64,
                       color: const Color(0xFF10D3D0),
                       textColor: Colors.white,
-                      label: 'match',
+                      label: loc.match,
                     ),
                   ],
                 ),
@@ -98,13 +100,13 @@ class CareerLabDetailScreen extends StatelessWidget {
                   children: [
                     _Fact(
                       icon: Icons.euro,
-                      label: 'Salary (France)',
+                      label: loc.salaryFrance,
                       value: career.salary,
                     ),
                     const SizedBox(width: 10),
                     _Fact(
                       icon: Icons.school_outlined,
-                      label: 'Education',
+                      label: loc.education,
                       value: career.education,
                     ),
                   ],
@@ -125,7 +127,7 @@ class CareerLabDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const SectionTitle('About the job'),
+                SectionTitle(loc.aboutTheJob),
                 const SizedBox(height: 6),
                 Text(
                   career.description,
@@ -136,7 +138,7 @@ class CareerLabDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 14),
-                const SectionTitle('A typical day'),
+                SectionTitle(loc.typicalDay),
                 const SizedBox(height: 6),
                 ...career.dailyTasks.map(
                   (task) => Padding(
@@ -156,7 +158,7 @@ class CareerLabDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const SectionTitle('Tools you will use'),
+                SectionTitle(loc.toolsYouWillUse),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 6,
@@ -167,8 +169,8 @@ class CareerLabDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 18),
                 SectionTitle(
-                  'Career Labs',
-                  action: 'Learning path',
+                  loc.careerLabs,
+                  action: loc.learningPath,
                   onAction: () =>
                       Navigator.of(context)
                           .pushNamed('/learning-path', arguments: career.id),
@@ -180,10 +182,10 @@ class CareerLabDetailScreen extends StatelessWidget {
                 GradientActionButton(
                   key: const Key('start-lab'),
                   label: current == null
-                      ? 'Replay first lab'
+                      ? loc.replayFirstLab
                       : done == 0
-                      ? 'Start lab: ${current.title}'
-                      : 'Continue: ${current.title}',
+                      ? loc.startLabNamed(current.title)
+                      : loc.continueLabNamed(current.title),
                   icon: Icons.play_arrow_rounded,
                   onPressed: () => Navigator.of(context).pushNamed(
                     '/simulation',
@@ -251,8 +253,8 @@ class _LabTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    '${lab.level} · ${lab.questions.length} tasks · ~${lab.minutes} min'
-                    '${attempts > 0 ? ' · $attempts attempt${attempts > 1 ? 's' : ''}' : ''}',
+                    '${tc(lab.level)} · ${context.l10n.tasksCount(lab.questions.length)} · ~${context.l10n.minutesShort(lab.minutes)}'
+                    '${attempts > 0 ? ' · ${context.l10n.attemptsCount(attempts)}' : ''}',
                     style: TextStyle(
                       color: levelColor(lab.level),
                       fontSize: 11,

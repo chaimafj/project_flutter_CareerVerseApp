@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/content_ar.dart';
+import '../l10n/content_fr.dart';
 import '../models/career.dart';
 
 /// Career catalog used by the whole app. Salaries are indicative gross yearly
 /// ranges for France (junior → confirmed), based on public job-market surveys.
-const careers = <Career>[
+const _careersEn = <Career>[
   Career(
     id: 'cloud',
     title: 'Cloud Engineer',
@@ -834,6 +836,34 @@ const careerInterests = <String, List<String>>{
   'backend': ['Programming', 'Data', 'Problem solving', 'Design'],
   'cyber': ['Security', 'Networks', 'Problem solving', 'Data'],
 };
+
+const _translations = <String, Map<String, String>>{
+  'fr': contentFr,
+  'ar': contentAr,
+};
+
+String _language = 'en';
+final _localizedCatalogs = <String, List<Career>>{};
+
+/// Language used for the catalog content (set by the app from the locale).
+String get catalogLanguage => _language;
+
+void setCatalogLanguage(String languageCode) {
+  _language = _translations.containsKey(languageCode) ? languageCode : 'en';
+}
+
+/// Translates a catalog string (career content, skill, level, interest,
+/// study level…) to the current language, falling back to English.
+String tc(String english) => _translations[_language]?[english] ?? english;
+
+/// Careers in the current language. Ids, skills, levels and tags stay in
+/// English so stored results remain valid whatever the language.
+List<Career> get careers => _localizedCatalogs.putIfAbsent(
+  _language,
+  () => _language == 'en'
+      ? _careersEn
+      : [for (final career in _careersEn) career.translate(tc)],
+);
 
 Career? careerById(String id) {
   for (final career in careers) {

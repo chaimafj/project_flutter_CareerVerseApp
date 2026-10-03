@@ -19,6 +19,14 @@ class LabQuestion {
 
   bool isCorrect(Set<int> selected) =>
       selected.length == correct.length && selected.containsAll(correct);
+
+  LabQuestion translate(String Function(String) t) => LabQuestion(
+    prompt: t(prompt),
+    options: [for (final option in options) t(option)],
+    correct: correct,
+    skill: skill,
+    explanation: t(explanation),
+  );
 }
 
 class Lab {
@@ -41,6 +49,15 @@ class Lab {
 
   List<String> get skills =>
       questions.map((question) => question.skill).toSet().toList();
+
+  /// Level stays untranslated: it is used as a filter key.
+  Lab translate(String Function(String) t) => Lab(
+    id: id,
+    title: t(title),
+    scenario: t(scenario),
+    level: level,
+    questions: [for (final question in questions) question.translate(t)],
+  );
 }
 
 class Career {
@@ -75,4 +92,21 @@ class Career {
   final List<Lab> labs;
 
   int get totalMinutes => labs.fold(0, (sum, lab) => sum + lab.minutes);
+
+  /// Tags stay untranslated: they are matched against user interests.
+  Career translate(String Function(String) t) => Career(
+    id: id,
+    title: t(title),
+    summary: t(summary),
+    description: t(description),
+    icon: icon,
+    color: color,
+    tools: tools,
+    tags: tags,
+    salary: t(salary),
+    outlook: t(outlook),
+    education: t(education),
+    dailyTasks: [for (final task in dailyTasks) t(task)],
+    labs: [for (final lab in labs) lab.translate(t)],
+  );
 }

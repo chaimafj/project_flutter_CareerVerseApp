@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 
@@ -24,15 +25,16 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
     final career = careerById(_careerId!)!;
     final current = state.currentLab(career);
     final done = state.completedLabs(career);
+    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        title: const Text(
-          'Learning Path',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.learningPathTitle,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
       ),
       body: ListView(
@@ -44,7 +46,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
               children: careers
                   .map(
                     (c) => Padding(
-                      padding: const EdgeInsets.only(right: 6),
+                      padding: const EdgeInsetsDirectional.only(end: 6),
                       child: ChoiceChip(
                         avatar: Icon(c.icon, size: 16, color: c.color),
                         label: Text(c.title),
@@ -70,7 +72,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Become a ${career.title}',
+                        loc.becomeCareer(career.title),
                         style: const TextStyle(
                           color: ink,
                           fontWeight: FontWeight.w800,
@@ -79,7 +81,11 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '$done of ${career.labs.length} steps · ~${career.totalMinutes} min total',
+                        loc.pathSteps(
+                          done,
+                          career.labs.length,
+                          career.totalMinutes,
+                        ),
                         style: const TextStyle(color: mutedInk, fontSize: 12),
                       ),
                     ],
@@ -169,8 +175,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                           best != null
                                               ? '${best.overall}%'
                                               : isCurrent
-                                              ? 'Up next'
-                                              : 'Later',
+                                              ? loc.upNext
+                                              : loc.later,
                                           style: TextStyle(
                                             color: best != null
                                                 ? scoreColor(best.overall)
@@ -185,7 +191,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '${lab.level} · ~${lab.minutes} min',
+                                      '${tc(lab.level)} · ~${loc.minutesShort(lab.minutes)}',
                                       style: TextStyle(
                                         color: levelColor(lab.level),
                                         fontSize: 11,
@@ -196,7 +202,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                                       spacing: 5,
                                       runSpacing: 5,
                                       children: lab.skills
-                                          .map((s) => ToolPill(s))
+                                          .map((s) => ToolPill(tc(s)))
                                           .toList(),
                                     ),
                                   ],
@@ -215,8 +221,8 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           if (current != null)
             GradientActionButton(
               label: done == 0
-                  ? 'Start the path'
-                  : 'Continue: ${current.title}',
+                  ? loc.startThePath
+                  : loc.continueLabNamed(current.title),
               icon: Icons.play_arrow_rounded,
               onPressed: () =>
                   Navigator.of(context)
@@ -230,8 +236,10 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Text(
-                'Path completed! Your average on ${career.title} is '
-                '${state.careerAverage(career)}%. Replay labs to improve it.',
+                loc.pathCompleted(
+                  career.title,
+                  state.careerAverage(career) ?? 0,
+                ),
                 style: const TextStyle(color: ink, fontSize: 13),
               ),
             ),

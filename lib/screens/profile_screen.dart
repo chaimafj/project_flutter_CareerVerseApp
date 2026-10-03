@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
 import '../widgets/user_avatar.dart';
@@ -12,6 +14,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final profile = state.profile;
+    final loc = context.l10n;
     final skills = state.skillAverages.entries.take(3).toList();
     final subtitle = [
       profile.specialty,
@@ -37,10 +40,10 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Profile',
-                        style: TextStyle(
+                        loc.profile,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
                           fontSize: 18,
@@ -83,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
                   onPressed: () =>
                       Navigator.of(context).pushNamed('/edit-profile'),
                   icon: const Icon(Icons.edit_outlined, size: 18),
-                  label: const Text('Edit profile'),
+                  label: Text(loc.editProfile),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white,
                     side: const BorderSide(color: Colors.white54),
@@ -103,10 +106,10 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              'Profile completeness',
-                              style: TextStyle(
+                              loc.profileCompleteness,
+                              style: const TextStyle(
                                 color: ink,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -133,9 +136,9 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       if (profile.completeness < 100) ...[
                         const SizedBox(height: 6),
-                        const Text(
-                          'A complete profile improves your recommendations.',
-                          style: TextStyle(color: mutedInk, fontSize: 11),
+                        Text(
+                          loc.completeProfileHint,
+                          style: const TextStyle(color: mutedInk, fontSize: 11),
                         ),
                       ],
                     ],
@@ -144,54 +147,57 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    _Mini(value: '${state.totalCompletedLabs}', label: 'Labs'),
+                    _Mini(
+                      value: '${state.totalCompletedLabs}',
+                      label: loc.labs,
+                    ),
                     const SizedBox(width: 10),
                     _Mini(
                       value: state.averageScore == null
                           ? '--'
                           : '${state.averageScore}%',
-                      label: 'Avg score',
+                      label: loc.avgScore,
                     ),
                     const SizedBox(width: 10),
                     _Mini(
                       value: '${state.matches.first.score}%',
-                      label: 'Top match',
+                      label: loc.topMatch,
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                const SectionTitle('About me'),
+                SectionTitle(loc.aboutMe),
                 const SizedBox(height: 8),
                 _Card(
                   child: Column(
                     children: [
-                      _InfoRow(Icons.mail_outline, 'Email', profile.email),
+                      _InfoRow(Icons.mail_outline, loc.email, profile.email),
                       _InfoRow(
                         Icons.school_outlined,
-                        'Study level',
-                        profile.studyLevel,
+                        loc.studyLevel,
+                        tc(profile.studyLevel),
                       ),
                       _InfoRow(
                         Icons.account_balance_outlined,
-                        'University',
+                        loc.university,
                         profile.university,
                       ),
                       _InfoRow(
                         Icons.workspace_premium_outlined,
-                        'Specialty',
+                        loc.specialty,
                         profile.specialty,
                       ),
-                      _InfoRow(Icons.notes, 'Bio', profile.bio),
+                      _InfoRow(Icons.notes, loc.bio, profile.bio),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                const SectionTitle('Interests'),
+                SectionTitle(loc.interests),
                 const SizedBox(height: 8),
                 if (profile.interests.isEmpty)
-                  const Text(
-                    'No interests yet. Add some to personalize your matches.',
-                    style: TextStyle(color: mutedInk, fontSize: 12),
+                  Text(
+                    loc.noInterestsYet,
+                    style: const TextStyle(color: mutedInk, fontSize: 12),
                   )
                 else
                   Wrap(
@@ -200,7 +206,7 @@ class ProfileScreen extends StatelessWidget {
                     children: profile.interests
                         .map(
                           (i) => Chip(
-                            label: Text(i),
+                            label: Text(tc(i)),
                             backgroundColor: const Color(0xFFEDE8FF),
                             labelStyle: const TextStyle(
                               color: purple,
@@ -212,12 +218,12 @@ class ProfileScreen extends StatelessWidget {
                         .toList(),
                   ),
                 const SizedBox(height: 16),
-                const SectionTitle('Top skills'),
+                SectionTitle(loc.topSkills),
                 const SizedBox(height: 8),
                 if (skills.isEmpty)
-                  const Text(
-                    'Complete labs to reveal your strongest skills.',
-                    style: TextStyle(color: mutedInk, fontSize: 12),
+                  Text(
+                    loc.noTopSkills,
+                    style: const TextStyle(color: mutedInk, fontSize: 12),
                   )
                 else
                   ...skills.map(
@@ -225,7 +231,10 @@ class ProfileScreen extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       dense: true,
                       leading: const Icon(Icons.bolt, color: purple),
-                      title: Text(e.key, style: const TextStyle(color: ink)),
+                      title: Text(
+                        tc(e.key),
+                        style: const TextStyle(color: ink),
+                      ),
                       trailing: Text(
                         '${e.value}%',
                         style: TextStyle(
@@ -238,8 +247,10 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 Center(
                   child: Text(
-                    'Member since ${profile.createdAt.day.toString().padLeft(2, '0')}/'
-                    '${profile.createdAt.month.toString().padLeft(2, '0')}/${profile.createdAt.year}',
+                    loc.memberSince(
+                      '${profile.createdAt.day.toString().padLeft(2, '0')}/'
+                      '${profile.createdAt.month.toString().padLeft(2, '0')}/${profile.createdAt.year}',
+                    ),
                     style: const TextStyle(color: mutedInk, fontSize: 11),
                   ),
                 ),
@@ -255,9 +266,9 @@ class ProfileScreen extends StatelessWidget {
                       );
                     },
                     icon: const Icon(Icons.logout, color: Color(0xFFE5484D)),
-                    label: const Text(
-                      'Log out',
-                      style: TextStyle(color: Color(0xFFE5484D)),
+                    label: Text(
+                      loc.logout,
+                      style: const TextStyle(color: Color(0xFFE5484D)),
                     ),
                   ),
                 ),
@@ -342,7 +353,7 @@ class _InfoRow extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              value.isEmpty ? 'Not set' : value,
+              value.isEmpty ? context.l10n.notSet : value,
               style: TextStyle(
                 color: value.isEmpty ? const Color(0xFFAAB6CB) : ink,
                 fontSize: 13,

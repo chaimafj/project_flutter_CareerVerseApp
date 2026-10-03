@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../models/lab_result.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
@@ -17,15 +18,16 @@ class ResultsScreen extends StatelessWidget {
     if (result == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: const Center(
+        body: Center(
           child: EmptyState(
             icon: Icons.search_off,
-            title: 'Result not found',
-            message: 'This result is no longer available.',
+            title: context.l10n.resultNotFound,
+            message: context.l10n.resultNotFoundMessage,
           ),
         ),
       );
     }
+    final loc = context.l10n;
     final (career, lab) = findLab(result.labId)!;
     final previous = state
         .resultsForLab(lab.id)
@@ -69,11 +71,11 @@ class ResultsScreen extends StatelessWidget {
                               .pushNamedAndRemoveUntil('/home', (_) => false),
                       icon: const Icon(Icons.close, color: Colors.white),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Lab Results',
+                        loc.labResults,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
                           fontSize: 17,
@@ -100,7 +102,7 @@ class ResultsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  passed ? 'Lab Completed!' : 'Keep practicing!',
+                  passed ? loc.labCompleted : loc.keepPracticing,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -123,7 +125,7 @@ class ResultsScreen extends StatelessWidget {
                   size: 120,
                   color: scoreColor(result.overall),
                   textColor: Colors.white,
-                  label: 'overall',
+                  label: loc.overall,
                 ),
               ],
             ),
@@ -138,15 +140,16 @@ class ResultsScreen extends StatelessWidget {
                     _StatTile(
                       icon: Icons.check_circle_outline,
                       value: '${result.correct}/${result.total}',
-                      label: 'Correct answers',
+                      label: loc.correctAnswers,
                       color: const Color(0xFF10A37F),
                     ),
                     const SizedBox(width: 10),
                     _StatTile(
                       icon: Icons.timer_outlined,
                       value: formatDuration(result.durationSeconds),
-                      label:
-                          'Time (target ${formatDuration(result.expectedSeconds)})',
+                      label: loc.timeTarget(
+                        formatDuration(result.expectedSeconds),
+                      ),
                       color: blue,
                     ),
                   ],
@@ -157,14 +160,14 @@ class ResultsScreen extends StatelessWidget {
                     _StatTile(
                       icon: Icons.track_changes,
                       value: '${result.correctness}%',
-                      label: 'Accuracy (80%)',
+                      label: loc.accuracyWeight,
                       color: purple,
                     ),
                     const SizedBox(width: 10),
                     _StatTile(
                       icon: Icons.speed,
                       value: '${result.timeScore}%',
-                      label: 'Speed (20%)',
+                      label: loc.speedWeight,
                       color: const Color(0xFFF59E0B),
                     ),
                   ],
@@ -179,30 +182,37 @@ class ResultsScreen extends StatelessWidget {
                         ? const Color(0xFF10A37F)
                         : mutedInk,
                     text: result.overall > previousBest.overall
-                        ? 'New personal best! +${result.overall - previousBest.overall} pts vs ${previousBest.overall}%.'
-                        : 'Your best on this lab is still ${previousBest.overall}%.',
+                        ? loc.newPersonalBest(
+                            result.overall - previousBest.overall,
+                            previousBest.overall,
+                          )
+                        : loc.stillBest(previousBest.overall),
                   ),
                 const SizedBox(height: 16),
-                const SectionTitle('Skills breakdown'),
+                SectionTitle(loc.skillsBreakdown),
                 const SizedBox(height: 8),
                 ...result.skillScores.entries.map(
-                  (entry) => _SkillBar(skill: entry.key, value: entry.value),
+                  (entry) =>
+                      _SkillBar(skill: tc(entry.key), value: entry.value),
                 ),
                 const SizedBox(height: 14),
                 _InfoBanner(
                   icon: Icons.auto_awesome,
                   color: purple,
-                  text:
-                      '${career.title} match is now ${match.score}%. '
-                      '${state.completedLabs(career)}/${career.labs.length} labs completed in this career.',
+                  text: loc.matchNow(
+                    career.title,
+                    match.score,
+                    state.completedLabs(career),
+                    career.labs.length,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 if (next != null)
                   GradientActionButton(
                     key: const Key('next-lab'),
                     label: next.$1.id == career.id
-                        ? 'Next Lab: ${next.$2.title}'
-                        : 'Try ${next.$1.title}: ${next.$2.title}',
+                        ? loc.nextLabNamed(next.$2.title)
+                        : loc.tryCareerLab(next.$1.title, next.$2.title),
                     onPressed: () => Navigator.of(context).pushReplacementNamed(
                       '/simulation',
                       arguments: next.$2.id,
@@ -211,7 +221,7 @@ class ResultsScreen extends StatelessWidget {
                 else
                   GradientActionButton(
                     key: const Key('view-recommendations'),
-                    label: 'View recommendations',
+                    label: loc.viewRecommendations,
                     icon: Icons.auto_awesome,
                     onPressed: () =>
                         Navigator.of(context)
@@ -228,7 +238,7 @@ class ResultsScreen extends StatelessWidget {
                               arguments: lab.id,
                             ),
                         icon: const Icon(Icons.replay),
-                        label: const Text('Retry'),
+                        label: Text(loc.retry),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -238,7 +248,7 @@ class ResultsScreen extends StatelessWidget {
                             Navigator.of(context)
                                 .pushReplacementNamed('/recommendations'),
                         icon: const Icon(Icons.auto_awesome),
-                        label: const Text('Matches'),
+                        label: Text(loc.matches),
                       ),
                     ),
                   ],
@@ -249,7 +259,7 @@ class ResultsScreen extends StatelessWidget {
                     onPressed: () =>
                         Navigator.of(context)
                             .pushNamedAndRemoveUntil('/home', (_) => false),
-                    child: const Text('Back to home'),
+                    child: Text(loc.backToHome),
                   ),
                 ),
               ],

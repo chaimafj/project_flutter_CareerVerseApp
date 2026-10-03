@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../widgets/career_ui.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -7,6 +8,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.l10n;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -34,10 +36,10 @@ class WelcomeScreen extends StatelessWidget {
                       const SizedBox(height: 12),
                       const CareerLogo(dark: true),
                       const SizedBox(height: 18),
-                      const Text(
-                        'Explore  ·  Learn  ·  Build\nYour Future',
+                      Text(
+                        loc.welcomeTagline,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFFDCEAFF),
                           height: 1.6,
                           fontSize: 16,
@@ -49,8 +51,8 @@ class WelcomeScreen extends StatelessWidget {
                         height: 245,
                         child: Stack(
                           alignment: Alignment.center,
-                          children: const [
-                            _SkillTile(
+                          children: [
+                            const _SkillTile(
                               icon: Icons.cloud_queue_rounded,
                               title: 'Cloud',
                               color: Color(0xFF1ABEFF),
@@ -58,23 +60,23 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                             _SkillTile(
                               icon: Icons.verified_user_outlined,
-                              title: 'Cybersecurity',
-                              color: Color(0xFF18D2B4),
-                              alignment: Alignment(.65, -.8),
+                              title: loc.cybersecurity,
+                              color: const Color(0xFF18D2B4),
+                              alignment: const Alignment(.65, -.8),
                             ),
-                            _SkillTile(
+                            const _SkillTile(
                               icon: Icons.settings_outlined,
                               title: 'DevOps',
                               color: Color(0xFF974BFF),
                               alignment: Alignment(-.84, .35),
                             ),
-                            _SkillTile(
+                            const _SkillTile(
                               icon: Icons.code_rounded,
                               title: 'Backend',
                               color: Color(0xFFE63DCE),
                               alignment: Alignment(.84, .32),
                             ),
-                            Positioned(
+                            const Positioned(
                               bottom: 8,
                               child: Icon(
                                 Icons.person,
@@ -93,22 +95,23 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       GradientActionButton(
-                        label: 'Get Started',
+                        label: loc.getStarted,
                         onPressed: () =>
                             Navigator.of(context).pushNamed('/register'),
                       ),
                       const SizedBox(height: 14),
                       TextButton(
+                        key: const Key('welcome-login'),
                         onPressed: () =>
                             Navigator.of(context).pushNamed('/login'),
-                        child: const Text.rich(
+                        child: Text.rich(
                           TextSpan(
-                            style: TextStyle(color: Color(0xFFB7C9E8)),
+                            style: const TextStyle(color: Color(0xFFB7C9E8)),
                             children: [
-                              TextSpan(text: 'Already have an account?   '),
+                              TextSpan(text: '${loc.haveAccount}   '),
                               TextSpan(
-                                text: 'Log In',
-                                style: TextStyle(
+                                text: loc.logIn,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),

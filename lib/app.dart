@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'data/catalog.dart';
+import 'l10n/app_localizations.dart';
 import 'providers/app_state.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
@@ -16,7 +18,6 @@ import 'screens/results_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/simulation_screen.dart';
 import 'screens/welcome_screen.dart';
-import 'utils/app_localizations.dart';
 import 'utils/app_theme.dart';
 
 class CareerVerseApp extends StatelessWidget {
@@ -27,8 +28,10 @@ class CareerVerseApp extends StatelessWidget {
     final loggedIn = context.read<AppState>().isLoggedIn;
     return Consumer2<ThemeProvider, LocaleProvider>(
       builder: (context, themeProvider, localeProvider, _) {
+        // Career content (titles, labs, questions) follows the app language.
+        setCatalogLanguage(localeProvider.locale.languageCode);
         return MaterialApp(
-          title: 'CareerVerse',
+          onGenerateTitle: (context) => AppLocalizations.of(context).appName,
           debugShowCheckedModeBanner: false,
           themeMode: themeProvider.themeMode,
           theme: AppTheme.lightTheme,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
@@ -11,6 +12,13 @@ const _categories = <String, List<String>>{
   'Infrastructure': ['cloud', 'devops'],
   'Development': ['backend', 'devops'],
   'Security': ['cyber', 'cloud'],
+};
+
+String _categoryLabel(AppLocalizations loc, String key) => switch (key) {
+  'Infrastructure' => loc.categoryInfrastructure,
+  'Development' => loc.categoryDevelopment,
+  'Security' => loc.categorySecurity,
+  _ => loc.all,
 };
 
 /// "Explore" tab: search careers and browse them by category.
@@ -38,6 +46,7 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = context.l10n;
     return DefaultTabController(
       length: _categories.length,
       child: Scaffold(
@@ -46,9 +55,9 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.white,
           automaticallyImplyLeading: false,
-          title: const Text(
-            'Explore Careers',
-            style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+          title: Text(
+            loc.exploreCareersTitle,
+            style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(110),
@@ -60,7 +69,7 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
                     key: const Key('explore-search'),
                     onChanged: (value) => setState(() => _query = value),
                     decoration: InputDecoration(
-                      hintText: 'Search careers, tools or labs...',
+                      hintText: loc.exploreSearchHint,
                       prefixIcon: const Icon(Icons.search, color: mutedInk),
                       filled: true,
                       fillColor: const Color(0xFFF0F4FC),
@@ -78,7 +87,9 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
                   labelColor: purple,
                   unselectedLabelColor: mutedInk,
                   indicatorColor: purple,
-                  tabs: _categories.keys.map((c) => Tab(text: c)).toList(),
+                  tabs: _categories.keys
+                      .map((c) => Tab(text: _categoryLabel(loc, c)))
+                      .toList(),
                 ),
               ],
             ),
@@ -90,11 +101,11 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
                 .where((c) => ids.contains(c.id) && _matchesQuery(c))
                 .toList();
             if (list.isEmpty) {
-              return const Center(
+              return Center(
                 child: EmptyState(
                   icon: Icons.search_off,
-                  title: 'No career found',
-                  message: 'Try another keyword, e.g. "AWS" or "Docker".',
+                  title: loc.noCareerFound,
+                  message: loc.noCareerFoundMessage,
                 ),
               );
             }
@@ -202,7 +213,7 @@ class CareerCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      '$done/${career.labs.length} labs'
+                      '${context.l10n.labsProgress(done, career.labs.length)}'
                       '${average != null ? ' · $average%' : ''}',
                       style: const TextStyle(
                         color: mutedInk,
@@ -236,6 +247,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final loc = context.l10n;
     final entries =
         [
           for (final career in careers)
@@ -255,9 +267,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Career Labs',
-          style: TextStyle(color: ink, fontWeight: FontWeight.w800),
+        title: Text(
+          loc.careerLabs,
+          style: const TextStyle(color: ink, fontWeight: FontWeight.w800),
         ),
       ),
       body: Column(
@@ -271,11 +283,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   values: const ['All', 'Beginner', 'Intermediate', 'Advanced'],
                   selected: _level,
                   onSelected: (v) => setState(() => _level = v),
+                  labelOf: (v) => v == 'All' ? loc.all : tc(v),
                 ),
                 _ChipRow(
                   values: const ['All', 'To do', 'Completed'],
                   selected: _status,
                   onSelected: (v) => setState(() => _status = v),
+                  labelOf: (v) => switch (v) {
+                    'To do' => loc.toDo,
+                    'Completed' => loc.completed,
+                    _ => loc.all,
+                  },
                 ),
               ],
             ),
@@ -285,12 +303,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
             child: Row(
               children: [
                 Text(
-                  '${entries.length} labs',
+                  loc.labsCount(entries.length),
                   style: const TextStyle(color: mutedInk, fontSize: 12),
                 ),
                 const Spacer(),
                 Text(
-                  '${state.totalCompletedLabs}/${state.totalLabs} completed',
+                  loc.completedCount(state.totalCompletedLabs, state.totalLabs),
                   style: const TextStyle(
                     color: purple,
                     fontWeight: FontWeight.w700,
@@ -302,11 +320,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
           Expanded(
             child: entries.isEmpty
-                ? const Center(
+                ? Center(
                     child: EmptyState(
                       icon: Icons.science_outlined,
-                      title: 'No lab here',
-                      message: 'Change the filters to see more labs.',
+                      title: loc.noLabHere,
+                      message: loc.noLabHereMessage,
                     ),
                   )
                 : ListView.builder(
@@ -350,7 +368,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ),
                             ),
                             subtitle: Text(
-                              '${career.title} · ${lab.level} · ~${lab.minutes} min',
+                              '${career.title} · ${tc(lab.level)} · ~${loc.minutesShort(lab.minutes)}',
                               style: TextStyle(
                                 color: levelColor(lab.level),
                                 fontSize: 11,
@@ -358,7 +376,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
                             trailing: best == null
                                 ? IconButton(
-                                    tooltip: 'Start',
+                                    tooltip: loc.start,
                                     onPressed: () => Navigator.of(context)
                                         .pushNamed(
                                           '/simulation',
@@ -395,11 +413,13 @@ class _ChipRow extends StatelessWidget {
     required this.values,
     required this.selected,
     required this.onSelected,
+    required this.labelOf,
   });
 
   final List<String> values;
   final String selected;
   final ValueChanged<String> onSelected;
+  final String Function(String) labelOf;
 
   @override
   Widget build(BuildContext context) {
@@ -409,9 +429,9 @@ class _ChipRow extends StatelessWidget {
         children: values
             .map(
               (value) => Padding(
-                padding: const EdgeInsets.only(right: 6, top: 6),
+                padding: const EdgeInsetsDirectional.only(end: 6, top: 6),
                 child: ChoiceChip(
-                  label: Text(value),
+                  label: Text(labelOf(value)),
                   selected: value == selected,
                   onSelected: (_) => onSelected(value),
                   selectedColor: const Color(0xFFEDE8FF),

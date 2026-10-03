@@ -15,6 +15,14 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 - **Progress & learning path**: completed labs per career, skill averages, full attempt history and a timeline for each career.
 - **Notifications center**: finishing a lab creates "Your recommendations are ready!". Tapping it opens the matching results. Notifications can be marked as read or cleared.
 - **Settings**: light/dark theme, FR / EN / AR languages with RTL support, reset progress and logout. All of these are saved with SharedPreferences.
+- **Fully translated (FR / EN / AR)**: every interface string, plus all career content: titles, descriptions, labs, questions, answers, explanations, skills and levels. Switching the language in Settings updates the whole app instantly. Arabic is displayed right to left.
+
+### Localization
+
+- Interface strings come from Flutter `gen-l10n`: `lib/l10n/app_en.arb` (template), `app_fr.arb` and `app_ar.arb`. They are accessed with `context.l10n.key`, and plurals use ICU syntax.
+- Career content is written in English in `data/catalog.dart`. It is translated through `lib/l10n/content_fr.dart` and `content_ar.dart`, and `setCatalogLanguage()` selects the active catalog.
+- Stored values (skills, levels, interests) stay in English and are displayed with `tc()`, so results remain valid after a language change.
+- To add a string, add it to all three ARB files, then run `flutter gen-l10n` (or `flutter pub get`).
 
 ### Scoring
 
@@ -28,7 +36,8 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 ```
 lib/
 ├── main.dart / app.dart        providers + named routes
-├── data/catalog.dart           careers, labs and questions
+├── data/catalog.dart           careers, labs and questions (EN source + translated catalogs)
+├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content translations
 ├── models/                     Career, Lab, LabQuestion, LabResult, UserProfile, AppNotification
 ├── providers/                  AppState (auth, persistence, scoring, recommendations), Theme, Locale
 ├── screens/                    welcome, login, register, home, explore, career detail, simulation,
@@ -53,7 +62,7 @@ flutter test
 flutter build apk --debug   # build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing.
+The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors.
 
 ## Not configured yet
 
