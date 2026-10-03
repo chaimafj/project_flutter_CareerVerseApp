@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
@@ -85,19 +86,22 @@ class ResultsScreen extends StatelessWidget {
                     const SizedBox(width: 48),
                   ],
                 ),
-                const SizedBox(height: 10),
-                TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0.6, end: 1),
-                  duration: const Duration(milliseconds: 700),
-                  curve: Curves.elasticOut,
-                  builder: (context, value, child) =>
-                      Transform.scale(scale: value, child: child),
-                  child: Icon(
-                    passed ? Icons.emoji_events : Icons.replay_circle_filled,
-                    color: passed
-                        ? const Color(0xFFFFC53D)
-                        : const Color(0xFF7CB2FF),
-                    size: 54,
+                const SizedBox(height: 4),
+                SizedBox(
+                  height: 96,
+                  child: Lottie.asset(
+                    passed
+                        ? 'assets/lottie/success.json'
+                        : 'assets/lottie/retry.json',
+                    key: Key(passed ? 'lottie-success' : 'lottie-retry'),
+                    repeat: false,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      passed ? Icons.emoji_events : Icons.replay_circle_filled,
+                      color: passed
+                          ? const Color(0xFFFFC53D)
+                          : const Color(0xFF7CB2FF),
+                      size: 54,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -254,6 +258,16 @@ class ResultsScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
+                Center(
+                  child: TextButton.icon(
+                    key: const Key('review-course'),
+                    onPressed: () =>
+                        Navigator.of(context)
+                            .pushNamed('/course', arguments: lab.id),
+                    icon: const Icon(Icons.menu_book_rounded, size: 18),
+                    label: Text(loc.reviewCourse),
+                  ),
+                ),
                 Center(
                   child: TextButton(
                     onPressed: () =>

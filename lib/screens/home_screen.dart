@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../data/catalog.dart';
 import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
+import '../widgets/ad_banner.dart';
 import '../widgets/career_ui.dart';
 import '../widgets/user_avatar.dart';
 import 'explore_screen.dart';
@@ -57,26 +58,37 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       body: IndexedStack(index: _selectedIndex, children: pages),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE8EEF8))),
-        ),
-        child: NavigationBar(
-          height: 70,
-          backgroundColor: Colors.white,
-          indicatorColor: const Color(0xFFEDE8FF),
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: _select,
-          destinations: List.generate(
-            labels.length,
-            (index) => NavigationDestination(
-              icon: Icon(icons[index]),
-              selectedIcon: Icon(icons[index], color: purple),
-              label: labels[index],
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Test banner on the Home and Explore tabs only.
+          Visibility(
+            visible: _selectedIndex == 0 || _selectedIndex == 2,
+            maintainState: true,
+            child: const AdBanner(),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Color(0xFFE8EEF8))),
+            ),
+            child: NavigationBar(
+              height: 70,
+              backgroundColor: Colors.white,
+              indicatorColor: const Color(0xFFEDE8FF),
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: _select,
+              destinations: List.generate(
+                labels.length,
+                (index) => NavigationDestination(
+                  icon: Icon(icons[index]),
+                  selectedIcon: Icon(icons[index], color: purple),
+                  label: labels[index],
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -716,6 +728,12 @@ class CareerDrawer extends StatelessWidget {
                     Icons.person_outline,
                     loc.profile,
                     () => onNavigate(4),
+                  ),
+                  _DrawerItem(
+                    Icons.workspace_premium_outlined,
+                    loc.premium,
+                    () => push('/premium'),
+                    color: const Color(0xFFFFC94D),
                   ),
                   _DrawerItem(
                     Icons.settings_outlined,

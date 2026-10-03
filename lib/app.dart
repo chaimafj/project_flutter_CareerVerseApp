@@ -7,11 +7,13 @@ import 'providers/app_state.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
 import 'screens/career_lab_detail_screen.dart';
+import 'screens/course_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/learning_path_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/notifications_screen.dart';
+import 'screens/premium_screen.dart';
 import 'screens/recommendations_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/results_screen.dart';
@@ -19,6 +21,9 @@ import 'screens/settings_screen.dart';
 import 'screens/simulation_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'utils/app_theme.dart';
+
+/// Used to open screens from notification taps.
+final appNavigatorKey = GlobalKey<NavigatorState>();
 
 class CareerVerseApp extends StatelessWidget {
   const CareerVerseApp({super.key});
@@ -31,6 +36,7 @@ class CareerVerseApp extends StatelessWidget {
         // Career content (titles, labs, questions) follows the app language.
         setCatalogLanguage(localeProvider.locale.languageCode);
         return MaterialApp(
+          navigatorKey: appNavigatorKey,
           onGenerateTitle: (context) => AppLocalizations.of(context).appName,
           debugShowCheckedModeBanner: false,
           themeMode: themeProvider.themeMode,
@@ -49,10 +55,12 @@ class CareerVerseApp extends StatelessWidget {
             '/simulation': (context) => const SimulationScreen(),
             '/results': (context) => const ResultsScreen(),
             '/learning-path': (context) => const LearningPathScreen(),
+            '/course': (context) => const CourseScreen(),
             '/recommendations': (context) => const RecommendationsScreen(),
             '/settings': (context) => const SettingsScreen(),
             '/notifications': (context) => const NotificationsScreen(),
             '/edit-profile': (context) => const EditProfileScreen(),
+            '/premium': (context) => const PremiumScreen(),
           },
         );
       },

@@ -19,6 +19,21 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// Some plugins (e.g. stripe_android) let Kotlin target the Gradle JDK while
+// their Java code targets 17; align every Kotlin task on JVM 17.
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+        compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+    // stripe_android's lint classpath needs play-services-tapandpay, which is
+    // not published on public repositories; skip release lint for plugins.
+    if (name != "app") {
+        tasks.matching { it.name.startsWith("lintVital") }.configureEach {
+            enabled = false
+        }
+    }
+}
+
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }

@@ -4,18 +4,82 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 
 ## Features
 
-- **Accounts**: register and log in with email and password. Accounts are stored on the device, and passwords are saved as salted SHA-256 hashes. The session persists between launches, and forms are validated.
+- **Accounts (Firebase Auth)**: register and log in with email and password, **Google Sign-In**, and password reset by email. The session persists between launches, forms are validated, and Firebase errors are translated (wrong password, email already used, network...). On platforms without Firebase (desktop, tests) the app falls back to local accounts stored on the device (salted SHA-256).
+- **Cloud sync (Cloud Firestore)**: profile, lab results, recommendation history and notifications are saved to the user's Firestore document, so logging in on another device restores everything.
 - **Editable profile**: name, photo (gallery or camera), study level, university, specialty, bio and interests. The profile screen shows how complete it is, your stats and your top skills.
 - **Career explorer**: search, category tabs (Infrastructure / Development / Security) and detail pages (Hero animation) covering salary, education, outlook, typical day and tools.
   - Careers covered: Cloud Engineer, DevOps Engineer, Backend Developer and Cybersecurity Analyst.
 - **Real simulations**: each career has 3 labs (Beginner → Advanced) of real scenario questions (single and multi-select). The flow is: select answers → *Check answer* → feedback with explanation → *Next question* / *Finish lab*. A timer runs, and there is an exit confirmation.
-- **Real results**: score ring, correct answers, time, comparison with your previous best, per-skill scores and the updated career match.
+- **Real results**: Lottie animation (success / keep practicing), score ring, correct answers, time, comparison with your previous best, per-skill scores and the updated career match.
   - **Next Lab** opens the next lab of the same career. When a career is finished, it moves on to the best-matching unfinished career.
 - **Recommendations**: the top match, all matches with explanations, and a history of past recommendations.
 - **Progress & learning path**: completed labs per career, skill averages, full attempt history and a timeline for each career.
+- **Courses before every lab**: each step of the learning path is *Course → Lab*. The 12 courses (FR/EN/AR) have an introduction, 3 lessons (explanation, key points and a code or command example) and a summary. "Finish and start the lab" marks the course as read and opens the lab. The course can be reopened from the career detail or the results screen. Read courses are saved offline (Hive) and in Firestore (`users/{uid}/courses`).
 - **Notifications center**: finishing a lab creates "Your recommendations are ready!". Tapping it opens the matching results. Notifications can be marked as read or cleared.
+- **Push notifications (firebase_messaging)**: received in the foreground (shown as a local notification) and in the background. Finishing a lab also shows a system notification; tapping any notification opens the related results screen. Push can be turned off in Settings.
 - **Settings**: light/dark theme, FR / EN / AR languages with RTL support, reset progress and logout. All of these are saved with SharedPreferences.
 - **Fully translated (FR / EN / AR)**: every interface string, plus all career content: titles, descriptions, labs, questions, answers, explanations, skills and levels. Switching the language in Settings updates the whole app instantly. Arabic is displayed right to left.
+- **Offline database (Hive)**: profile, lab results, recommendation history and notifications are stored per user in Hive boxes. Results and history can be consulted without network. Data saved by older versions (SharedPreferences) is migrated automatically.
+- **Premium subscription (Stripe test mode)**: Advanced labs are locked (padlock) for free users; opening one shows a paywall. Premium (4.99 € / 30 days) is paid with the Stripe Payment Sheet, then the lab unlocks immediately. A new payment extends the current period. Every payment is saved offline (Hive) and in Firestore (`users/{uid}/transactions`), and the Premium screen (drawer or Settings) shows the status and transaction history.
+- **Ads (AdMob, test IDs only)**: an adaptive banner at the bottom of the Home and Explore tabs, and an interstitial after each finished simulation, before the results. If no ad is ready, the results open immediately.
+
+### Ads (Google test IDs only)
+
+| | Android | iOS |
+|---|---|---|
+| App ID | `ca-app-pub-3940256099942544~3347511713` | `ca-app-pub-3940256099942544~1458002511` |
+| Banner | `ca-app-pub-3940256099942544/9214589741` | `ca-app-pub-3940256099942544/2435281174` |
+| Interstitial | `ca-app-pub-3940256099942544/1033173712` | `ca-app-pub-3940256099942544/4411468910` |
+
+The app IDs are declared in `AndroidManifest.xml` and `Info.plist`; the unit IDs are in `lib/services/ad_service.dart`. Ads are disabled on web, desktop and in tests.
+
+### Firebase
+
+Project: `careerverse-3057` (config generated by `flutterfire configure`: `lib/firebase_options.dart`, `android/app/google-services.json`).
+
+- **Auth**: Email/Password and Google providers are enabled in the console. The debug keystore SHA-1/SHA-256 are registered for Google Sign-In on Android; add your release SHA-1 before publishing.
+- **Firestore layout**:
+
+  ```
+  users/{uid}                       profile, email, updatedAt, fcmToken, platform, pushEnabled
+  users/{uid}/results/{id}          lab results (score, answers, time)
+  users/{uid}/recommendations/{id}  recommendation history
+  users/{uid}/notifications/{id}    notification history
+  users/{uid}/transactions/{id}     Stripe payments (write-once), premiumUntil on users/{uid}
+  users/{uid}/courses/{labId}       courses read (completedAt)
+  ```
+
+- **Security rules** (`firestore.rules`): each user can only read and write their own document and subcollections. Deploy with `firebase deploy --only firestore`.
+- **Offline first**: data is written to Hive first, then to Firestore. On login, the local and cloud data are merged (union of results, history and notifications; the newest profile wins), and local data created offline is uploaded.
+- **Cloud Messaging**: every device subscribes to the topic `careerverse` and stores its token in `users/{uid}.fcmToken`. To test, open Firebase Console → Messaging → *New campaign* → *Notifications*, target the topic `careerverse` (or a token), and optionally add the custom data `resultId` (opens these results) or `route` (e.g. `/recommendations`). Without data, the tap opens the notifications screen.
+- **iOS (manual, needs a Mac)**: run `flutterfire configure` on the Mac to add `GoogleService-Info.plist`, upload an APNs key in Firebase project settings, and enable *Push Notifications* and *Background Modes → Remote notifications* in Xcode. `Info.plist` already contains the background mode and the Google Sign-In URL scheme.
+
+### Stripe (test mode only)
+
+1. Create a free account on https://dashboard.stripe.com and stay in **Test mode**.
+2. Copy `stripe_keys.example.json` to `stripe_keys.json` (ignored by Git) and paste your keys from *Developers → API keys*:
+
+   ```json
+   {
+     "STRIPE_PUBLISHABLE_KEY": "pk_test_...",
+     "STRIPE_SECRET_KEY": "sk_test_..."
+   }
+   ```
+
+3. Run or build with the keys:
+
+   ```bash
+   flutter run --dart-define-from-file=stripe_keys.json
+   flutter build apk --debug --dart-define-from-file=stripe_keys.json
+   ```
+
+4. Pay with the test card `4242 4242 4242 4242`, any future expiry date and any CVC (`4000 0000 0000 0002` tests a declined card). Payments appear in the Stripe dashboard (*Payments*, test mode) and in Firestore.
+
+How it works (`lib/services/payment_service.dart`): the app creates a PaymentIntent with the Stripe API, shows the Payment Sheet, then reads the PaymentIntent back and only grants Premium when its status is `succeeded`. Only `pk_test_` / `sk_test_` keys are accepted, so a real card can never be charged. Without keys (or on desktop) the Premium screen explains that payment is not configured.
+
+> Creating PaymentIntents from the app with a secret key is acceptable only in test mode. A production app must do it on a server (e.g. Cloud Functions) and verify payments with webhooks. The Firestore rules make transactions write-once (no edit or delete).
+
+On iOS, Stripe requires iOS 13+ (already required by Firebase).
 
 ### Localization
 
@@ -37,14 +101,23 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 lib/
 ├── main.dart / app.dart        providers + named routes
 ├── data/catalog.dart           careers, labs and questions (EN source + translated catalogs)
-├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content translations
-├── models/                     Career, Lab, LabQuestion, LabResult, UserProfile, AppNotification
-├── providers/                  AppState (auth, persistence, scoring, recommendations), Theme, Locale
+├── data/courses.dart           course for each lab (EN source, code examples, courseFor())
+├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content and
+│                               course translations (courses_fr.dart, courses_ar.dart)
+├── models/                     Career, Lab, LabQuestion, LabResult, UserProfile, AppNotification,
+│                               PaymentTransaction / PremiumPlan, Course / CourseSection
+├── providers/                  AppState (auth, scoring, recommendations), Theme, Locale
+├── services/                   AuthService (Firebase/local), FirestoreService (cloud sync),
+│                               PaymentService (Stripe test mode),
+│                               NotificationService (FCM + local notifications),
+│                               LocalStore (Hive offline database), AdService (AdMob test ads)
+├── firebase_options.dart       generated by flutterfire configure
 ├── screens/                    welcome, login, register, home, explore, career detail, simulation,
-│                               results, recommendations, learning path, progress, profile,
-│                               edit profile, notifications, settings
-├── widgets/                    design system (career_ui), avatar, form helpers
+│                               results, recommendations, learning path, course, progress, profile,
+│                               edit profile, notifications, settings, premium
+├── widgets/                    design system (career_ui), ad banner, avatar, form helpers
 └── utils/validators.dart
+assets/lottie/                  success.json, retry.json (results animations)
 ```
 
 ## Run locally
@@ -62,15 +135,8 @@ flutter test
 flutter build apk --debug   # build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors.
+The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors. Other tests check that results survive an app restart in Hive, that legacy data is migrated, that the Lottie files are valid, and that the flow continues when no interstitial is available. The Firebase sync tests use fake Auth/Firestore services: results are written to the cloud, a second device restores them, data created offline is uploaded, auth errors are mapped, a Google profile is imported, and tapping a notification opens the results. The Premium tests use a fake payment service: Advanced labs stay locked until payment, failed or cancelled payments grant nothing, a second payment extends the period, expired Premium locks labs again, transactions are restored on another device, live Stripe keys are refused, and the paywall flow unlocks and starts the lab. The course tests check that every lab has a course with the same structure in the three languages, that read courses persist, sync and reset, and that the flow learning path → course → summary → lab works.
 
-## Not configured yet
+## Limitations
 
-These services need your own project keys, so they are not connected:
-
-- Firebase (Auth, Firestore, Cloud Messaging)
-- Google Sign-In
-- AdMob test ads
-- Stripe test mode
-
-The app works fully offline with local storage. The Google button explains that it requires Firebase, and notifications are in-app.
+Sending a push from the app itself requires a server (Cloud Functions need the Blaze plan), so the in-app trigger is a local system notification; real FCM pushes are sent from the Firebase console. Profile photos are stored on the device (Firebase Storage also needs Blaze); Google accounts use their Google photo.

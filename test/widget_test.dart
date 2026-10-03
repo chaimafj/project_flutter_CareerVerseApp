@@ -3,6 +3,10 @@ import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/providers/locale_provider.dart';
 import 'package:careerverseapp/providers/theme_provider.dart';
+import 'package:careerverseapp/services/ad_service.dart';
+import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/services/notification_service.dart';
+import 'package:careerverseapp/services/payment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +31,21 @@ Future<void> answerLab(WidgetTester tester, String labId) async {
   }
 }
 
-Widget buildApp(SharedPreferences prefs, AppState appState) => MultiProvider(
+Widget buildApp(
+  SharedPreferences prefs,
+  AppState appState, {
+  PaymentService payments = const UnavailablePaymentService(),
+}) => MultiProvider(
   providers: [
+    Provider.value(value: AdService(enabled: false)),
+    Provider<PaymentService>.value(value: payments),
+    ChangeNotifierProvider(
+      create: (_) => NotificationService(
+        prefs,
+        navigatorKey: appNavigatorKey,
+        supported: false,
+      ),
+    ),
     ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
     ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
     ChangeNotifierProvider.value(value: appState),
@@ -43,13 +60,16 @@ void useTallScreen(WidgetTester tester) {
 }
 
 void main() {
+  late LocalStore store;
+  setUp(() => store = MemoryLocalStore());
+
   testWidgets('register, run a real lab, see results and open next lab', (
     tester,
   ) async {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final appState = AppState(prefs);
+    final appState = AppState(prefs, store);
 
     await tester.pumpWidget(buildApp(prefs, appState));
     await tester.pumpAndSettle();
@@ -98,6 +118,7 @@ void main() {
     }
 
     expect(find.text('Lab Completed!'), findsOneWidget);
+    expect(find.byKey(const Key('lottie-success')), findsOneWidget);
     expect(find.text('3/4'), findsOneWidget);
     expect(appState.results.single.correct, 3);
     expect(appState.unreadCount, 2);
@@ -114,7 +135,7 @@ void main() {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final appState = AppState(prefs);
+    final appState = AppState(prefs, store);
     await appState.register(
       name: 'Old Name',
       email: 'user@example.com',

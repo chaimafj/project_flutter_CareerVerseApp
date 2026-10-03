@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../data/catalog.dart';
 import '../models/app_notification.dart';
 import '../providers/app_state.dart';
+import '../services/payment_service.dart';
 import 'app_localizations.dart';
 
 export 'app_localizations.dart';
@@ -16,11 +17,19 @@ extension AppLocalizationsX on AppLocalizations {
     AuthError.emailTaken => errorEmailTaken,
     AuthError.noAccount => errorNoAccount,
     AuthError.wrongPassword => errorWrongPassword,
+    AuthError.invalidCredentials => errorInvalidCredentials,
+    AuthError.weakPassword => errorWeakPassword,
+    AuthError.network => errorNetwork,
+    AuthError.tooManyRequests => errorTooManyRequests,
+    AuthError.providerDisabled => errorProviderDisabled,
+    AuthError.googleUnavailable => googleSignInUnavailable,
+    AuthError.cancelled || AuthError.unknown => errorUnknown,
   };
 
   String notificationTitle(AppNotification n) => switch (n.kind) {
     NotificationKind.welcome => notifWelcomeTitle,
     NotificationKind.labResult => notifResultTitle,
+    NotificationKind.premium => notifPremiumTitle,
     NotificationKind.other => n.title,
   };
 
@@ -39,6 +48,9 @@ extension AppLocalizationsX on AppLocalizations {
           n.data['topScore'] as int? ?? 0,
         );
         return n.data['improved'] == true ? '$body $notifNewBest' : body;
+      case NotificationKind.premium:
+        final until = DateTime.tryParse(n.data['until'] as String? ?? '');
+        return notifPremiumBody(until == null ? '' : shortDate(until));
       case NotificationKind.other:
         return n.body;
     }
@@ -69,7 +81,17 @@ extension AppLocalizationsX on AppLocalizations {
     if (diff.inHours < 1) return timeMinutesAgo(diff.inMinutes);
     if (diff.inDays < 1) return timeHoursAgo(diff.inHours);
     if (diff.inDays < 7) return timeDaysAgo(diff.inDays);
-    return '${date.day.toString().padLeft(2, '0')}/'
-        '${date.month.toString().padLeft(2, '0')}/${date.year}';
+    return shortDate(date);
   }
+
+  String shortDate(DateTime date) =>
+      '${date.day.toString().padLeft(2, '0')}/'
+      '${date.month.toString().padLeft(2, '0')}/${date.year}';
+
+  String paymentError(PaymentError error, String? message) => switch (error) {
+    PaymentError.notConfigured => paymentNotConfigured,
+    PaymentError.network => errorNetwork,
+    PaymentError.failed => paymentFailed(message ?? errorUnknown),
+    PaymentError.cancelled => paymentCancelled,
+  };
 }

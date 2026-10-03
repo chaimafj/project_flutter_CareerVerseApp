@@ -47,6 +47,9 @@ class Lab {
   int get expectedSeconds => questions.length * 60;
   int get minutes => (expectedSeconds / 60).ceil() + 2;
 
+  /// Advanced labs need a Premium subscription.
+  bool get isPremium => level == 'Advanced';
+
   List<String> get skills =>
       questions.map((question) => question.skill).toSet().toList();
 

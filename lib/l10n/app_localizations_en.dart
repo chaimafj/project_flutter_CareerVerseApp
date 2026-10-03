@@ -39,7 +39,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get googleSignInInfo =>
-      'Google Sign-In requires a Firebase project (google-services.json). Use email sign-in for now.';
+      'Google Sign-In is available in the Android and iOS app.';
 
   @override
   String get continueWithGoogle => 'Continue with Google';
@@ -724,4 +724,204 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progressReset => 'Progress reset';
+
+  @override
+  String get googleSignInUnavailable =>
+      'Google Sign-In is not available right now. Please use your email.';
+
+  @override
+  String get errorInvalidCredentials => 'Incorrect email or password.';
+
+  @override
+  String get errorWeakPassword => 'This password is too weak.';
+
+  @override
+  String get errorNetwork =>
+      'No internet connection. Check your network and try again.';
+
+  @override
+  String get errorTooManyRequests =>
+      'Too many attempts. Please try again later.';
+
+  @override
+  String get errorProviderDisabled =>
+      'This sign-in method is not enabled for the app.';
+
+  @override
+  String get errorUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get passwordResetEnterEmail =>
+      'Enter your email address above, then tap “Forgot password?” again.';
+
+  @override
+  String passwordResetSent(String email) {
+    return 'A password reset link was sent to $email.';
+  }
+
+  @override
+  String get pushNotifications => 'Push notifications';
+
+  @override
+  String get pushNotificationsSubtitle =>
+      'Alerts when your results and recommendations are ready';
+
+  @override
+  String get premium => 'Premium';
+
+  @override
+  String get premiumTitle => 'CareerVerse Premium';
+
+  @override
+  String get premiumSubtitle =>
+      'Unlock every Advanced lab and go further in your orientation.';
+
+  @override
+  String get premiumBenefitLabs => 'All Advanced labs (expert scenarios)';
+
+  @override
+  String get premiumBenefitSkills =>
+      'Harder questions for a sharper skill analysis';
+
+  @override
+  String get premiumBenefitSync =>
+      'Access on all your devices with your account';
+
+  @override
+  String premiumPrice(String price, int days) {
+    return '$price / $days days';
+  }
+
+  @override
+  String premiumBuy(String price) {
+    return 'Subscribe for $price';
+  }
+
+  @override
+  String premiumExtend(String price) {
+    return 'Extend for $price';
+  }
+
+  @override
+  String premiumActiveUntil(String date) {
+    return 'Premium active until $date';
+  }
+
+  @override
+  String premiumExpired(String date) {
+    return 'Premium expired on $date';
+  }
+
+  @override
+  String get premiumFree => 'Free plan';
+
+  @override
+  String get premiumTestMode => 'Stripe test mode: no real money is charged.';
+
+  @override
+  String get premiumTestCard =>
+      'Test card: 4242 4242 4242 4242, any future date, any CVC.';
+
+  @override
+  String premiumSuccess(String date) {
+    return 'Payment confirmed! Premium is active until $date.';
+  }
+
+  @override
+  String get paymentCancelled => 'Payment cancelled.';
+
+  @override
+  String paymentFailed(String message) {
+    return 'Payment failed: $message';
+  }
+
+  @override
+  String get paymentNotConfigured =>
+      'Payments are not available on this build (missing Stripe test keys or unsupported platform).';
+
+  @override
+  String get transactionHistory => 'Transaction history';
+
+  @override
+  String get noTransactions => 'No transactions yet.';
+
+  @override
+  String get premiumLabTitle => 'Premium lab';
+
+  @override
+  String premiumLabMessage(String title) {
+    return '\"$title\" is an Advanced lab. Subscribe to Premium to unlock it.';
+  }
+
+  @override
+  String get unlockPremium => 'Unlock with Premium';
+
+  @override
+  String get notifPremiumTitle => 'Welcome to Premium!';
+
+  @override
+  String notifPremiumBody(String date) {
+    return 'Advanced labs are unlocked until $date.';
+  }
+
+  @override
+  String get courseLabel => 'Course';
+
+  @override
+  String get labLabel => 'Lab';
+
+  @override
+  String lessonProgress(int current, int total) {
+    return 'Lesson $current/$total';
+  }
+
+  @override
+  String get keyPoints => 'Key points';
+
+  @override
+  String get exampleLabel => 'Example';
+
+  @override
+  String get takeaways => 'Key takeaways';
+
+  @override
+  String get summaryLabel => 'Summary';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get finishCourse => 'Finish';
+
+  @override
+  String get finishAndStartLab => 'Finish and start the lab';
+
+  @override
+  String readCourseNamed(String title) {
+    return 'Read the course: $title';
+  }
+
+  @override
+  String get courseCompleted => 'Course completed';
+
+  @override
+  String get reviewCourse => 'Review the course';
+
+  @override
+  String get readCourse => 'Read the course';
+
+  @override
+  String get courseRead => 'Course read';
+
+  @override
+  String get courseThenLab =>
+      'Each step: a course with explanations, then a hands-on lab to practise.';
+
+  @override
+  String coursesDone(int done, int total) {
+    return '$done/$total courses read';
+  }
 }

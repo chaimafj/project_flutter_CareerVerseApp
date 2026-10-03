@@ -1,4 +1,4 @@
-enum NotificationKind { welcome, labResult, other }
+enum NotificationKind { welcome, labResult, premium, other }
 
 /// In-app notification. The text is rendered in the current language from
 /// [kind] and [data]; [title]/[body] are only used for [NotificationKind.other].

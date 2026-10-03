@@ -39,7 +39,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get googleSignInInfo =>
-      'يتطلب تسجيل الدخول عبر Google مشروع Firebase (google-services.json). استخدم البريد الإلكتروني حاليًا.';
+      'تسجيل الدخول عبر Google متاح في تطبيق Android وiOS.';
 
   @override
   String get continueWithGoogle => 'المتابعة باستخدام Google';
@@ -724,4 +724,205 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get progressReset => 'تمت إعادة تعيين التقدّم';
+
+  @override
+  String get googleSignInUnavailable =>
+      'تسجيل الدخول عبر Google غير متاح حاليًا. استخدم بريدك الإلكتروني.';
+
+  @override
+  String get errorInvalidCredentials =>
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+
+  @override
+  String get errorWeakPassword => 'كلمة المرور هذه ضعيفة جدًا.';
+
+  @override
+  String get errorNetwork =>
+      'لا يوجد اتصال بالإنترنت. تحقق من الشبكة وحاول مرة أخرى.';
+
+  @override
+  String get errorTooManyRequests =>
+      'محاولات كثيرة جدًا. يرجى المحاولة لاحقًا.';
+
+  @override
+  String get errorProviderDisabled =>
+      'طريقة تسجيل الدخول هذه غير مفعّلة في التطبيق.';
+
+  @override
+  String get errorUnknown => 'حدث خطأ ما. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get passwordResetEnterEmail =>
+      'أدخل بريدك الإلكتروني أعلاه، ثم اضغط مرة أخرى على «نسيت كلمة المرور؟».';
+
+  @override
+  String passwordResetSent(String email) {
+    return 'تم إرسال رابط إعادة تعيين كلمة المرور إلى $email.';
+  }
+
+  @override
+  String get pushNotifications => 'الإشعارات الفورية';
+
+  @override
+  String get pushNotificationsSubtitle =>
+      'تنبيهات عندما تكون نتائجك وتوصياتك جاهزة';
+
+  @override
+  String get premium => 'بريميوم';
+
+  @override
+  String get premiumTitle => 'CareerVerse بريميوم';
+
+  @override
+  String get premiumSubtitle =>
+      'افتح جميع المختبرات المتقدمة وتعمّق أكثر في توجيهك المهني.';
+
+  @override
+  String get premiumBenefitLabs =>
+      'جميع المختبرات المتقدمة (سيناريوهات الخبراء)';
+
+  @override
+  String get premiumBenefitSkills => 'أسئلة أصعب لتحليل أدق لمهاراتك';
+
+  @override
+  String get premiumBenefitSync => 'الوصول من جميع أجهزتك بحسابك';
+
+  @override
+  String premiumPrice(String price, int days) {
+    return '$price / $days يومًا';
+  }
+
+  @override
+  String premiumBuy(String price) {
+    return 'اشترك مقابل $price';
+  }
+
+  @override
+  String premiumExtend(String price) {
+    return 'مدّد مقابل $price';
+  }
+
+  @override
+  String premiumActiveUntil(String date) {
+    return 'بريميوم مفعّل حتى $date';
+  }
+
+  @override
+  String premiumExpired(String date) {
+    return 'انتهى بريميوم في $date';
+  }
+
+  @override
+  String get premiumFree => 'الخطة المجانية';
+
+  @override
+  String get premiumTestMode =>
+      'Stripe في وضع الاختبار: لا يتم خصم أي أموال حقيقية.';
+
+  @override
+  String get premiumTestCard =>
+      'بطاقة الاختبار: 4242 4242 4242 4242، أي تاريخ مستقبلي، أي رمز CVC.';
+
+  @override
+  String premiumSuccess(String date) {
+    return 'تم تأكيد الدفع! بريميوم مفعّل حتى $date.';
+  }
+
+  @override
+  String get paymentCancelled => 'تم إلغاء الدفع.';
+
+  @override
+  String paymentFailed(String message) {
+    return 'فشل الدفع: $message';
+  }
+
+  @override
+  String get paymentNotConfigured =>
+      'الدفع غير متاح في هذه النسخة (مفاتيح اختبار Stripe مفقودة أو المنصة غير مدعومة).';
+
+  @override
+  String get transactionHistory => 'سجل المعاملات';
+
+  @override
+  String get noTransactions => 'لا توجد معاملات حتى الآن.';
+
+  @override
+  String get premiumLabTitle => 'مختبر بريميوم';
+
+  @override
+  String premiumLabMessage(String title) {
+    return '«$title» مختبر متقدم. اشترك في بريميوم لفتحه.';
+  }
+
+  @override
+  String get unlockPremium => 'افتح مع بريميوم';
+
+  @override
+  String get notifPremiumTitle => 'مرحبًا بك في بريميوم!';
+
+  @override
+  String notifPremiumBody(String date) {
+    return 'المختبرات المتقدمة مفتوحة حتى $date.';
+  }
+
+  @override
+  String get courseLabel => 'الدرس';
+
+  @override
+  String get labLabel => 'المختبر';
+
+  @override
+  String lessonProgress(int current, int total) {
+    return 'الدرس $current/$total';
+  }
+
+  @override
+  String get keyPoints => 'النقاط الأساسية';
+
+  @override
+  String get exampleLabel => 'مثال';
+
+  @override
+  String get takeaways => 'ما يجب تذكره';
+
+  @override
+  String get summaryLabel => 'الملخص';
+
+  @override
+  String get previous => 'السابق';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get finishCourse => 'إنهاء';
+
+  @override
+  String get finishAndStartLab => 'إنهاء وبدء المختبر';
+
+  @override
+  String readCourseNamed(String title) {
+    return 'اقرأ الدرس: $title';
+  }
+
+  @override
+  String get courseCompleted => 'اكتمل الدرس';
+
+  @override
+  String get reviewCourse => 'مراجعة الدرس';
+
+  @override
+  String get readCourse => 'اقرأ الدرس';
+
+  @override
+  String get courseRead => 'تمت قراءة الدرس';
+
+  @override
+  String get courseThenLab =>
+      'كل خطوة: درس مع شروحات، ثم مختبر تطبيقي للتدرّب.';
+
+  @override
+  String coursesDone(int done, int total) {
+    return '$done/$total دروس مقروءة';
+  }
 }

@@ -8,7 +8,9 @@ class UserProfile {
     this.bio = '',
     this.interests = const [],
     this.photoPath,
+    this.photoUrl,
     required this.createdAt,
+    this.updatedAt,
   });
 
   final String name;
@@ -19,7 +21,11 @@ class UserProfile {
   final String bio;
   final List<String> interests;
   final String? photoPath;
+
+  /// Remote photo (Google account), used when there is no local photo.
+  final String? photoUrl;
   final DateTime createdAt;
+  final DateTime? updatedAt;
 
   String get firstName {
     final trimmed = name.trim();
@@ -47,7 +53,7 @@ class UserProfile {
       specialty.isNotEmpty,
       bio.isNotEmpty,
       interests.isNotEmpty,
-      photoPath != null,
+      photoPath != null || photoUrl != null,
     ];
     return (fields.where((filled) => filled).length * 100 / fields.length)
         .round();
@@ -61,7 +67,9 @@ class UserProfile {
     String? bio,
     List<String>? interests,
     String? photoPath,
+    String? photoUrl,
     bool clearPhoto = false,
+    DateTime? updatedAt,
   }) => UserProfile(
     name: name ?? this.name,
     email: email,
@@ -71,7 +79,9 @@ class UserProfile {
     bio: bio ?? this.bio,
     interests: interests ?? this.interests,
     photoPath: clearPhoto ? null : photoPath ?? this.photoPath,
+    photoUrl: clearPhoto ? null : photoUrl ?? this.photoUrl,
     createdAt: createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
   );
 
   Map<String, dynamic> toJson() => {
@@ -83,7 +93,9 @@ class UserProfile {
     'bio': bio,
     'interests': interests,
     'photoPath': photoPath,
+    'photoUrl': photoUrl,
     'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt?.toIso8601String(),
   };
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -95,7 +107,9 @@ class UserProfile {
     bio: json['bio'] as String? ?? '',
     interests: List<String>.from(json['interests'] as List? ?? const []),
     photoPath: json['photoPath'] as String?,
+    photoUrl: json['photoUrl'] as String?,
     createdAt:
         DateTime.tryParse(json['createdAt'] as String? ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json['updatedAt'] as String? ?? ''),
   );
 }

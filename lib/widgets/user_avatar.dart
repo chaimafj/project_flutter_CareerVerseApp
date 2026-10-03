@@ -15,11 +15,18 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final path = profile.photoPath;
     final file = path == null ? null : File(path);
-    final hasPhoto = file != null && file.existsSync();
+    final url = profile.photoUrl;
+    final ImageProvider? image = file != null && file.existsSync()
+        ? FileImage(file)
+        : url != null && url.isNotEmpty
+        ? NetworkImage(url)
+        : null;
+    final hasPhoto = image != null;
     return CircleAvatar(
       radius: radius,
       backgroundColor: const Color(0xFFDCE7FF),
-      backgroundImage: hasPhoto ? FileImage(file) : null,
+      backgroundImage: image,
+      onBackgroundImageError: hasPhoto ? (_, _) {} : null,
       child: hasPhoto
           ? null
           : Text(

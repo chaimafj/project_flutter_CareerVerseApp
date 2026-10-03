@@ -1,5 +1,6 @@
 package com.example.careerverseapp
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+// flutter_stripe (Payment Sheet) requires a FragmentActivity.
+class MainActivity : FlutterFragmentActivity()

@@ -5,6 +5,7 @@ import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../providers/locale_provider.dart';
 import '../providers/theme_provider.dart';
+import '../services/notification_service.dart';
 import '../widgets/form_fields.dart';
 
 const _languageNames = {'fr': 'Français', 'en': 'English', 'ar': 'العربية'};
@@ -70,6 +71,36 @@ class SettingsScreen extends StatelessWidget {
                   ),
               ],
             ),
+          ),
+          SwitchListTile.adaptive(
+            key: const Key('push-switch'),
+            secondary: const Icon(Icons.notifications_active_outlined),
+            value: context.watch<NotificationService>().enabled,
+            onChanged: context.read<NotificationService>().setEnabled,
+            title: Text(loc.pushNotifications),
+            subtitle: Text(loc.pushNotificationsSubtitle),
+          ),
+          ListTile(
+            key: const Key('premium-tile'),
+            leading: const Icon(
+              Icons.workspace_premium_outlined,
+              color: Color(0xFFE0A100),
+            ),
+            title: Text(loc.premium),
+            subtitle: Builder(
+              builder: (context) {
+                final state = context.watch<AppState>();
+                return Text(
+                  state.isPremium
+                      ? loc.premiumActiveUntil(
+                          loc.shortDate(state.premiumUntil!),
+                        )
+                      : loc.premiumFree,
+                );
+              },
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.of(context).pushNamed('/premium'),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_none),

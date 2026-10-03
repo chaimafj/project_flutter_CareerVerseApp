@@ -2,6 +2,7 @@ import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/l10n/content_ar.dart';
 import 'package:careerverseapp/l10n/content_fr.dart';
 import 'package:careerverseapp/providers/app_state.dart';
+import 'package:careerverseapp/services/local_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +29,8 @@ Set<String> englishContent() {
 }
 
 void main() {
+  late LocalStore store;
+  setUp(() => store = MemoryLocalStore());
   tearDown(() => setCatalogLanguage('en'));
 
   test('all career content is translated in French and Arabic', () {
@@ -54,7 +57,7 @@ void main() {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({'locale': 'fr'});
     final prefs = await SharedPreferences.getInstance();
-    await tester.pumpWidget(buildApp(prefs, AppState(prefs)));
+    await tester.pumpWidget(buildApp(prefs, AppState(prefs, store)));
     await tester.pumpAndSettle();
 
     expect(find.text('Commencer'), findsOneWidget);
@@ -63,13 +66,11 @@ void main() {
     expect(find.text('Créez votre compte'), findsOneWidget);
   });
 
-  testWidgets('home screen shows translated careers in French', (
-    tester,
-  ) async {
+  testWidgets('home screen shows translated careers in French', (tester) async {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({'locale': 'fr'});
     final prefs = await SharedPreferences.getInstance();
-    final state = AppState(prefs);
+    final state = AppState(prefs, store);
     await state.register(name: 'Chaima', email: 'c@c.com', password: '123456');
 
     await tester.pumpWidget(buildApp(prefs, state));
@@ -84,7 +85,7 @@ void main() {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({'locale': 'ar'});
     final prefs = await SharedPreferences.getInstance();
-    await tester.pumpWidget(buildApp(prefs, AppState(prefs)));
+    await tester.pumpWidget(buildApp(prefs, AppState(prefs, store)));
     await tester.pumpAndSettle();
 
     final button = find.text('ابدأ الآن');
@@ -96,7 +97,7 @@ void main() {
     useTallScreen(tester);
     SharedPreferences.setMockInitialValues({'locale': 'ar'});
     final prefs = await SharedPreferences.getInstance();
-    final state = AppState(prefs);
+    final state = AppState(prefs, store);
     await state.register(name: 'Chaima', email: 'a@a.com', password: '123456');
     await state.updateProfile(
       state.profile.copyWith(interests: ['Security', 'Cloud']),

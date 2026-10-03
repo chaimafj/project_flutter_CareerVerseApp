@@ -1,6 +1,7 @@
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/models/lab_result.dart';
 import 'package:careerverseapp/providers/app_state.dart';
+import 'package:careerverseapp/services/local_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,10 +10,12 @@ List<Set<int>> perfectAnswers(String labId) =>
 
 void main() {
   late SharedPreferences prefs;
+  late LocalStore store;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     prefs = await SharedPreferences.getInstance();
+    store = MemoryLocalStore();
   });
 
   test('catalog labs are well formed', () {
@@ -57,7 +60,7 @@ void main() {
   });
 
   test('register, logout, login and wrong password', () async {
-    final state = AppState(prefs);
+    final state = AppState(prefs, store);
     expect(
       await state.register(
         name: 'Chaima Fejjari',
@@ -81,11 +84,15 @@ void main() {
     expect(state.isLoggedIn, isFalse);
     expect(await state.login('chaima@example.com', 'bad-pass'), isNotNull);
     expect(await state.login('chaima@example.com', 'secret123'), isNull);
-    expect(AppState(prefs).isLoggedIn, isTrue, reason: 'session persisted');
+    expect(
+      AppState(prefs, store).isLoggedIn,
+      isTrue,
+      reason: 'session persisted',
+    );
   });
 
   test('results drive progress, recommendations and next lab', () async {
-    final state = AppState(prefs);
+    final state = AppState(prefs, store);
     await state.register(name: 'Test', email: 't@t.com', password: '123456');
     final (cyber, cyberLab) = findLab('cyber-1')!;
 
@@ -105,7 +112,7 @@ void main() {
     expect(state.recommendationHistory, hasLength(1));
 
     // Data survives a restart.
-    final reloaded = AppState(prefs);
+    final reloaded = AppState(prefs, store);
     expect(reloaded.resultById(result.id)?.overall, 100);
 
     await state.resetProgress();
@@ -113,7 +120,7 @@ void main() {
   });
 
   test('profile updates are persisted and affect matches', () async {
-    final state = AppState(prefs);
+    final state = AppState(prefs, store);
     await state.register(name: 'Test', email: 'p@t.com', password: '123456');
     await state.updateProfile(
       state.profile.copyWith(
@@ -121,7 +128,7 @@ void main() {
         interests: ['Security', 'Networks', 'Problem solving', 'Data'],
       ),
     );
-    expect(AppState(prefs).profile.university, 'ESPRIT');
+    expect(AppState(prefs, store).profile.university, 'ESPRIT');
     expect(state.matches.first.career.id, 'cyber');
   });
 }

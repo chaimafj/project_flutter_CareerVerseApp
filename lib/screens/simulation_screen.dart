@@ -7,6 +7,8 @@ import '../data/catalog.dart';
 import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../providers/app_state.dart';
+import '../services/ad_service.dart';
+import '../services/notification_service.dart';
 import '../widgets/career_ui.dart';
 
 class SimulationScreen extends StatefulWidget {
@@ -20,6 +22,9 @@ class _SimulationScreenState extends State<SimulationScreen> {
   late final Career _career;
   late final Lab _lab;
   bool _initialized = false;
+
+  /// Advanced lab opened without Premium: show the paywall instead.
+  bool _locked = false;
 
   final _stopwatch = Stopwatch();
   Timer? _ticker;
@@ -38,6 +43,8 @@ class _SimulationScreenState extends State<SimulationScreen> {
     _career = found.$1;
     _lab = found.$2;
     _initialized = true;
+    _locked = context.read<AppState>().isLabLocked(_lab);
+    if (_locked) return;
     _stopwatch.start();
     _ticker = Timer.periodic(
       const Duration(seconds: 1),
@@ -94,8 +101,23 @@ class _SimulationScreenState extends State<SimulationScreen> {
       durationSeconds: _stopwatch.elapsed.inSeconds,
     );
     if (!mounted) return;
-    Navigator.of(context)
-        .pushReplacementNamed('/results', arguments: result.id);
+    // System notification: "Your recommendations are ready!" (tap → results).
+    final loc = context.l10n;
+    final notification = context.read<AppState>().notifications.first;
+    context.read<NotificationService>().showLabResult(
+      title: loc.notificationTitle(notification),
+      body: loc.notificationBody(notification),
+      resultId: result.id,
+      notificationId: notification.id,
+    );
+    // Test interstitial after the simulation, then the results.
+    context.read<AdService>().showInterstitial(
+      onDone: () {
+        if (!mounted) return;
+        Navigator.of(context)
+            .pushReplacementNamed('/results', arguments: result.id);
+      },
+    );
   }
 
   Future<bool> _confirmExit() async {
@@ -119,8 +141,56 @@ class _SimulationScreenState extends State<SimulationScreen> {
     return leave ?? false;
   }
 
+  Future<void> _unlock() async {
+    final navigator = Navigator.of(context);
+    await navigator.pushNamed('/premium');
+    if (!mounted || context.read<AppState>().isLabLocked(_lab)) return;
+    navigator.pushReplacementNamed('/simulation', arguments: _lab.id);
+  }
+
+  Widget _buildLocked(BuildContext context) {
+    final loc = context.l10n;
+    return Scaffold(
+      appBar: AppBar(title: Text(loc.premiumLabTitle)),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.lock_outline,
+                size: 72,
+                color: Color(0xFFE0A100),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                '${_career.title} \u00b7 ${tc(_lab.level)}',
+                style: const TextStyle(color: mutedInk),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                loc.premiumLabMessage(_lab.title),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 24),
+              GradientActionButton(
+                key: const Key('unlock-premium'),
+                label: loc.unlockPremium,
+                icon: Icons.workspace_premium,
+                onPressed: _unlock,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_locked) return _buildLocked(context);
     final loc = context.l10n;
     final total = _lab.questions.length;
     final progress = (_index + (_checked ? 1 : 0)) / total;

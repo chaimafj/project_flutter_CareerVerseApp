@@ -217,6 +217,7 @@ class _LabTile extends StatelessWidget {
     final state = context.watch<AppState>();
     final best = state.bestResult(lab.id);
     final attempts = state.resultsForLab(lab.id).length;
+    final locked = state.isLabLocked(lab);
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: _Card(
@@ -271,8 +272,26 @@ class _LabTile extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               )
+            else if (locked)
+              const Icon(Icons.lock_outline, color: Color(0xFFE0A100), size: 26)
             else
               const Icon(Icons.play_circle_fill, color: purple, size: 28),
+            IconButton(
+              key: Key('open-course-${lab.id}'),
+              tooltip: state.isCourseCompleted(lab.id)
+                  ? context.l10n.courseRead
+                  : context.l10n.readCourse,
+              onPressed: () =>
+                  Navigator.of(context).pushNamed('/course', arguments: lab.id),
+              icon: Icon(
+                state.isCourseCompleted(lab.id)
+                    ? Icons.menu_book_rounded
+                    : Icons.menu_book_outlined,
+                color: state.isCourseCompleted(lab.id)
+                    ? const Color(0xFF10A37F)
+                    : career.color,
+              ),
+            ),
           ],
         ),
       ),

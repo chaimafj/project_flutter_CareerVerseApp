@@ -36,13 +36,50 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailController.text,
       _passwordController.text,
     );
+    _finish(error);
+  }
+
+  Future<void> _loginWithGoogle() async {
+    final state = context.read<AppState>();
+    if (!state.isCloudAccount) {
+      showInfo(context, context.l10n.googleSignInInfo);
+      return;
+    }
+    FocusScope.of(context).unfocus();
+    setState(() => _loading = true);
+    _finish(await state.signInWithGoogle());
+  }
+
+  void _finish(AuthError? error) {
     if (!mounted) return;
     setState(() => _loading = false);
+    if (error == AuthError.cancelled) return;
     if (error != null) {
       showError(context, context.l10n.authError(error));
       return;
     }
     Navigator.of(context).pushNamedAndRemoveUntil('/home', (_) => false);
+  }
+
+  Future<void> _resetPassword() async {
+    final loc = context.l10n;
+    final state = context.read<AppState>();
+    if (!state.isCloudAccount) {
+      showInfo(context, loc.forgotPasswordInfo);
+      return;
+    }
+    final email = _emailController.text.trim();
+    if (AppValidators.email(loc)(email) != null) {
+      showInfo(context, loc.passwordResetEnterEmail);
+      return;
+    }
+    final error = await state.sendPasswordReset(email);
+    if (!mounted) return;
+    if (error != null) {
+      showError(context, loc.authError(error));
+    } else {
+      showInfo(context, loc.passwordResetSent(email));
+    }
   }
 
   @override
@@ -117,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
                   child: TextButton(
-                    onPressed: () => showInfo(context, loc.forgotPasswordInfo),
+                    onPressed: _resetPassword,
                     child: Text(
                       loc.forgotPassword,
                       style: const TextStyle(color: blue, fontSize: 11),
@@ -150,7 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   height: 45,
                   child: OutlinedButton.icon(
-                    onPressed: () => showInfo(context, loc.googleSignInInfo),
+                    key: const Key('google-sign-in'),
+                    onPressed: _loading ? null : _loginWithGoogle,
                     icon: const Icon(
                       Icons.g_mobiledata,
                       color: Color(0xFF4285F4),

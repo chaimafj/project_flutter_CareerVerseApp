@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "771627760712",
+    "project_id": "careerverse-3057",
+    "storage_bucket": "careerverse-3057.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771627760712:android:fb169cf532327a3f7fac7d",
+        "android_client_info": {
+          "package_name": "com.example.careerverseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771627760712-38ss2q9boeu0a1qcdg09papqb534q2ip.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.careerverseapp",
+            "certificate_hash": "8ec4b1668e4ea534a81988a9d3449d6c81ccf59e"
+          }
+        },
+        {
+          "client_id": "771627760712-bkdn3fhuuuspo3107nhgbidcphv8r9s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqrzuMQmAz73kDWGHVW42j8dT-xZoE03s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771627760712-bkdn3fhuuuspo3107nhgbidcphv8r9s0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "771627760712-g3c3923i6c132a5vgo4lv34ln7g58do3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.careerverseapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

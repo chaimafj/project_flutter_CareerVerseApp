@@ -157,7 +157,7 @@ abstract class AppLocalizations {
   /// No description provided for @googleSignInInfo.
   ///
   /// In en, this message translates to:
-  /// **'Google Sign-In requires a Firebase project (google-services.json). Use email sign-in for now.'**
+  /// **'Google Sign-In is available in the Android and iOS app.'**
   String get googleSignInInfo;
 
   /// No description provided for @continueWithGoogle.
@@ -1335,6 +1335,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Progress reset'**
   String get progressReset;
+
+  /// No description provided for @googleSignInUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Sign-In is not available right now. Please use your email.'**
+  String get googleSignInUnavailable;
+
+  /// No description provided for @errorInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get errorInvalidCredentials;
+
+  /// No description provided for @errorWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'This password is too weak.'**
+  String get errorWeakPassword;
+
+  /// No description provided for @errorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your network and try again.'**
+  String get errorNetwork;
+
+  /// No description provided for @errorTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please try again later.'**
+  String get errorTooManyRequests;
+
+  /// No description provided for @errorProviderDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in method is not enabled for the app.'**
+  String get errorProviderDisabled;
+
+  /// No description provided for @errorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorUnknown;
+
+  /// No description provided for @passwordResetEnterEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address above, then tap “Forgot password?” again.'**
+  String get passwordResetEnterEmail;
+
+  /// No description provided for @passwordResetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'A password reset link was sent to {email}.'**
+  String passwordResetSent(String email);
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notifications'**
+  String get pushNotifications;
+
+  /// No description provided for @pushNotificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts when your results and recommendations are ready'**
+  String get pushNotificationsSubtitle;
+
+  /// No description provided for @premium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premium;
+
+  /// No description provided for @premiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CareerVerse Premium'**
+  String get premiumTitle;
+
+  /// No description provided for @premiumSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock every Advanced lab and go further in your orientation.'**
+  String get premiumSubtitle;
+
+  /// No description provided for @premiumBenefitLabs.
+  ///
+  /// In en, this message translates to:
+  /// **'All Advanced labs (expert scenarios)'**
+  String get premiumBenefitLabs;
+
+  /// No description provided for @premiumBenefitSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Harder questions for a sharper skill analysis'**
+  String get premiumBenefitSkills;
+
+  /// No description provided for @premiumBenefitSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Access on all your devices with your account'**
+  String get premiumBenefitSync;
+
+  /// No description provided for @premiumPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} / {days} days'**
+  String premiumPrice(String price, int days);
+
+  /// No description provided for @premiumBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe for {price}'**
+  String premiumBuy(String price);
+
+  /// No description provided for @premiumExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend for {price}'**
+  String premiumExtend(String price);
+
+  /// No description provided for @premiumActiveUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium active until {date}'**
+  String premiumActiveUntil(String date);
+
+  /// No description provided for @premiumExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium expired on {date}'**
+  String premiumExpired(String date);
+
+  /// No description provided for @premiumFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan'**
+  String get premiumFree;
+
+  /// No description provided for @premiumTestMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe test mode: no real money is charged.'**
+  String get premiumTestMode;
+
+  /// No description provided for @premiumTestCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Test card: 4242 4242 4242 4242, any future date, any CVC.'**
+  String get premiumTestCard;
+
+  /// No description provided for @premiumSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment confirmed! Premium is active until {date}.'**
+  String premiumSuccess(String date);
+
+  /// No description provided for @paymentCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cancelled.'**
+  String get paymentCancelled;
+
+  /// No description provided for @paymentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed: {message}'**
+  String paymentFailed(String message);
+
+  /// No description provided for @paymentNotConfigured.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments are not available on this build (missing Stripe test keys or unsupported platform).'**
+  String get paymentNotConfigured;
+
+  /// No description provided for @transactionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction history'**
+  String get transactionHistory;
+
+  /// No description provided for @noTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet.'**
+  String get noTransactions;
+
+  /// No description provided for @premiumLabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium lab'**
+  String get premiumLabTitle;
+
+  /// No description provided for @premiumLabMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" is an Advanced lab. Subscribe to Premium to unlock it.'**
+  String premiumLabMessage(String title);
+
+  /// No description provided for @unlockPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock with Premium'**
+  String get unlockPremium;
+
+  /// No description provided for @notifPremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Premium!'**
+  String get notifPremiumTitle;
+
+  /// No description provided for @notifPremiumBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced labs are unlocked until {date}.'**
+  String notifPremiumBody(String date);
+
+  /// No description provided for @courseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Course'**
+  String get courseLabel;
+
+  /// No description provided for @labLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab'**
+  String get labLabel;
+
+  /// No description provided for @lessonProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson {current}/{total}'**
+  String lessonProgress(int current, int total);
+
+  /// No description provided for @keyPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Key points'**
+  String get keyPoints;
+
+  /// No description provided for @exampleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get exampleLabel;
+
+  /// No description provided for @takeaways.
+  ///
+  /// In en, this message translates to:
+  /// **'Key takeaways'**
+  String get takeaways;
+
+  /// No description provided for @summaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get summaryLabel;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @finishCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finishCourse;
+
+  /// No description provided for @finishAndStartLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish and start the lab'**
+  String get finishAndStartLab;
+
+  /// No description provided for @readCourseNamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the course: {title}'**
+  String readCourseNamed(String title);
+
+  /// No description provided for @courseCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Course completed'**
+  String get courseCompleted;
+
+  /// No description provided for @reviewCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the course'**
+  String get reviewCourse;
+
+  /// No description provided for @readCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the course'**
+  String get readCourse;
+
+  /// No description provided for @courseRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Course read'**
+  String get courseRead;
+
+  /// No description provided for @courseThenLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Each step: a course with explanations, then a hands-on lab to practise.'**
+  String get courseThenLab;
+
+  /// No description provided for @coursesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{done}/{total} courses read'**
+  String coursesDone(int done, int total);
 }
 
 class _AppLocalizationsDelegate
