@@ -2007,6 +2007,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ESCO code: {code}'**
   String escoOccupationCode(String code);
+
+  /// No description provided for @country.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get country;
+
+  /// No description provided for @noCountrySelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No country selected (show EUR)'**
+  String get noCountrySelected;
+
+  /// No description provided for @salaryConverted.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted estimate · {country}'**
+  String salaryConverted(String country);
+
+  /// No description provided for @salaryConvertedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Converted from France estimates; not local-market data.'**
+  String get salaryConvertedNote;
+
+  /// No description provided for @salaryRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{min} – {max} {currency} / {period}'**
+  String salaryRange(String min, String max, String currency, String period);
+
+  /// No description provided for @salaryPerYear.
+  ///
+  /// In en, this message translates to:
+  /// **'year'**
+  String get salaryPerYear;
+
+  /// No description provided for @exchangeRateLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading exchange rate…'**
+  String get exchangeRateLoading;
+
+  /// No description provided for @exchangeRateUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Exchange rate unavailable'**
+  String get exchangeRateUnavailable;
+
+  /// No description provided for @countryTunisia.
+  ///
+  /// In en, this message translates to:
+  /// **'Tunisia'**
+  String get countryTunisia;
+
+  /// No description provided for @countryAlgeria.
+  ///
+  /// In en, this message translates to:
+  /// **'Algeria'**
+  String get countryAlgeria;
+
+  /// No description provided for @countryMorocco.
+  ///
+  /// In en, this message translates to:
+  /// **'Morocco'**
+  String get countryMorocco;
+
+  /// No description provided for @countryEgypt.
+  ///
+  /// In en, this message translates to:
+  /// **'Egypt'**
+  String get countryEgypt;
+
+  /// No description provided for @countryFrance.
+  ///
+  /// In en, this message translates to:
+  /// **'France'**
+  String get countryFrance;
+
+  /// No description provided for @countryGermany.
+  ///
+  /// In en, this message translates to:
+  /// **'Germany'**
+  String get countryGermany;
+
+  /// No description provided for @countryUnitedStates.
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get countryUnitedStates;
+
+  /// No description provided for @countryCanada.
+  ///
+  /// In en, this message translates to:
+  /// **'Canada'**
+  String get countryCanada;
+
+  /// No description provided for @countryUnitedKingdom.
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get countryUnitedKingdom;
+
+  /// No description provided for @countrySwitzerland.
+  ///
+  /// In en, this message translates to:
+  /// **'Switzerland'**
+  String get countrySwitzerland;
+
+  /// No description provided for @countryUae.
+  ///
+  /// In en, this message translates to:
+  /// **'United Arab Emirates'**
+  String get countryUae;
+
+  /// No description provided for @countrySaudiArabia.
+  ///
+  /// In en, this message translates to:
+  /// **'Saudi Arabia'**
+  String get countrySaudiArabia;
+
+  /// No description provided for @countryIndia.
+  ///
+  /// In en, this message translates to:
+  /// **'India'**
+  String get countryIndia;
+
+  /// No description provided for @countryJapan.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get countryJapan;
+
+  /// No description provided for @countryAustralia.
+  ///
+  /// In en, this message translates to:
+  /// **'Australia'**
+  String get countryAustralia;
+
+  /// No description provided for @countrySenegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Senegal'**
+  String get countrySenegal;
 }
 
 class _AppLocalizationsDelegate

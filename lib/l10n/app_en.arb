@@ -889,5 +889,52 @@
         "type": "String"
       }
     }
-  }
+  },
+  "country": "Country",
+  "noCountrySelected": "No country selected (show EUR)",
+  "salaryConverted": "Converted estimate · {country}",
+  "@salaryConverted": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryConvertedNote": "Converted from France estimates; not local-market data.",
+  "salaryRange": "{min} – {max} {currency} / {period}",
+  "@salaryRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryPerYear": "year",
+  "exchangeRateLoading": "Loading exchange rate…",
+  "exchangeRateUnavailable": "Exchange rate unavailable",
+  "countryTunisia": "Tunisia",
+  "countryAlgeria": "Algeria",
+  "countryMorocco": "Morocco",
+  "countryEgypt": "Egypt",
+  "countryFrance": "France",
+  "countryGermany": "Germany",
+  "countryUnitedStates": "United States",
+  "countryCanada": "Canada",
+  "countryUnitedKingdom": "United Kingdom",
+  "countrySwitzerland": "Switzerland",
+  "countryUae": "United Arab Emirates",
+  "countrySaudiArabia": "Saudi Arabia",
+  "countryIndia": "India",
+  "countryJapan": "Japan",
+  "countryAustralia": "Australia",
+  "countrySenegal": "Senegal"
 }

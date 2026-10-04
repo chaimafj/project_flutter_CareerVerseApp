@@ -1156,4 +1156,81 @@ class AppLocalizationsEn extends AppLocalizations {
   String escoOccupationCode(String code) {
     return 'ESCO code: $code';
   }
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get noCountrySelected => 'No country selected (show EUR)';
+
+  @override
+  String salaryConverted(String country) {
+    return 'Converted estimate · $country';
+  }
+
+  @override
+  String get salaryConvertedNote =>
+      'Converted from France estimates; not local-market data.';
+
+  @override
+  String salaryRange(String min, String max, String currency, String period) {
+    return '$min – $max $currency / $period';
+  }
+
+  @override
+  String get salaryPerYear => 'year';
+
+  @override
+  String get exchangeRateLoading => 'Loading exchange rate…';
+
+  @override
+  String get exchangeRateUnavailable => 'Exchange rate unavailable';
+
+  @override
+  String get countryTunisia => 'Tunisia';
+
+  @override
+  String get countryAlgeria => 'Algeria';
+
+  @override
+  String get countryMorocco => 'Morocco';
+
+  @override
+  String get countryEgypt => 'Egypt';
+
+  @override
+  String get countryFrance => 'France';
+
+  @override
+  String get countryGermany => 'Germany';
+
+  @override
+  String get countryUnitedStates => 'United States';
+
+  @override
+  String get countryCanada => 'Canada';
+
+  @override
+  String get countryUnitedKingdom => 'United Kingdom';
+
+  @override
+  String get countrySwitzerland => 'Switzerland';
+
+  @override
+  String get countryUae => 'United Arab Emirates';
+
+  @override
+  String get countrySaudiArabia => 'Saudi Arabia';
+
+  @override
+  String get countryIndia => 'India';
+
+  @override
+  String get countryJapan => 'Japan';
+
+  @override
+  String get countryAustralia => 'Australia';
+
+  @override
+  String get countrySenegal => 'Senegal';
 }

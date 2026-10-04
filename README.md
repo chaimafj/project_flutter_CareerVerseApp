@@ -7,6 +7,7 @@ CareerVerse is a Flutter app (Android / iOS) that helps students discover techno
 - **Accounts (Firebase Auth)**: register and log in with email and password, **Google Sign-In**, and password reset by email. The session persists between launches, forms are validated, and Firebase errors are translated (wrong password, email already used, network...). On platforms without Firebase (desktop, tests) the app falls back to local accounts stored on the device (salted SHA-256).
 - **Cloud sync (Cloud Firestore)**: profile, lab results, recommendation history and notifications are saved to the user's Firestore document, so logging in on another device restores everything.
 - **Editable profile**: name, photo (gallery or camera), study level, university, specialty, bio and interests. The profile screen shows how complete it is, your stats and your top skills.
+- **Country-based salary display**: select a supported country in the profile to convert the app's France-based euro ranges into local currency using current EUR exchange rates from a public API. Rates are cached for offline use and refreshed every 24 hours. With no country selected, salaries remain in euros. Converted values are labelled as France-based currency conversions, not local-market salaries. Supported choices include Tunisia (DT), Algeria, Morocco, Egypt, France, Germany, United States, Canada, United Kingdom, Switzerland, UAE, Saudi Arabia, India, Japan, Australia and Senegal.
 - **Career explorer**: search, category tabs (Infrastructure / Development / Security) and detail pages (Hero animation) covering salary, education, outlook, typical day and tools.
   - The 9 CareerVerse careers have curated courses and interactive labs. Searching also queries the European Commission's multilingual ESCO API for additional occupations; their official descriptions, occupation codes and essential/optional skills are displayed in a separate profile. Search results are paginated. Existing career discovery and simulations remain available offline.
 - **Real simulations**: each career has 3 labs (Beginner → Advanced) of real scenario questions (single and multi-select). The flow is: select answers → *Check answer* → feedback with explanation → *Next question* / *Finish lab*. A timer runs, and there is an exit confirmation.
@@ -130,15 +131,18 @@ lib/
 ├── data/catalog.dart           careers, labs and questions (EN source + translated catalogs)
 ├── data/careers/               career packs (Flutter, Java, Data, AI, Frontend)
 ├── data/courses.dart           course for each lab (EN source, code examples, courseFor())
+├── data/salary_countries.dart supported country/currency choices
 ├── models/esco_occupation.dart ESCO search results and occupation profiles
 ├── l10n/                       ARB files (en/fr/ar), generated AppLocalizations, content and
 │                               course translations (courses_fr.dart, courses_ar.dart)
 ├── models/                     Career, Lab, LabQuestion, LabResult, UserProfile, AppNotification,
 │                               PaymentTransaction / PremiumPlan, Course / CourseSection, ChatMessage
 ├── providers/                  AppState (auth, scoring, recommendations), Theme, Locale,
-│                               ChatProvider (conversation, Gemini → offline fallback)
+│                               ChatProvider (conversation, Gemini → offline fallback),
+│                               SalaryCurrencyProvider (cached exchange rates)
 ├── services/                   AuthService (Firebase/local), FirestoreService (cloud sync),
 │                               EscoCareerService (dynamic occupation search and profiles),
+│                               ExchangeRateService (public EUR exchange rates),
 │                               PaymentService (Stripe test mode),
 │                               ChatService (Gemini), CareerAssistant (offline chatbot),
 │                               NotificationService (FCM + local notifications),
@@ -167,7 +171,7 @@ flutter test
 flutter build apk --debug   # build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing. The localization tests check three things: every career string has a FR/AR translation, the UI renders in French, and a complete lab plus every screen renders in Arabic (RTL) without layout errors. Other tests check that results survive an app restart in Hive, that legacy data is migrated, that the Lottie files are valid, and that the flow continues when no interstitial is available. The Firebase sync tests use fake Auth/Firestore services: results are written to the cloud, a second device restores them, data created offline is uploaded, auth errors are mapped, a Google profile is imported, and tapping a notification opens the results. The Premium tests use a fake payment service: Advanced labs stay locked until payment, failed or cancelled payments grant nothing, a second payment extends the period, expired Premium locks labs again, transactions are restored on another device, live Stripe keys are refused, and the paywall flow unlocks and starts the lab. The course tests check that every lab has a course with the same structure in the three languages, that read courses persist, sync and reset, and that the flow learning path → course → summary → lab works. The chatbot tests check the offline assistant in the three languages (recommendations, career salary, next step, progress, unknown questions), the Gemini client with a mocked HTTP server (request, parsing, errors), the fallback to the offline assistant when Gemini fails, per-user persistence, and the chat screen flow. ESCO tests cover localized search results, occupation descriptions/skills, HTTP and JSON errors, plus searching and opening a dynamic occupation profile.
+The tests cover scoring, authentication, persistence, recommendations and next-lab logic. A full widget flow goes from register → lab → results → Next Lab → second lab, and another test covers profile editing, including country selection. The localization tests check translations and Arabic RTL screens. Other tests check Hive persistence, legacy data migration, Lottie files and unavailable interstitials. Firebase sync tests use fake Auth/Firestore services. Premium tests use a fake payment service. Course tests cover three-language course data and the learning path → course → lab flow. Chatbot tests cover offline FR/EN/AR replies, Gemini with mocked HTTP, fallback, persistence and widget flow. ESCO tests cover localized search, profile details, errors and navigation. Currency tests cover EUR defaults, TND conversion, cached exchange rates and profile country persistence.
 
 ## Limitations
 

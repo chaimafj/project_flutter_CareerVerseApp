@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:careerverseapp/l10n/app_localizations.dart';
 import 'package:careerverseapp/models/esco_occupation.dart';
 import 'package:careerverseapp/providers/app_state.dart';
+import 'package:careerverseapp/providers/salary_currency_provider.dart';
 import 'package:careerverseapp/screens/esco_career_detail_screen.dart';
 import 'package:careerverseapp/screens/explore_screen.dart';
 import 'package:careerverseapp/services/esco_career_service.dart';
@@ -115,6 +116,11 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final state = AppState(prefs, MemoryLocalStore());
+    await state.register(
+      name: 'Sara',
+      email: 'sara@example.com',
+      password: 'p',
+    );
     final service = EscoCareerService(
       client: MockClient((request) async {
         if (request.url.path == '/esco/api/search') {
@@ -161,19 +167,22 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider.value(
         value: state,
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: CareerExplorerScreen(escoService: service),
-          onGenerateRoute: (settings) {
-            if (settings.name == '/esco-career') {
-              return MaterialPageRoute<void>(
-                settings: settings,
-                builder: (_) => EscoCareerDetailScreen(service: service),
-              );
-            }
-            return null;
-          },
+        child: ChangeNotifierProvider(
+          create: (_) => SalaryCurrencyProvider(prefs, autoRefresh: false),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: CareerExplorerScreen(escoService: service),
+            onGenerateRoute: (settings) {
+              if (settings.name == '/esco-career') {
+                return MaterialPageRoute<void>(
+                  settings: settings,
+                  builder: (_) => EscoCareerDetailScreen(service: service),
+                );
+              }
+              return null;
+            },
+          ),
         ),
       ),
     );

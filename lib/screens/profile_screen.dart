@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../data/salary_countries.dart';
 import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
 import '../widgets/career_ui.dart';
@@ -19,6 +20,8 @@ class ProfileScreen extends StatelessWidget {
     final subtitle = [
       profile.specialty,
       profile.university,
+      if (salaryCountryByCode(profile.countryCode) case final country?)
+        country.name(loc),
     ].where((s) => s.isNotEmpty).join(' · ');
 
     return Scaffold(

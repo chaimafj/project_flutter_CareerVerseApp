@@ -197,10 +197,13 @@ bool _has(String text, String word) {
 /// Offline career assistant: answers from the catalog, the courses and the
 /// user's own progress. It is also the fallback when Gemini is unavailable.
 class LocalAssistant {
-  LocalAssistant(this.state, this.loc);
+  LocalAssistant(this.state, this.loc, {this.formatSalary});
 
   final AppState state;
   final AppLocalizations loc;
+  final String Function(String salary)? formatSalary;
+
+  String _salary(String salary) => formatSalary?.call(salary) ?? salary;
 
   Set<_Intent> _intents(String text) => {
     for (final entry in _intentWords.entries)
@@ -277,12 +280,12 @@ class LocalAssistant {
       lines
         ..add('${career.title}: ${career.summary}')
         ..add(career.description)
-        ..add(loc.chatLocalSalary(career.title, career.salary))
+        ..add(loc.chatLocalSalary(career.title, _salary(career.salary)))
         ..add(loc.chatLocalTools(career.tools.join(', ')))
         ..add(loc.chatLocalLabs(career.labs.length));
     } else {
       if (specific.contains(_Intent.salary)) {
-        lines.add(loc.chatLocalSalary(career.title, career.salary));
+        lines.add(loc.chatLocalSalary(career.title, _salary(career.salary)));
       }
       if (specific.contains(_Intent.skills)) {
         lines
@@ -447,6 +450,12 @@ class LocalAssistant {
       ..writeln()
       ..writeln('USER PROFILE')
       ..writeln('- Name: ${profile.firstName}')
+      ..writeln('- Country: ${profile.countryCode ?? 'not selected'}')
+      ..writeln(
+        '- If a country is selected, salaries are converted from the app’s '
+        'France estimates using the latest cached EUR exchange rate; they are '
+        'not local-market salary data.',
+      )
       ..writeln('- Study level: ${_or(profile.studyLevel)}')
       ..writeln('- Specialty: ${_or(profile.specialty)}')
       ..writeln('- Interests: ${_or(profile.interests.join(', '))}')
@@ -465,7 +474,7 @@ class LocalAssistant {
         'labs ${match.labsDone}/${career.labs.length}'
         '${match.performance != null ? ', lab average ${match.performance}%' : ''}'
         '${next != null ? ', next lab "${next.title}" (${next.level})' : ', all labs done'}'
-        '. Salary ${career.salary}. Tools: ${career.tools.join(', ')}. '
+        '. Salary ${_salary(career.salary)}. Tools: ${career.tools.join(', ')}. '
         '${career.summary}',
       );
     }

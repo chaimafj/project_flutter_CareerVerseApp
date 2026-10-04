@@ -5,7 +5,9 @@ import '../data/catalog.dart';
 import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../providers/app_state.dart';
+import '../providers/salary_currency_provider.dart';
 import '../widgets/career_ui.dart';
+import '../widgets/salary_display.dart';
 
 class CareerLabDetailScreen extends StatelessWidget {
   const CareerLabDetailScreen({super.key});
@@ -100,8 +102,11 @@ class CareerLabDetailScreen extends StatelessWidget {
                   children: [
                     _Fact(
                       icon: Icons.euro,
-                      label: loc.salaryFrance,
+                      label: context
+                          .watch<SalaryCurrencyProvider>()
+                          .salaryLabel(state.profile.countryCode, loc),
                       value: career.salary,
+                      valueWidget: SalaryDisplay(euroSalary: career.salary),
                     ),
                     const SizedBox(width: 10),
                     _Fact(
@@ -300,11 +305,17 @@ class _LabTile extends StatelessWidget {
 }
 
 class _Fact extends StatelessWidget {
-  const _Fact({required this.icon, required this.label, required this.value});
+  const _Fact({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.valueWidget,
+  });
 
   final IconData icon;
   final String label;
   final String value;
+  final Widget? valueWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -317,13 +328,13 @@ class _Fact extends StatelessWidget {
             const SizedBox(height: 6),
             Text(label, style: const TextStyle(color: mutedInk, fontSize: 11)),
             const SizedBox(height: 2),
-            Text(
-              value,
+            DefaultTextStyle(
               style: const TextStyle(
                 color: ink,
                 fontWeight: FontWeight.w700,
                 fontSize: 12,
               ),
+              child: valueWidget ?? Text(value),
             ),
           ],
         ),

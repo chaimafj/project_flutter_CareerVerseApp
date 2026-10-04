@@ -7,6 +7,7 @@ class UserProfile {
     this.specialty = '',
     this.bio = '',
     this.interests = const [],
+    this.countryCode,
     this.photoPath,
     this.photoUrl,
     required this.createdAt,
@@ -20,6 +21,7 @@ class UserProfile {
   final String specialty;
   final String bio;
   final List<String> interests;
+  final String? countryCode;
   final String? photoPath;
 
   /// Remote photo (Google account), used when there is no local photo.
@@ -66,6 +68,8 @@ class UserProfile {
     String? specialty,
     String? bio,
     List<String>? interests,
+    String? countryCode,
+    bool clearCountry = false,
     String? photoPath,
     String? photoUrl,
     bool clearPhoto = false,
@@ -78,6 +82,7 @@ class UserProfile {
     specialty: specialty ?? this.specialty,
     bio: bio ?? this.bio,
     interests: interests ?? this.interests,
+    countryCode: clearCountry ? null : countryCode ?? this.countryCode,
     photoPath: clearPhoto ? null : photoPath ?? this.photoPath,
     photoUrl: clearPhoto ? null : photoUrl ?? this.photoUrl,
     createdAt: createdAt,
@@ -92,6 +97,7 @@ class UserProfile {
     'specialty': specialty,
     'bio': bio,
     'interests': interests,
+    'countryCode': countryCode,
     'photoPath': photoPath,
     'photoUrl': photoUrl,
     'createdAt': createdAt.toIso8601String(),
@@ -106,6 +112,7 @@ class UserProfile {
     specialty: json['specialty'] as String? ?? '',
     bio: json['bio'] as String? ?? '',
     interests: List<String>.from(json['interests'] as List? ?? const []),
+    countryCode: json['countryCode'] as String?,
     photoPath: json['photoPath'] as String?,
     photoUrl: json['photoUrl'] as String?,
     createdAt:

@@ -317,5 +317,52 @@
   "escoOptionalCareerSkills": "مهارات إضافية",
   "escoCareerLabsNote": "الدروس والمحاكاة التفاعلية متاحة حاليًا للمهن التسع الموجودة في كتالوج CareerVerse المحلي.",
   "escoLoadMore": "عرض المزيد من المهن",
-  "escoOccupationCode": "رمز ESCO: {code}"
+  "escoOccupationCode": "رمز ESCO: {code}",
+  "country": "البلد",
+  "noCountrySelected": "لم يتم اختيار بلد (العرض باليورو)",
+  "salaryConverted": "تقدير محوّل · {country}",
+  "@salaryConverted": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryConvertedNote": "تم التحويل من تقديرات فرنسا؛ ولا يمثل بيانات سوق العمل المحلي.",
+  "salaryRange": "{min} – {max} {currency} / {period}",
+  "@salaryRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryPerYear": "سنة",
+  "exchangeRateLoading": "جارٍ تحميل سعر الصرف…",
+  "exchangeRateUnavailable": "سعر الصرف غير متاح",
+  "countryTunisia": "تونس",
+  "countryAlgeria": "الجزائر",
+  "countryMorocco": "المغرب",
+  "countryEgypt": "مصر",
+  "countryFrance": "فرنسا",
+  "countryGermany": "ألمانيا",
+  "countryUnitedStates": "الولايات المتحدة",
+  "countryCanada": "كندا",
+  "countryUnitedKingdom": "المملكة المتحدة",
+  "countrySwitzerland": "سويسرا",
+  "countryUae": "الإمارات العربية المتحدة",
+  "countrySaudiArabia": "السعودية",
+  "countryIndia": "الهند",
+  "countryJapan": "اليابان",
+  "countryAustralia": "أستراليا",
+  "countrySenegal": "السنغال"
 }

@@ -317,5 +317,52 @@
   "escoOptionalCareerSkills": "Compétences complémentaires",
   "escoCareerLabsNote": "Les cours et simulations interactives sont actuellement disponibles pour les 9 métiers CareerVerse du catalogue local.",
   "escoLoadMore": "Charger plus de métiers",
-  "escoOccupationCode": "Code ESCO : {code}"
+  "escoOccupationCode": "Code ESCO : {code}",
+  "country": "Pays",
+  "noCountrySelected": "Aucun pays sélectionné (affichage en EUR)",
+  "salaryConverted": "Estimation convertie · {country}",
+  "@salaryConverted": {
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryConvertedNote": "Converti depuis les estimations françaises ; ce n’est pas le salaire du marché local.",
+  "salaryRange": "{min} – {max} {currency} / {period}",
+  "@salaryRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "salaryPerYear": "an",
+  "exchangeRateLoading": "Chargement du taux de change…",
+  "exchangeRateUnavailable": "Taux de change indisponible",
+  "countryTunisia": "Tunisie",
+  "countryAlgeria": "Algérie",
+  "countryMorocco": "Maroc",
+  "countryEgypt": "Égypte",
+  "countryFrance": "France",
+  "countryGermany": "Allemagne",
+  "countryUnitedStates": "États-Unis",
+  "countryCanada": "Canada",
+  "countryUnitedKingdom": "Royaume-Uni",
+  "countrySwitzerland": "Suisse",
+  "countryUae": "Émirats arabes unis",
+  "countrySaudiArabia": "Arabie saoudite",
+  "countryIndia": "Inde",
+  "countryJapan": "Japon",
+  "countryAustralia": "Australie",
+  "countrySenegal": "Sénégal"
 }

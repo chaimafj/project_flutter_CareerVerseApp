@@ -8,6 +8,7 @@ import '../l10n/l10n.dart';
 import '../models/career.dart';
 import '../models/esco_occupation.dart';
 import '../providers/app_state.dart';
+import '../providers/salary_currency_provider.dart';
 import '../services/esco_career_service.dart';
 import '../widgets/career_ui.dart';
 
@@ -485,7 +486,17 @@ class CareerCard extends StatelessWidget {
                   spacing: 6,
                   runSpacing: 6,
                   children: [
-                    ToolPill(career.salary, icon: Icons.euro),
+                    ToolPill(
+                      context.watch<SalaryCurrencyProvider>().formatSalary(
+                        career.salary,
+                        state.profile.countryCode,
+                        context.l10n,
+                        localeCode: Localizations.localeOf(
+                          context,
+                        ).languageCode,
+                      ),
+                      icon: Icons.euro,
+                    ),
                     ...career.tools.take(3).map((t) => ToolPill(t)),
                   ],
                 ),

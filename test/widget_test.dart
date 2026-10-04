@@ -5,6 +5,7 @@ import 'package:careerverseapp/services/chat_service.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/providers/locale_provider.dart';
 import 'package:careerverseapp/providers/theme_provider.dart';
+import 'package:careerverseapp/providers/salary_currency_provider.dart';
 import 'package:careerverseapp/services/ad_service.dart';
 import 'package:careerverseapp/services/local_store.dart';
 import 'package:careerverseapp/services/notification_service.dart';
@@ -51,6 +52,9 @@ Widget buildApp(
     ),
     ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
     ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
+    ChangeNotifierProvider(
+      create: (_) => SalaryCurrencyProvider(prefs, autoRefresh: false),
+    ),
     ChangeNotifierProvider.value(value: appState),
     ChangeNotifierProvider(create: (_) => ChatProvider(prefs, service: chat)),
   ],
@@ -155,12 +159,18 @@ void main() {
 
     await tester.enterText(find.byKey(const Key('edit-name')), 'New Name');
     await tester.enterText(find.byKey(const Key('edit-university')), 'ESPRIT');
+    await tester.tap(find.byKey(const Key('edit-country')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tunisia (TND)').last);
+    await tester.pumpAndSettle();
     await tapKey(tester, 'interest-Security');
     await tapKey(tester, 'save-profile');
 
     expect(find.byKey(const Key('profile-name')), findsOneWidget);
     expect(find.text('New Name'), findsWidgets);
     expect(appState.profile.university, 'ESPRIT');
+    expect(appState.profile.countryCode, 'TN');
     expect(appState.profile.interests, ['Security']);
+    expect(AppState(prefs, store).profile.countryCode, 'TN');
   });
 }

@@ -10,6 +10,7 @@ import 'firebase_options.dart';
 import 'providers/app_state.dart';
 import 'providers/chat_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/salary_currency_provider.dart';
 import 'providers/theme_provider.dart';
 import 'services/ad_service.dart';
 import 'services/auth_service.dart';
@@ -45,6 +46,9 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: notifications),
         ChangeNotifierProvider(create: (_) => ThemeProvider(prefs)),
         ChangeNotifierProvider(create: (_) => LocaleProvider(prefs)),
+        ChangeNotifierProvider(
+          create: (_) => SalaryCurrencyProvider(prefs),
+        ),
         ChangeNotifierProvider(
           create: (_) => firebaseReady
               ? AppState(

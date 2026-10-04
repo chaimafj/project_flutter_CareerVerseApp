@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../data/catalog.dart';
+import '../data/salary_countries.dart';
 import '../l10n/l10n.dart';
 import '../models/user_profile.dart';
 import '../providers/app_state.dart';
@@ -28,6 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late final TextEditingController _specialty;
   late final TextEditingController _bio;
   late String _studyLevel;
+  late String _countryCode;
   late Set<String> _interests;
   String? _photoPath;
   bool _saving = false;
@@ -41,6 +43,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _specialty = TextEditingController(text: profile.specialty);
     _bio = TextEditingController(text: profile.bio);
     _studyLevel = profile.studyLevel;
+    _countryCode = profile.countryCode ?? '';
     _interests = profile.interests.toSet();
     _photoPath = profile.photoPath;
   }
@@ -122,6 +125,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       specialty: _specialty.text.trim(),
       bio: _bio.text.trim(),
       studyLevel: _studyLevel,
+      countryCode: _countryCode.isEmpty ? null : _countryCode,
+      clearCountry: _countryCode.isEmpty,
       interests: allInterests.where(_interests.contains).toList(),
       photoPath: _photoPath,
       clearPhoto: _photoPath == null,
@@ -221,6 +226,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   )
                   .toList(),
               onChanged: (value) => setState(() => _studyLevel = value ?? ''),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              key: const Key('edit-country'),
+              isExpanded: true,
+              initialValue: salaryCountries.any(
+                    (country) => country.code == _countryCode,
+                  )
+                  ? _countryCode
+                  : '',
+              decoration: careerInputDecoration(
+                label: loc.country,
+                icon: Icons.public_outlined,
+              ),
+              items: [
+                DropdownMenuItem(value: '', child: Text(loc.noCountrySelected)),
+                for (final country in salaryCountries)
+                  DropdownMenuItem(
+                    value: country.code,
+                    child: Text(
+                      '${country.name(loc)} (${country.currencyCode})',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+              onChanged: (value) => setState(() => _countryCode = value ?? ''),
             ),
             const SizedBox(height: 12),
             TextFormField(

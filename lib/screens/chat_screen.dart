@@ -5,6 +5,7 @@ import '../l10n/l10n.dart';
 import '../models/chat_message.dart';
 import '../providers/app_state.dart';
 import '../providers/chat_provider.dart';
+import '../providers/salary_currency_provider.dart';
 import '../widgets/career_ui.dart';
 
 /// Chat with the career assistant (Gemini, or offline answers).
@@ -44,10 +45,25 @@ class _ChatScreenState extends State<ChatScreen> {
     final question = text ?? _input.text;
     if (question.trim().isEmpty) return;
     _input.clear();
+    final state = context.read<AppState>();
+    final loc = context.l10n;
+    final currency = context.read<SalaryCurrencyProvider>();
+    final languageCode = Localizations.localeOf(context).languageCode;
     await context.read<ChatProvider>().send(
       question,
-      state: context.read<AppState>(),
-      loc: context.l10n,
+      state: state,
+      loc: loc,
+      formatSalary: (salary) {
+        final converted = currency.formatSalary(
+          salary,
+          state.profile.countryCode,
+          loc,
+          localeCode: languageCode,
+        );
+        return currency.hasLocalCurrency(state.profile.countryCode)
+            ? '$converted ${loc.salaryConvertedNote}'
+            : converted;
+      },
     );
   }
 

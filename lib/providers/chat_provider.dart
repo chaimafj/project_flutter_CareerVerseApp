@@ -65,6 +65,7 @@ class ChatProvider extends ChangeNotifier {
     String text, {
     required AppState state,
     required AppLocalizations loc,
+    String Function(String salary)? formatSalary,
   }) async {
     final question = text.trim();
     if (question.isEmpty || _typing || !state.isLoggedIn) return;
@@ -80,7 +81,11 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
     await _save();
 
-    final assistant = LocalAssistant(state, loc);
+    final assistant = LocalAssistant(
+      state,
+      loc,
+      formatSalary: formatSalary,
+    );
     ChatMessage answer;
     if (service.isConfigured) {
       try {
