@@ -36,6 +36,9 @@ class Lab {
     required this.scenario,
     required this.level,
     required this.questions,
+    this.secondsPerQuestion = 60,
+    this.correctnessWeight = 0.8,
+    this.passMark = 60,
   });
 
   final String id;
@@ -43,8 +46,11 @@ class Lab {
   final String scenario;
   final String level;
   final List<LabQuestion> questions;
+  final int secondsPerQuestion;
+  final double correctnessWeight;
+  final int passMark;
 
-  int get expectedSeconds => questions.length * 60;
+  int get expectedSeconds => questions.length * secondsPerQuestion;
   int get minutes => (expectedSeconds / 60).ceil() + 2;
 
   /// Advanced labs need a Premium subscription.
@@ -60,6 +66,9 @@ class Lab {
     scenario: t(scenario),
     level: level,
     questions: [for (final question in questions) question.translate(t)],
+    secondsPerQuestion: secondsPerQuestion,
+    correctnessWeight: correctnessWeight,
+    passMark: passMark,
   );
 }
 

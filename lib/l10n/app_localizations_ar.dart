@@ -10,6 +10,168 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get adminTitle => 'الإدارة';
+
+  @override
+  String accuracyWeightValue(int percent) {
+    return 'الدقة ($percent%)';
+  }
+
+  @override
+  String speedWeightValue(int percent) {
+    return 'السرعة ($percent%)';
+  }
+
+  @override
+  String get adminAccessDenied => 'يلزم حساب مسؤول.';
+
+  @override
+  String get adminContent => 'المحتوى';
+
+  @override
+  String get adminStudents => 'الطلاب';
+
+  @override
+  String get adminStatistics => 'الإحصاءات';
+
+  @override
+  String get adminContentHelp =>
+      'إدارة المهن والدروس المترجمة والاختبارات. تُنشر التعديلات للطلاب عبر Firestore.';
+
+  @override
+  String get adminAddCareer => 'إضافة مهنة';
+
+  @override
+  String get adminArchived => 'مؤرشفة';
+
+  @override
+  String get adminPublished => 'متاحة';
+
+  @override
+  String get adminArchive => 'أرشفة / استعادة';
+
+  @override
+  String get adminArchiveHelp =>
+      'تخفي الأرشفة المهنة من الاستكشاف والتوصيات مع الاحتفاظ بالنتائج السابقة. تعيد الاستعادة إتاحتها.';
+
+  @override
+  String get adminStudentHelp =>
+      'تعديل ملفات الطلاب فقط. لا ينشئ هذا حسابات Firebase Auth ولا يعطلها ولا يحذفها.';
+
+  @override
+  String get adminNoStudents => 'لا توجد ملفات طلاب بعد.';
+
+  @override
+  String get adminAttempts => 'محاولات المحاكاة';
+
+  @override
+  String get adminAverage => 'متوسط الدرجات';
+
+  @override
+  String adminOperationError(String detail) {
+    return 'فشلت العملية: $detail';
+  }
+
+  @override
+  String get adminInvalidId =>
+      'استخدم معرّفًا فريدًا بحروف إنجليزية صغيرة وأرقام وشرطات.';
+
+  @override
+  String get adminIdHelp =>
+      'اختر معرّفًا دائمًا. لا يمكن تغيير المعرّفات وترتيب المختبرات السابقة لحماية سجل الطلاب.';
+
+  @override
+  String get adminTranslationHelp =>
+      'أكمل الإنجليزية والفرنسية والعربية قبل النشر. المهارات والوسوم والإجابات والمعايير مشتركة بين اللغات.';
+
+  @override
+  String get adminOnePerLine => 'عنصر واحد في كل سطر';
+
+  @override
+  String get adminFieldTitle => 'العنوان';
+
+  @override
+  String get adminFieldSummary => 'الملخص';
+
+  @override
+  String get adminFieldDescription => 'الوصف';
+
+  @override
+  String get adminFieldSalary => 'الراتب: مثال 40k – 65k € / year (فرنسا)';
+
+  @override
+  String get adminFieldOutlook => 'الآفاق المهنية';
+
+  @override
+  String get adminFieldEducation => 'التعليم';
+
+  @override
+  String get adminFieldTools => 'الأدوات';
+
+  @override
+  String get adminFieldTags => 'وسوم البحث (بالإنجليزية)';
+
+  @override
+  String get adminFieldInterests => 'اهتمامات التوصيات (بالإنجليزية)';
+
+  @override
+  String get adminFieldTasks => 'المهام اليومية';
+
+  @override
+  String get adminFieldScenario => 'سيناريو المحاكاة';
+
+  @override
+  String get adminSeconds => 'ثوانٍ لكل سؤال (10–3600)';
+
+  @override
+  String get adminWeight => 'وزن الإجابات الصحيحة (0–1)، والباقي للوقت';
+
+  @override
+  String get adminPassMark => 'درجة النجاح (1–100)';
+
+  @override
+  String get adminAddLab => 'إضافة محاكاة';
+
+  @override
+  String get adminAddQuestion => 'إضافة مهمة اختبار';
+
+  @override
+  String get adminFieldIntro => 'مقدمة الدرس';
+
+  @override
+  String get adminFieldTakeaways => 'أهم النتائج';
+
+  @override
+  String get adminLesson => 'درس';
+
+  @override
+  String get adminQuestion => 'مهمة اختبار';
+
+  @override
+  String get adminFieldExplanation => 'الشرح / الملاحظات';
+
+  @override
+  String get adminFieldPoints => 'النقاط الرئيسية';
+
+  @override
+  String get adminFieldExample => 'مثال / تمرين عملي';
+
+  @override
+  String get adminAddLesson => 'إضافة درس';
+
+  @override
+  String get adminFieldPrompt => 'السؤال';
+
+  @override
+  String get adminFieldOptions => 'خيارات الإجابة';
+
+  @override
+  String get adminFieldAnswers => 'أرقام الإجابات الصحيحة، مثل 1,3';
+
+  @override
+  String get adminFieldSkill => 'المهارة المقيمة (بالإنجليزية)';
+
+  @override
   String get appName => 'CareerVerse';
 
   @override

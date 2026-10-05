@@ -44,7 +44,7 @@ class ResultsScreen extends StatelessWidget {
       }
     }
     final next = state.nextLab(lab.id);
-    final match = state.matches.firstWhere((m) => m.career.id == career.id);
+    final match = state.matchForCareer(career);
     final passed = result.passed;
 
     return Scaffold(
@@ -164,14 +164,18 @@ class ResultsScreen extends StatelessWidget {
                     _StatTile(
                       icon: Icons.track_changes,
                       value: '${result.correctness}%',
-                      label: loc.accuracyWeight,
+                      label: loc.accuracyWeightValue(
+                        (result.correctnessWeight * 100).round(),
+                      ),
                       color: purple,
                     ),
                     const SizedBox(width: 10),
                     _StatTile(
                       icon: Icons.speed,
                       value: '${result.timeScore}%',
-                      label: loc.speedWeight,
+                      label: loc.speedWeightValue(
+                        ((1 - result.correctnessWeight) * 100).round(),
+                      ),
                       color: const Color(0xFFF59E0B),
                     ),
                   ],

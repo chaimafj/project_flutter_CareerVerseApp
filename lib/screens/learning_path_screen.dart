@@ -20,15 +20,21 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
+    final loc = context.l10n;
     _careerId ??=
         ModalRoute.of(context)?.settings.arguments as String? ??
-        state.matches.first.career.id;
+        (state.matches.isEmpty ? null : state.matches.first.career.id);
+    if (_careerId == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text(loc.learningPathTitle)),
+        body: Center(child: Text(loc.noCareerFound)),
+      );
+    }
     final career = careerById(_careerId!)!;
     final current = state.currentLab(career);
     final done = state.completedLabs(career);
     final coursesRead = state.completedCourses(career);
     final courseFirst = current != null && !state.isCourseCompleted(current.id);
-    final loc = context.l10n;
 
     return Scaffold(
       backgroundColor: canvas,
@@ -46,7 +52,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: careers
+              children: activeCareers
                   .map(
                     (c) => Padding(
                       padding: const EdgeInsetsDirectional.only(end: 6),

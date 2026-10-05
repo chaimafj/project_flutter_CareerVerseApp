@@ -2,6 +2,7 @@ import '../l10n/courses_ar.dart';
 import '../l10n/courses_fr.dart';
 import '../models/course.dart';
 import 'catalog.dart';
+import 'managed_catalog.dart';
 
 /// Courses that prepare each lab (keyed by lab id). The text exists in each
 /// language with the same structure; examples (code, commands) are shared.
@@ -832,8 +833,13 @@ final _resolved = <String, Course?>{};
 
 /// Course of [labId] in the current catalog language (English fallback),
 /// with the shared examples attached.
-Course? courseFor(String labId) =>
-    _resolved.putIfAbsent('$catalogLanguage/$labId', () {
+Course? courseFor(String labId) {
+  for (final career in managedCareers.values) {
+    if (career.career(catalogLanguage).labs.any((lab) => lab.id == labId)) {
+      return career.course(catalogLanguage, labId);
+    }
+  }
+  return _resolved.putIfAbsent('$catalogLanguage/$labId', () {
       final course =
           coursesByLanguage[catalogLanguage]?[labId] ??
           coursesByLanguage['en']![labId];
@@ -851,3 +857,4 @@ Course? courseFor(String labId) =>
         takeaways: course.takeaways,
       );
     });
+}

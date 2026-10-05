@@ -100,6 +100,306 @@ abstract class AppLocalizations {
     Locale('fr'),
   ];
 
+  /// No description provided for @adminTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Administration'**
+  String get adminTitle;
+
+  /// No description provided for @accuracyWeightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy ({percent}%)'**
+  String accuracyWeightValue(int percent);
+
+  /// No description provided for @speedWeightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed ({percent}%)'**
+  String speedWeightValue(int percent);
+
+  /// No description provided for @adminAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator access is required.'**
+  String get adminAccessDenied;
+
+  /// No description provided for @adminContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Content'**
+  String get adminContent;
+
+  /// No description provided for @adminStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'Students'**
+  String get adminStudents;
+
+  /// No description provided for @adminStatistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get adminStatistics;
+
+  /// No description provided for @adminContentHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage careers, translated courses and quizzes. Changes are published to students through Firestore.'**
+  String get adminContentHelp;
+
+  /// No description provided for @adminAddCareer.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a career'**
+  String get adminAddCareer;
+
+  /// No description provided for @adminArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get adminArchived;
+
+  /// No description provided for @adminPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get adminPublished;
+
+  /// No description provided for @adminArchive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive / restore'**
+  String get adminArchive;
+
+  /// No description provided for @adminArchiveHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Archiving hides this career from discovery and recommendations. Previous results stay accessible. Restoring makes it available again.'**
+  String get adminArchiveHelp;
+
+  /// No description provided for @adminStudentHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit student profiles. This does not create, disable or delete Firebase Auth accounts.'**
+  String get adminStudentHelp;
+
+  /// No description provided for @adminNoStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'No student profiles yet.'**
+  String get adminNoStudents;
+
+  /// No description provided for @adminAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation attempts'**
+  String get adminAttempts;
+
+  /// No description provided for @adminAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average score'**
+  String get adminAverage;
+
+  /// No description provided for @adminOperationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation failed: {detail}'**
+  String adminOperationError(String detail);
+
+  /// No description provided for @adminInvalidId.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a unique ID with lowercase letters, numbers and hyphens.'**
+  String get adminInvalidId;
+
+  /// No description provided for @adminIdHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a permanent career ID. IDs and existing lab order cannot be changed, to preserve student history.'**
+  String get adminIdHelp;
+
+  /// No description provided for @adminTranslationHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete EN, FR and AR before publishing. Skills, tags, answer keys, levels and assessment criteria are shared across languages.'**
+  String get adminTranslationHelp;
+
+  /// No description provided for @adminOnePerLine.
+  ///
+  /// In en, this message translates to:
+  /// **'One item per line'**
+  String get adminOnePerLine;
+
+  /// No description provided for @adminFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get adminFieldTitle;
+
+  /// No description provided for @adminFieldSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get adminFieldSummary;
+
+  /// No description provided for @adminFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get adminFieldDescription;
+
+  /// No description provided for @adminFieldSalary.
+  ///
+  /// In en, this message translates to:
+  /// **'Salary: e.g. 40k – 65k € / year (France)'**
+  String get adminFieldSalary;
+
+  /// No description provided for @adminFieldOutlook.
+  ///
+  /// In en, this message translates to:
+  /// **'Career outlook'**
+  String get adminFieldOutlook;
+
+  /// No description provided for @adminFieldEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get adminFieldEducation;
+
+  /// No description provided for @adminFieldTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get adminFieldTools;
+
+  /// No description provided for @adminFieldTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tags (canonical English)'**
+  String get adminFieldTags;
+
+  /// No description provided for @adminFieldInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendation interests (canonical English)'**
+  String get adminFieldInterests;
+
+  /// No description provided for @adminFieldTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily tasks'**
+  String get adminFieldTasks;
+
+  /// No description provided for @adminFieldScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation scenario'**
+  String get adminFieldScenario;
+
+  /// No description provided for @adminSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Seconds per question (10–3600)'**
+  String get adminSeconds;
+
+  /// No description provided for @adminWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Correctness weight (0–1); remaining weight is time'**
+  String get adminWeight;
+
+  /// No description provided for @adminPassMark.
+  ///
+  /// In en, this message translates to:
+  /// **'Passing score (1–100)'**
+  String get adminPassMark;
+
+  /// No description provided for @adminAddLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a simulation'**
+  String get adminAddLab;
+
+  /// No description provided for @adminAddQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a quiz task'**
+  String get adminAddQuestion;
+
+  /// No description provided for @adminFieldIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Course introduction'**
+  String get adminFieldIntro;
+
+  /// No description provided for @adminFieldTakeaways.
+  ///
+  /// In en, this message translates to:
+  /// **'Course takeaways'**
+  String get adminFieldTakeaways;
+
+  /// No description provided for @adminLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson'**
+  String get adminLesson;
+
+  /// No description provided for @adminQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz task'**
+  String get adminQuestion;
+
+  /// No description provided for @adminFieldExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Explanation / feedback'**
+  String get adminFieldExplanation;
+
+  /// No description provided for @adminFieldPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Key points'**
+  String get adminFieldPoints;
+
+  /// No description provided for @adminFieldExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example / practical exercise'**
+  String get adminFieldExample;
+
+  /// No description provided for @adminAddLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a lesson'**
+  String get adminAddLesson;
+
+  /// No description provided for @adminFieldPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get adminFieldPrompt;
+
+  /// No description provided for @adminFieldOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer choices'**
+  String get adminFieldOptions;
+
+  /// No description provided for @adminFieldAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct choice numbers, e.g. 1,3'**
+  String get adminFieldAnswers;
+
+  /// No description provided for @adminFieldSkill.
+  ///
+  /// In en, this message translates to:
+  /// **'Assessed skill (canonical English)'**
+  String get adminFieldSkill;
+
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:

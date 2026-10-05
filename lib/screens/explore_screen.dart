@@ -240,8 +240,8 @@ class _CareerExplorerScreenState extends State<CareerExplorerScreen> {
         ),
         body: TabBarView(
           children: _categories.values.map((ids) {
-            final list = careers
-                .where((c) => ids.contains(c.id) && _matchesQuery(c))
+            final list = activeCareers
+                .where((c) => (ids == _categories['All'] || ids.contains(c.id)) && _matchesQuery(c))
                 .toList();
             if (list.isEmpty &&
                 _escoResults.isEmpty &&

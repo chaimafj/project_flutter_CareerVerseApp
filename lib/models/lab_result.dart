@@ -9,6 +9,8 @@ class LabResult {
     required this.expectedSeconds,
     required this.skillScores,
     required this.completedAt,
+    this.correctnessWeight = 0.8,
+    this.passMark = 60,
   });
 
   final String id;
@@ -22,6 +24,8 @@ class LabResult {
   /// Percentage of correct answers per skill (0-100).
   final Map<String, int> skillScores;
   final DateTime completedAt;
+  final double correctnessWeight;
+  final int passMark;
 
   int get correctness => total == 0 ? 0 : (correct * 100 / total).round();
 
@@ -33,9 +37,10 @@ class LabResult {
     return (100 - overRatio * 60).clamp(40, 100).round();
   }
 
-  int get overall => (0.8 * correctness + 0.2 * timeScore).round();
+  int get overall =>
+      (correctnessWeight * correctness + (1 - correctnessWeight) * timeScore).round();
 
-  bool get passed => overall >= 60;
+  bool get passed => overall >= passMark;
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -47,6 +52,8 @@ class LabResult {
     'expectedSeconds': expectedSeconds,
     'skillScores': skillScores,
     'completedAt': completedAt.toIso8601String(),
+    'correctnessWeight': correctnessWeight,
+    'passMark': passMark,
   };
 
   factory LabResult.fromJson(Map<String, dynamic> json) => LabResult(
@@ -61,5 +68,7 @@ class LabResult {
       (key, value) => MapEntry(key, value as int),
     ),
     completedAt: DateTime.parse(json['completedAt'] as String),
+    correctnessWeight: (json['correctnessWeight'] as num?)?.toDouble() ?? 0.8,
+    passMark: json['passMark'] as int? ?? 60,
   );
 }

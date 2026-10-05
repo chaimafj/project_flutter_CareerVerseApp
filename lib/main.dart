@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'firebase_options.dart';
 import 'providers/app_state.dart';
+import 'providers/admin_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/salary_currency_provider.dart';
@@ -63,6 +64,14 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => ChatProvider(prefs, service: GeminiChatService()),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => AdminProvider(
+            prefs,
+            enabled: firebaseReady,
+            onCatalogChanged: context.read<AppState>().catalogChanged,
+          ),
         ),
       ],
       child: const CareerVerseApp(),

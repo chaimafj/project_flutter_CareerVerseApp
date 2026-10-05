@@ -163,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     _Mini(
-                      value: '${state.matches.first.score}%',
+                      value: state.matches.isEmpty ? '--' : '${state.matches.first.score}%',
                       label: loc.topMatch,
                     ),
                   ],

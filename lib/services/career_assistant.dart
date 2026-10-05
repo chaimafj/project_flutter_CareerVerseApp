@@ -395,7 +395,10 @@ class LocalAssistant {
         _openCareer(candidate),
       ]);
     }
-    final finished = career ?? careers.first;
+    if (career == null && activeCareers.isEmpty) {
+      return AssistantAnswer(loc.noCareerFound);
+    }
+    final finished = career ?? activeCareers.first;
     return AssistantAnswer(loc.chatLocalPathDone(finished.title), [
       ChatAction(label: loc.chatOpenRecommendations, route: '/recommendations'),
     ]);
@@ -409,8 +412,8 @@ class LocalAssistant {
 
   AssistantAnswer _list() => AssistantAnswer(
     loc.chatLocalCareersList(
-      careers.length,
-      careers.map((career) => career.title).join(', '),
+      activeCareers.length,
+      activeCareers.map((career) => career.title).join(', '),
     ),
     [ChatAction(label: loc.chatOpenRecommendations, route: '/recommendations')],
   );
@@ -481,8 +484,8 @@ class LocalAssistant {
     buffer
       ..writeln()
       ..writeln(
-        'APP FEATURES: each career has a learning path of 3 steps '
-        '(Beginner, Intermediate, Advanced); every step is a course followed '
+        'APP FEATURES: each career has a learning path with course/lab steps '
+        '(Beginner, Intermediate or Advanced); every step is a course followed '
         'by a lab. Advanced labs need Premium (Stripe test mode). The '
         'Recommendations screen ranks careers; the Progress tab shows '
         'scores per skill.',

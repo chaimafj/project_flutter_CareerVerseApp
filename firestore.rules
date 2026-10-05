@@ -2,6 +2,32 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /catalog/{careerId} {
+      allow read: if request.auth != null;
+      allow create, update: if isAdmin()
+        && request.resource.data.id == careerId
+        && request.resource.data.archived is bool
+        && request.resource.data.variants is map
+        && request.resource.data.variants.keys().hasAll(['en', 'fr', 'ar']);
+      // Archive instead: existing result/lab references must remain readable.
+      allow delete: if false;
+    }
+
+    match /{path=**}/results/{resultId} {
+      allow read: if isAdmin();
+    }
+
     // Each user can only read and write their own document and sub-collections
     // (results, recommendations, notifications, transactions).
     match /users/{uid} {
@@ -9,7 +35,14 @@ service cloud.firestore {
         return request.auth != null && request.auth.uid == uid;
       }
 
-      allow read, write: if isOwner();
+      allow read: if isOwner() || isAdmin();
+      allow create, delete: if isOwner();
+      allow update: if isOwner() || (
+        isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['profile', 'updatedAt'])
+        && request.resource.data.profile.email == resource.data.profile.email
+      );
 
       match /{collection}/{docId} {
         allow read: if isOwner();

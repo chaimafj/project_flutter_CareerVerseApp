@@ -14,8 +14,20 @@ class RecommendationsScreen extends StatelessWidget {
     final state = context.watch<AppState>();
     final matches = state.matches;
     final tested = matches.where((m) => m.tested).length;
-    final top = matches.first;
     final loc = context.l10n;
+    if (matches.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: Text(loc.aiRecommendations)),
+        body: Center(
+          child: EmptyState(
+            icon: Icons.work_outline,
+            title: loc.noRecommendationYet,
+            message: loc.noCareerFound,
+          ),
+        ),
+      );
+    }
+    final top = matches.first;
 
     return Scaffold(
       backgroundColor: canvas,

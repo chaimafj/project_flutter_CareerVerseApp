@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../data/catalog.dart';
 import '../l10n/l10n.dart';
 import '../providers/app_state.dart';
+import '../providers/admin_provider.dart';
 import '../widgets/ad_banner.dart';
 import '../widgets/career_ui.dart';
 import '../widgets/user_avatar.dart';
@@ -124,7 +125,9 @@ class HomeDashboard extends StatelessWidget {
     final lastResult = state.results.isEmpty ? null : state.results.first;
     final continueEntry = lastResult != null
         ? state.nextLab(lastResult.labId)
-        : (matches.first.career, matches.first.career.labs.first);
+        : matches.isEmpty
+            ? null
+            : (matches.first.career, matches.first.career.labs.first);
 
     return Column(
       children: [
@@ -331,7 +334,7 @@ class HomeDashboard extends StatelessWidget {
                     color: blue,
                     onTap: () => Navigator.of(context).pushNamed(
                       '/learning-path',
-                      arguments: matches.first.career.id,
+                      arguments: matches.isEmpty ? null : matches.first.career.id,
                     ),
                   ),
                   _QuickTile(
@@ -724,10 +727,16 @@ class CareerDrawer extends StatelessWidget {
                     loc.chatTitle,
                     () => push('/chat'),
                   ),
+                  if (context.watch<AdminProvider>().isAdmin)
+                    _DrawerItem(
+                      Icons.admin_panel_settings_outlined,
+                      loc.adminTitle,
+                      () => push('/admin'),
+                    ),
                   _DrawerItem(
                     Icons.route_outlined,
                     loc.learningPath,
-                    () => push('/learning-path', state.matches.first.career.id),
+                    () => push('/learning-path', state.matches.isEmpty ? null : state.matches.first.career.id),
                   ),
                   _DrawerItem(
                     Icons.insights_outlined,

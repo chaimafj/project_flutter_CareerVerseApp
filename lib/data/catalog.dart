@@ -9,6 +9,12 @@ import 'careers/data_career.dart';
 import 'careers/flutter_career.dart';
 import 'careers/frontend_career.dart';
 import 'careers/java_career.dart';
+import 'managed_catalog.dart';
+
+List<String> interestsForCareer(Career career) =>
+    managedCareers[career.id]?.interests ??
+    careerInterests[career.id] ??
+    career.tags;
 
 /// Career catalog used by the whole app. Salaries are indicative gross yearly
 /// ranges for France (junior → confirmed), based on public job-market surveys.
@@ -885,12 +891,29 @@ String tc(String english) => _translations[_language]?[english] ?? english;
 
 /// Careers in the current language. Ids, skills, levels and tags stay in
 /// English so stored results remain valid whatever the language.
-List<Career> get careers => _localizedCatalogs.putIfAbsent(
+List<Career> get _builtInCareers => _localizedCatalogs.putIfAbsent(
   _language,
   () => _language == 'en'
       ? _careersEn
       : [for (final career in _careersEn) career.translate(tc)],
 );
+
+List<Career> get careers => [
+  for (final career in _builtInCareers)
+    managedCareers[career.id]?.career(
+      _language,
+      icon: career.icon,
+      color: career.color,
+    ) ?? career,
+  for (final career in managedCareers.values)
+    if (!_careersEn.any((original) => original.id == career.id))
+      career.career(_language),
+];
+
+List<Career> get activeCareers =>
+    careers.where((career) => managedCareers[career.id]?.archived != true).toList();
+
+bool isCareerArchived(String id) => managedCareers[id]?.archived == true;
 
 Career? careerById(String id) {
   for (final career in careers) {

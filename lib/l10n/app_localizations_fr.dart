@@ -10,6 +10,170 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get adminTitle => 'Administration';
+
+  @override
+  String accuracyWeightValue(int percent) {
+    return 'Précision ($percent %)';
+  }
+
+  @override
+  String speedWeightValue(int percent) {
+    return 'Rapidité ($percent %)';
+  }
+
+  @override
+  String get adminAccessDenied => 'Un accès administrateur est nécessaire.';
+
+  @override
+  String get adminContent => 'Contenu';
+
+  @override
+  String get adminStudents => 'Étudiants';
+
+  @override
+  String get adminStatistics => 'Statistiques';
+
+  @override
+  String get adminContentHelp =>
+      'Gérez les métiers, cours traduits et QCM. Les modifications sont publiées aux étudiants via Firestore.';
+
+  @override
+  String get adminAddCareer => 'Ajouter un métier';
+
+  @override
+  String get adminArchived => 'Archivé';
+
+  @override
+  String get adminPublished => 'Disponible';
+
+  @override
+  String get adminArchive => 'Archiver / restaurer';
+
+  @override
+  String get adminArchiveHelp =>
+      'L\'archivage masque le métier dans l\'exploration et les recommandations. Les anciens résultats restent accessibles. La restauration le rend à nouveau disponible.';
+
+  @override
+  String get adminStudentHelp =>
+      'Modifiez les profils étudiants. Ceci ne crée, ne désactive et ne supprime pas de comptes Firebase Auth.';
+
+  @override
+  String get adminNoStudents => 'Aucun profil étudiant pour le moment.';
+
+  @override
+  String get adminAttempts => 'Simulations réalisées';
+
+  @override
+  String get adminAverage => 'Score moyen';
+
+  @override
+  String adminOperationError(String detail) {
+    return 'Échec de l\'opération : $detail';
+  }
+
+  @override
+  String get adminInvalidId =>
+      'Utilisez un identifiant unique avec lettres minuscules, chiffres et tirets.';
+
+  @override
+  String get adminIdHelp =>
+      'Choisissez un identifiant permanent. Les identifiants et l\'ordre des labs existants sont conservés pour protéger l\'historique.';
+
+  @override
+  String get adminTranslationHelp =>
+      'Complétez EN, FR et AR avant publication. Compétences, tags, bonnes réponses, niveaux et critères sont partagés entre les langues.';
+
+  @override
+  String get adminOnePerLine => 'Un élément par ligne';
+
+  @override
+  String get adminFieldTitle => 'Titre';
+
+  @override
+  String get adminFieldSummary => 'Résumé';
+
+  @override
+  String get adminFieldDescription => 'Description';
+
+  @override
+  String get adminFieldSalary => 'Salaire : ex. 40k – 65k € / year (France)';
+
+  @override
+  String get adminFieldOutlook => 'Perspectives';
+
+  @override
+  String get adminFieldEducation => 'Formation';
+
+  @override
+  String get adminFieldTools => 'Outils';
+
+  @override
+  String get adminFieldTags => 'Tags de recherche (anglais canonique)';
+
+  @override
+  String get adminFieldInterests =>
+      'Intérêts pour les recommandations (anglais canonique)';
+
+  @override
+  String get adminFieldTasks => 'Tâches quotidiennes';
+
+  @override
+  String get adminFieldScenario => 'Scénario de simulation';
+
+  @override
+  String get adminSeconds => 'Secondes par question (10–3600)';
+
+  @override
+  String get adminWeight =>
+      'Poids des bonnes réponses (0–1) ; le reste mesure le temps';
+
+  @override
+  String get adminPassMark => 'Seuil de réussite (1–100)';
+
+  @override
+  String get adminAddLab => 'Ajouter une simulation';
+
+  @override
+  String get adminAddQuestion => 'Ajouter une tâche QCM';
+
+  @override
+  String get adminFieldIntro => 'Introduction du cours';
+
+  @override
+  String get adminFieldTakeaways => 'À retenir';
+
+  @override
+  String get adminLesson => 'Leçon';
+
+  @override
+  String get adminQuestion => 'Tâche QCM';
+
+  @override
+  String get adminFieldExplanation => 'Explication / feedback';
+
+  @override
+  String get adminFieldPoints => 'Points clés';
+
+  @override
+  String get adminFieldExample => 'Exemple / exercice pratique';
+
+  @override
+  String get adminAddLesson => 'Ajouter une leçon';
+
+  @override
+  String get adminFieldPrompt => 'Question';
+
+  @override
+  String get adminFieldOptions => 'Choix de réponse';
+
+  @override
+  String get adminFieldAnswers => 'Numéros des bonnes réponses, ex. 1,3';
+
+  @override
+  String get adminFieldSkill => 'Compétence évaluée (anglais canonique)';
+
+  @override
   String get appName => 'CareerVerse';
 
   @override

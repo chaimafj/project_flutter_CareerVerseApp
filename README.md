@@ -34,6 +34,88 @@ In Explore, searches of at least two characters query the public [ESCO web servi
 
 ESCO profiles do not contain CareerVerse's simulations or salary fields. The 9 built-in careers therefore keep their existing locally authored courses/labs and detailed salary information; additional ESCO occupations are informational profiles only. If the network is unavailable, the 9 local careers remain searchable and usable, while ESCO search displays an error and retry action.
 
+### Administration (Firestore only, no Cloud Functions)
+
+An authorized account sees **Administration** in the drawer. The named `/admin`
+route and editors also check the role, including when it is revoked during a
+session. Server-side Firestore rules enforce the permissions independently of
+the UI; an email address or a profile field never grants administrator access.
+
+Administrators can:
+
+- List student profiles and edit names, universities, study levels, specialties
+  and biographies, with individual simulation counts and average scores.
+- Add careers or edit existing careers, salary ranges, discovery tags and
+  recommendation interests. Use canonical English interests from the profile
+  choices (for example `Security`, `Networks`, `Data`) for matching.
+- Create simulations and quiz tasks, edit answer choices, correct answers,
+  assessed skills, scenarios and feedback explanations.
+- Author the associated courses: introductions, lessons, key points,
+  practical examples and takeaways.
+- Set seconds per question, correctness/time weighting and passing thresholds.
+  These criteria are used in scoring and saved with each result, so later edits
+  do not recalculate historical results.
+- Archive/restore careers instead of deleting them. Archived careers disappear
+  from discovery, active learning-path choices and recommendations, but their
+  courses, labs and previous results remain resolvable.
+- Consult aggregate simulation counts, student counts and average scores.
+
+Content is stored in `catalog/{careerId}` with complete `en`, `fr` and `ar`
+variants. Canonical IDs, skills, interests, answer keys, levels and assessment
+criteria stay aligned across languages. Each lab needs a course and a valid
+quiz. Existing lab IDs and order cannot be removed or changed from the editor.
+Firestore snapshots update the student catalogue, learning paths, courses and
+chatbot context. Validated content is cached locally for offline use; the
+built-in catalogue remains the baseline. ESCO entries remain informational and
+are not edited here.
+
+**Scope limitation:** this version manages Firestore profiles, not Firebase
+Auth accounts. It does not create, disable or delete login accounts, reset
+another user's password, or grant roles from inside the application. Profile
+changes are picked up by the existing cloud-sync flow on the student's next
+sign-in. Operations use the current Firestore rules and quotas; no paid
+Functions backend is required.
+
+#### Granting or revoking access
+
+1. Register the intended administrator normally in CareerVerse (or use an
+   existing Firebase Auth user).
+2. In Firebase Console → Authentication → Users, copy that user's **UID**.
+3. Using the trusted Firebase Console, create `admins/{UID}` with
+   `active: true` (boolean). Clients, including administrators, cannot write
+   these role documents.
+4. Deploy the rules: `firebase deploy --only firestore:rules --project careerverse-3057`.
+5. Sign in with that account. To revoke access, set `active` to `false` or remove
+   the role document through the console.
+
+For a future public release, use a privileged backend for full Auth-account
+management. Never put an administrator password or a service-account key in
+the Flutter application.
+
+**Texte adapté au cahier des charges :** « L'administrateur gère les profils
+étudiants, ajoute et modifie les métiers, archive les métiers retirés du
+catalogue, crée les simulations et tâches QCM, définit les critères
+d'évaluation, consulte les statistiques et gère les cours et contenus
+pédagogiques en français, anglais et arabe. La gestion des comptes de connexion
+Firebase Auth reste réservée à la console Firebase. »
+
+#### Administration tests
+
+Run `flutter test test/admin_test.dart` for content validation, publication UI,
+role guards, archive/history compatibility and scoring criteria.
+
+The permission tests run only against a local demo Firestore emulator (Node.js,
+Java and the Firebase CLI required):
+
+```powershell
+npm --prefix test\firestore ci
+firebase emulators:exec --only firestore --project demo-careerverse "npm --prefix test\firestore test"
+```
+
+They check role self-promotion, revoked accounts, student privacy, profile-write
+restrictions, catalogue writes/archiving and read-only statistics. The demo
+project cannot access the production Firebase database.
+
 ### Chatbot (Gemini, optional)
 
 1. Create a free API key at [Google AI Studio](https://aistudio.google.com/app/apikey).

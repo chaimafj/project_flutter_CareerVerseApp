@@ -17,7 +17,7 @@ class CareerLabDetailScreen extends StatelessWidget {
     final careerId = ModalRoute.of(context)!.settings.arguments as String;
     final career = careerById(careerId)!;
     final state = context.watch<AppState>();
-    final match = state.matches.firstWhere((m) => m.career.id == career.id);
+    final match = state.matchForCareer(career);
     final current = state.currentLab(career);
     final done = state.completedLabs(career);
     final loc = context.l10n;

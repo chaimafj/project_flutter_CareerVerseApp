@@ -105,6 +105,7 @@ class AppState extends ChangeNotifier {
   String? _localWelcomeId;
 
   bool get isLoggedIn => _profile != null;
+  void catalogChanged() => notifyListeners();
   UserProfile get profile => _profile!;
   List<LabResult> get results => List.unmodifiable(_results);
   List<AppNotification> get notifications => List.unmodifiable(_notifications);
@@ -584,6 +585,8 @@ class AppState extends ChangeNotifier {
       total: lab.questions.length,
       durationSeconds: durationSeconds,
       expectedSeconds: lab.expectedSeconds,
+      correctnessWeight: lab.correctnessWeight,
+      passMark: lab.passMark,
       skillScores: perSkillTotal.map(
         (skill, total) =>
             MapEntry(skill, (perSkillCorrect[skill]! * 100 / total).round()),
@@ -592,8 +595,10 @@ class AppState extends ChangeNotifier {
     );
     _results.insert(0, result);
 
-    final top = matches.first;
-    _history.insert(
+    final recommendations = matches;
+    final top = recommendations.isEmpty ? null : recommendations.first;
+    if (top != null) {
+      _history.insert(
       0,
       RecommendationSnapshot(
         careerId: top.career.id,
@@ -601,6 +606,7 @@ class AppState extends ChangeNotifier {
         createdAt: DateTime.now(),
       ),
     );
+    }
 
     final improved =
         previousBest != null && result.overall > previousBest.overall;
@@ -613,8 +619,8 @@ class AppState extends ChangeNotifier {
           'labId': lab.id,
           'score': result.overall,
           'improved': improved,
-          'topCareerId': top.career.id,
-          'topScore': top.score,
+          if (top != null) 'topCareerId': top.career.id,
+          if (top != null) 'topScore': top.score,
         },
         createdAt: DateTime.now(),
         resultId: result.id,
@@ -626,11 +632,13 @@ class AppState extends ChangeNotifier {
     final uid = _cloudUid;
     if (uid != null) {
       _cloud.saveResult(uid, result.id, _resultCloudJson(result));
-      _cloud.saveRecommendation(
+      if (top != null) {
+        _cloud.saveRecommendation(
         uid,
         _historyId(_history.first),
         _history.first.toJson(),
       );
+      }
       _cloud.saveNotification(
         uid,
         _notifications.first.id,
@@ -721,7 +729,9 @@ class AppState extends ChangeNotifier {
     if (found == null) return null;
     final (career, lab) = found;
     final index = career.labs.indexOf(lab);
-    if (index + 1 < career.labs.length) return (career, career.labs[index + 1]);
+    if (!isCareerArchived(career.id) && index + 1 < career.labs.length) {
+      return (career, career.labs[index + 1]);
+    }
     for (final match in matches) {
       for (final candidate in match.career.labs) {
         if (!isCompleted(candidate.id)) return (match.career, candidate);
@@ -761,9 +771,20 @@ class AppState extends ChangeNotifier {
   /// Career match = 75% lab performance + 25% interest fit when the user
   /// has tested the career, otherwise 60% of the interest fit only.
   List<CareerMatch> get matches {
+    final catalogue = activeCareers;
+    final list = catalogue.map(matchForCareer).toList();
+    list.sort((a, b) {
+      final byScore = b.score.compareTo(a.score);
+      if (byScore != 0) return byScore;
+      return catalogue.indexWhere((c) => c.id == a.career.id)
+          .compareTo(catalogue.indexWhere((c) => c.id == b.career.id));
+    });
+    return list;
+  }
+
+  CareerMatch matchForCareer(Career career) {
     final interests = _profile?.interests.toSet() ?? <String>{};
-    final list = careers.map((career) {
-      final related = careerInterests[career.id] ?? const [];
+      final related = interestsForCareer(career);
       final shared = related.where(interests.contains).toList();
       final interestScore = related.isEmpty
           ? 0
@@ -782,13 +803,6 @@ class AppState extends ChangeNotifier {
         strongestSkill: tested ? _strongestSkill(career) : null,
         sharedInterests: shared,
       );
-    }).toList();
-    list.sort((a, b) {
-      final byScore = b.score.compareTo(a.score);
-      if (byScore != 0) return byScore;
-      return careers.indexOf(a.career).compareTo(careers.indexOf(b.career));
-    });
-    return list;
   }
 
   String? _strongestSkill(Career career) {
