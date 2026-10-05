@@ -8,10 +8,16 @@ const purple = Color(0xFF633BFF);
 const blue = Color(0xFF1677FF);
 
 class CareerLogo extends StatelessWidget {
-  const CareerLogo({super.key, this.compact = false, this.dark = false});
+  const CareerLogo({
+    super.key,
+    this.compact = false,
+    this.dark = false,
+    this.fontFamily,
+  });
 
   final bool compact;
   final bool dark;
+  final String? fontFamily;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +47,7 @@ class CareerLogo extends StatelessWidget {
         RichText(
           text: TextSpan(
             style: TextStyle(
+              fontFamily: fontFamily,
               color: dark ? Colors.white : navy,
               fontWeight: FontWeight.w800,
               fontSize: 25,

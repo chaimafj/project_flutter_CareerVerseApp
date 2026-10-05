@@ -2,6 +2,33 @@
 
 CareerVerse is a Flutter app (Android / iOS) that helps students discover technology careers through interactive career labs. Users take real question-based simulations, get computed scores, and receive career recommendations based on their results and interests.
 
+## App icon
+
+The Android and iOS launcher icons render the same `CareerLogo` widget used
+on the Sign Up screen: the gradient infinity mark and CareerVerse wordmark.
+The Flutter renderer exports sharp 1024px PNGs to `assets/branding/`, with a
+white background for the full icon and a transparent Android foreground.
+The complete logo is centered within the adaptive safe area. The earlier
+supplied screenshot is retained as a reference, not used for rendering.
+
+To regenerate the source artwork on Windows using the installed Flutter SDK:
+
+```powershell
+.\tool\generate_app_icon.ps1
+```
+
+Then regenerate the native resources on any development platform:
+
+```sh
+dart run flutter_launcher_icons
+```
+
+Configuration is in `flutter_launcher_icons.yaml`. Rebuild and reinstall the
+app to see launcher icon changes; hot reload does not update native resources.
+After regeneration, review the Xcode project diff: launcher-icons 0.14.4 can
+incorrectly replace `ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS`
+with `AppIcon`; keep that unrelated setting at `YES`.
+
 ## Features
 
 - **Accounts (Firebase Auth)**: register and log in with email and password, **Google Sign-In**, and password reset by email. The session persists between launches, forms are validated, and Firebase errors are translated (wrong password, email already used, network...). On platforms without Firebase (desktop, tests) the app falls back to local accounts stored on the device (salted SHA-256).

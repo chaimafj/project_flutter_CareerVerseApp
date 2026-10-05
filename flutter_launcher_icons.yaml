@@ -1,0 +1,8 @@
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/branding/careerverse_icon.png
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/branding/careerverse_foreground.png
+  adaptive_icon_foreground_inset: 0
+  remove_alpha_ios: true
