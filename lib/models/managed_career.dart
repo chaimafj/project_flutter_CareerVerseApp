@@ -32,8 +32,12 @@ class ManagedCareer {
       throw const FormatException('Archived must be a boolean');
     }
     final variants = <String, Map<String, dynamic>>{};
+    final rawVariants = object(json['variants']);
+    variants['en'] = object(rawVariants['en']);
     for (final language in ['en', 'fr', 'ar']) {
-      variants[language] = object(object(json['variants'])[language]);
+      if (rawVariants.containsKey(language)) {
+        variants[language] = object(rawVariants[language]);
+      }
     }
     final result = ManagedCareer(
       id: id,
@@ -50,7 +54,10 @@ class ManagedCareer {
     for (final language in variants.keys) {
       final translated = result.career(language);
       if (translated.labs.length != base.labs.length ||
-          !listEquals(strings(variants[language]!['interests']), result.interests) ||
+          !listEquals(
+            strings(variants[language]!['interests']),
+            result.interests,
+          ) ||
           !listEquals(translated.tags, base.tags) ||
           !listEquals(translated.tools, base.tools)) {
         throw const FormatException('Lab IDs must match across languages');
@@ -64,13 +71,21 @@ class ManagedCareer {
             lab.correctnessWeight != original.correctnessWeight ||
             lab.passMark != original.passMark ||
             lab.questions.length != original.questions.length) {
-          throw const FormatException('Lab structure must match across languages');
+          throw const FormatException(
+            'Lab structure must match across languages',
+          );
         }
         for (var q = 0; q < lab.questions.length; q++) {
           if (lab.questions[q].skill != original.questions[q].skill ||
-              lab.questions[q].options.length != original.questions[q].options.length ||
-              !setEquals(lab.questions[q].correct, original.questions[q].correct)) {
-            throw const FormatException('Answer keys and skills must match across languages');
+              lab.questions[q].options.length !=
+                  original.questions[q].options.length ||
+              !setEquals(
+                lab.questions[q].correct,
+                original.questions[q].correct,
+              )) {
+            throw const FormatException(
+              'Answer keys and skills must match across languages',
+            );
           }
         }
         result.course(language, lab.id);
@@ -94,9 +109,7 @@ class ManagedCareer {
       outlook: text(data['outlook']),
       education: text(data['education']),
       dailyTasks: strings(data['dailyTasks']),
-      labs: [
-        for (final raw in list(data['labs'])) _lab(object(raw)),
-      ],
+      labs: [for (final raw in list(data['labs'])) _lab(object(raw))],
     );
   }
 
@@ -118,9 +131,16 @@ class ManagedCareer {
     final seconds = data['secondsPerQuestion'] ?? 60;
     final weight = data['correctnessWeight'] ?? 0.8;
     final passMark = data['passMark'] ?? 60;
-    if (seconds is! int || seconds < 10 || seconds > 3600 ||
-        weight is! num || !weight.isFinite || weight < 0 || weight > 1 ||
-        passMark is! int || passMark < 1 || passMark > 100) {
+    if (seconds is! int ||
+        seconds < 10 ||
+        seconds > 3600 ||
+        weight is! num ||
+        !weight.isFinite ||
+        weight < 0 ||
+        weight > 1 ||
+        passMark is! int ||
+        passMark < 1 ||
+        passMark > 100) {
       throw const FormatException('Invalid assessment criteria');
     }
     return Lab(
@@ -157,7 +177,8 @@ class ManagedCareer {
   }
 
   Course course(String language, String labId) {
-    final data = object(object(variants[language]!['courses'])[labId]);
+    final variant = variants[language] ?? variants['en']!;
+    final data = object(object(variant['courses'])[labId]);
     final sections = [
       for (final raw in list(data['sections']))
         CourseSection(
@@ -193,8 +214,7 @@ class ManagedCareer {
     return value;
   }
 
-  static List<String> strings(Object? value) =>
-      list(value).map(text).toList();
+  static List<String> strings(Object? value) => list(value).map(text).toList();
 
   static Map<String, dynamic> encodeCareer(Career career) => {
     'title': career.title,

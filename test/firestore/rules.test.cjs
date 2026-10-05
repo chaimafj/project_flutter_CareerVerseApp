@@ -86,6 +86,12 @@ test('only active admins may publish or archive catalogue content', async () => 
   await assertSucceeds(updateDoc(doc(db('admin'), 'catalog/test-career'), { archived: true }));
   await assertFails(deleteDoc(doc(db('admin'), 'catalog/test-career')));
   await assertFails(setDoc(doc(db('admin'), 'catalog/invalid'), career));
+  await assertSucceeds(setDoc(doc(db('admin'), 'catalog/english-only'), {
+    id: 'english-only', archived: false, variants: { en: {} },
+  }));
+  await assertFails(setDoc(doc(db('admin'), 'catalog/no-english'), {
+    id: 'no-english', archived: false, variants: { fr: {}, ar: {} },
+  }));
 });
 
 test('admin statistics are read-only; unauthenticated users have no access', async () => {
@@ -93,4 +99,54 @@ test('admin statistics are read-only; unauthenticated users have no access', asy
   await assertFails(updateDoc(doc(db('admin'), 'users/student/results/result'), { score: 100 }));
   await assertFails(getDoc(doc(env.unauthenticatedContext().firestore(), 'catalog/test-career')));
   await assertFails(getDoc(doc(env.unauthenticatedContext().firestore(), 'users/student')));
+});
+
+test('admin can remove student data while preventing resurrection and protecting admins', async () => {
+  const tombstone = { deleted: true, cleanupPending: true };
+  await assertFails(setDoc(doc(db('student'), 'users/student'), tombstone));
+  await assertFails(setDoc(doc(db('revoked'), 'users/student'), tombstone));
+  await assertFails(setDoc(doc(db('admin'), 'users/admin'), tombstone));
+  await env.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), 'users/admin'), { profile });
+    await setDoc(doc(context.firestore(), 'users/student/transactions/payment'), {
+      id: 'payment', amountCents: 499, status: 'succeeded',
+    });
+  });
+  await assertFails(setDoc(doc(db('admin'), 'users/admin'), tombstone));
+  await assertFails(deleteDoc(doc(db('admin'), 'users/student/transactions/payment')));
+  await assertSucceeds(setDoc(doc(db('admin'), 'users/student'), tombstone));
+  await assertSucceeds(deleteDoc(doc(db('admin'), 'users/student/results/result')));
+  await assertSucceeds(deleteDoc(doc(db('admin'), 'users/student/transactions/payment')));
+  await assertSucceeds(getDoc(doc(db('student'), 'users/student')));
+  await assertFails(setDoc(doc(db('student'), 'users/student'), { profile }));
+  await assertFails(deleteDoc(doc(db('student'), 'users/student')));
+  await assertFails(setDoc(doc(db('student'), 'users/student/results/reupload'), { score: 80 }));
+  await assertSucceeds(setDoc(doc(db('admin'), 'users/student'), {
+    deleted: true, cleanupPending: false,
+  }));
+});
+
+test('career deletion markers block reuploads and cannot be restored by clients', async () => {
+  const marker = { id: 'test-career', deleted: true, labIds: ['test-career-1'], cleanupPending: true };
+  await assertFails(setDoc(doc(db('student'), 'catalog/test-career'), marker));
+  await assertSucceeds(setDoc(doc(db('admin'), 'catalog/test-career'), marker));
+  await assertSucceeds(setDoc(doc(db('admin'), 'deletedLabs/test-career-1'), { deleted: true }));
+  await assertFails(setDoc(doc(db('admin'), 'catalog/test-career'), career));
+  await assertFails(deleteDoc(doc(db('student'), 'deletedLabs/test-career-1')));
+  await assertFails(setDoc(doc(db('student'), 'users/student/results/new'), {
+    careerId: 'test-career', labId: 'test-career-1', score: 80,
+  }));
+  await assertFails(setDoc(doc(db('student'), 'users/student/courses/test-career-1'), {
+    labId: 'test-career-1',
+  }));
+  await assertFails(setDoc(doc(db('student'), 'users/student/recommendations/new'), {
+    careerId: 'test-career',
+  }));
+  await assertFails(setDoc(doc(db('student'), 'users/student/notifications/new'), {
+    data: { labId: 'test-career-1' },
+  }));
+  await assertSucceeds(setDoc(doc(db('student'), 'users/student/results/unrelated'), {
+    careerId: 'java', labId: 'java-1', score: 80,
+  }));
+  await assertSucceeds(deleteDoc(doc(db('admin'), 'users/student/results/result')));
 });

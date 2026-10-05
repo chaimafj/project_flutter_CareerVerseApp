@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' show ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/catalog.dart';
+import '../data/managed_catalog.dart';
 import '../models/app_notification.dart';
 import '../models/career.dart';
 import '../models/lab_result.dart';
@@ -105,7 +106,23 @@ class AppState extends ChangeNotifier {
   String? _localWelcomeId;
 
   bool get isLoggedIn => _profile != null;
-  void catalogChanged() => notifyListeners();
+  void catalogChanged() {
+    _pruneDeletedContent();
+    if (_profile != null) unawaited(_saveAll());
+    notifyListeners();
+  }
+
+  void _pruneDeletedContent() {
+    final removedResults = _results.where((r) => deletedCareerIds.contains(r.careerId)
+      || deletedLabIds.contains(r.labId)).map((r) => r.id).toSet();
+    _results.removeWhere((r) => removedResults.contains(r.id));
+    _history.removeWhere((h) => deletedCareerIds.contains(h.careerId));
+    _courses.removeWhere((id, _) => deletedLabIds.contains(id));
+    _notifications.removeWhere((n) =>
+      removedResults.contains(n.resultId) ||
+      deletedLabIds.contains(n.data['labId']) ||
+      deletedCareerIds.contains(n.data['topCareerId']));
+  }
   UserProfile get profile => _profile!;
   List<LabResult> get results => List.unmodifiable(_results);
   List<AppNotification> get notifications => List.unmodifiable(_notifications);
@@ -176,7 +193,7 @@ class AppState extends ChangeNotifier {
     _openLocal(user);
     await _syncWithCloud(notify: false);
     notifyListeners();
-    return null;
+    return _profile == null ? AuthError.noAccount : null;
   }
 
   Future<AuthError?> sendPasswordReset(String email) async {
@@ -233,6 +250,7 @@ class AppState extends ChangeNotifier {
       _profile = profile.photoUrl == null && user.photoUrl != null
           ? profile.copyWith(photoUrl: user.photoUrl)
           : profile;
+      _pruneDeletedContent();
       return;
     }
     final name = user.displayName?.trim();
@@ -255,7 +273,16 @@ class AppState extends ChangeNotifier {
     if (user == null || !_auth.isCloud) return;
     final cloud = await _cloud.load(user.uid);
     if (cloud == null || _user?.uid != user.uid) return;
+    if (cloud.deleted) {
+      debugPrint('Student Firestore data was deleted by an administrator');
+      for (final collection in LocalStore.collections) {
+        await _store.delete(collection, user.email);
+      }
+      await logout();
+      return;
+    }
     _merge(cloud);
+    _pruneDeletedContent();
     await _saveAll();
     _pushToCloud(cloud);
     if (notify) notifyListeners();
@@ -325,6 +352,7 @@ class AppState extends ChangeNotifier {
   /// Uploads local data that [cloud] does not contain (everything when
   /// [cloud] is null).
   void _pushToCloud(CloudSnapshot? cloud) {
+    _pruneDeletedContent();
     final uid = _cloudUid;
     final profile = _profile;
     if (uid == null || profile == null) return;
@@ -562,6 +590,9 @@ class AppState extends ChangeNotifier {
     required List<Set<int>> answers,
     required int durationSeconds,
   }) async {
+    if (deletedCareerIds.contains(career.id) || deletedLabIds.contains(lab.id)) {
+      throw StateError('This career has been permanently deleted');
+    }
     final perSkillTotal = <String, int>{};
     final perSkillCorrect = <String, int>{};
     var correct = 0;

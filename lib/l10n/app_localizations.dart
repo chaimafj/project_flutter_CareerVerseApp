@@ -106,6 +106,36 @@ abstract class AppLocalizations {
   /// **'Administration'**
   String get adminTitle;
 
+  /// No description provided for @adminDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete permanently'**
+  String get adminDelete;
+
+  /// No description provided for @adminDeleteCareerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}, its courses, simulations and all related student results, recommendations and notifications? This cannot be undone.'**
+  String adminDeleteCareerMessage(String name);
+
+  /// No description provided for @adminDeleteStudentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the profile and all Firestore data for {name}, including results and payment records? The Firebase Auth login account remains. Local copies on other devices are not remotely erased. This cannot be undone.'**
+  String adminDeleteStudentMessage(String name);
+
+  /// No description provided for @adminRetryDeletions.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume interrupted deletions'**
+  String get adminRetryDeletions;
+
+  /// No description provided for @adminRetryDeletionsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'If a deletion failed due to connection loss, resume removal of the remaining data. Deleted IDs cannot be reused.'**
+  String get adminRetryDeletionsHelp;
+
   /// No description provided for @accuracyWeightValue.
   ///
   /// In en, this message translates to:
@@ -223,8 +253,14 @@ abstract class AppLocalizations {
   /// No description provided for @adminTranslationHelp.
   ///
   /// In en, this message translates to:
-  /// **'Complete EN, FR and AR before publishing. Skills, tags, answer keys, levels and assessment criteria are shared across languages.'**
+  /// **'Fill in English only to publish. When no French or Arabic translation exists, students see the English content. Existing translations are preserved.'**
   String get adminTranslationHelp;
+
+  /// No description provided for @adminEnglishContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Content in English'**
+  String get adminEnglishContent;
 
   /// No description provided for @adminOnePerLine.
   ///

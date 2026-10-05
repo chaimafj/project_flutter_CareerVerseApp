@@ -41,6 +41,11 @@ route and editors also check the role, including when it is revoked during a
 session. Server-side Firestore rules enforce the permissions independently of
 the UI; an email address or a profile field never grants administrator access.
 
+The administration interface uses themed content/student cards, availability
+badges and responsive statistics panels. It supports dark mode and Arabic RTL.
+The career editor groups simulations into expandable sections, provides a
+English-only authoring and keeps the save action visible at the bottom of the screen.
+
 Administrators can:
 
 - List student profiles and edit names, universities, study levels, specialties
@@ -55,13 +60,24 @@ Administrators can:
 - Set seconds per question, correctness/time weighting and passing thresholds.
   These criteria are used in scoring and saved with each result, so later edits
   do not recalculate historical results.
-- Archive/restore careers instead of deleting them. Archived careers disappear
+- Archive/restore careers when history should be retained. Archived careers disappear
   from discovery, active learning-path choices and recommendations, but their
   courses, labs and previous results remain resolvable.
+- Permanently delete careers and their related student results, course progress,
+  recommendations and notifications after confirmation. This also works for
+  built-in careers. Minimal deletion markers retain only IDs (not educational
+  content), preventing offline clients or the built-in catalogue from restoring
+  the deleted career. These IDs cannot be reused.
+- Delete a student's Firestore profile and all known subcollections, including
+  payment records, after confirmation. Administrator profiles are protected.
+  The Firebase Auth account is not deleted or disabled.
 - Consult aggregate simulation counts, student counts and average scores.
 
-Content is stored in `catalog/{careerId}` with complete `en`, `fr` and `ar`
-variants. Canonical IDs, skills, interests, answer keys, levels and assessment
+Content is stored in `catalog/{careerId}` with a required complete `en` variant.
+New careers are authored in English only; French and Arabic student screens
+use the English career, labs and courses when a translation is absent.
+Existing translated variants are preserved when editing existing careers.
+Canonical IDs, skills, interests, answer keys, levels and assessment
 criteria stay aligned across languages. Each lab needs a course and a valid
 quiz. Existing lab IDs and order cannot be removed or changed from the editor.
 Firestore snapshots update the student catalogue, learning paths, courses and
@@ -77,6 +93,16 @@ sign-in. Operations use the current Firestore rules and quotas; no paid
 Functions backend is required.
 
 #### Granting or revoking access
+
+Deletion runs in batches of at most 400 documents, not one atomic transaction.
+If a network/permission failure interrupts cleanup, the error is displayed and
+**Resume interrupted deletions** retries pending work. Deletion markers block
+re-upload while cleanup is pending. A removed student's Auth login still exists,
+but Firestore writes are blocked; the app clears that device's Hive data and
+signs out when it detects the marker during cloud sync. Other offline devices
+cannot be remotely wiped, and their local copies persist until they synchronize.
+Only the app's known Firestore subcollections are covered; Auth and external
+payment-provider data are not deleted.
 
 1. Register the intended administrator normally in CareerVerse (or use an
    existing Firebase Auth user).

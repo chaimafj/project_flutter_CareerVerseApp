@@ -834,6 +834,7 @@ final _resolved = <String, Course?>{};
 /// Course of [labId] in the current catalog language (English fallback),
 /// with the shared examples attached.
 Course? courseFor(String labId) {
+  if (deletedLabIds.contains(labId)) return null;
   for (final career in managedCareers.values) {
     if (career.career(catalogLanguage).labs.any((lab) => lab.id == labId)) {
       return career.course(catalogLanguage, labId);

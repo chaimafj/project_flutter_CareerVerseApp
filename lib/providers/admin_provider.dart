@@ -137,10 +137,20 @@ class AdminProvider extends ChangeNotifier {
   }
 
   void _applyCatalog(List<dynamic> records) {
+    final deleted = <String>{};
+    final deletedLabs = <String>{};
     final validated = [
       for (final record in records)
-        ManagedCareer.fromJson(ManagedCareer.object(record)),
+        if (ManagedCareer.object(record)['deleted'] != true)
+          ManagedCareer.fromJson(ManagedCareer.object(record)),
     ];
+    for (final record in records) {
+      final data = ManagedCareer.object(record);
+      if (data['deleted'] == true) {
+        deleted.add(ManagedCareer.text(data['id']));
+        deletedLabs.addAll(ManagedCareer.strings(data['labIds']));
+      }
+    }
     final ids = <String>{};
     for (final career in validated) {
       if (!ids.add(career.id)) {
@@ -150,6 +160,12 @@ class AdminProvider extends ChangeNotifier {
     managedCareers
       ..clear()
       ..addEntries(validated.map((career) => MapEntry(career.id, career)));
+    deletedCareerIds
+      ..clear()
+      ..addAll(deleted);
+    deletedLabIds
+      ..clear()
+      ..addAll(deletedLabs);
     _error = null;
     _onCatalogChanged?.call();
     notifyListeners();
@@ -164,6 +180,9 @@ class AdminProvider extends ChangeNotifier {
 
   Future<void> saveCareer(ManagedCareer career) async {
     final db = _authorizedDb();
+    if (deletedCareerIds.contains(career.id)) {
+      throw StateError('This career ID has been permanently deleted');
+    }
     ManagedCareer.fromJson(career.toJson());
     final existing = careerById(career.id);
     if (existing != null) {
@@ -194,6 +213,124 @@ class AdminProvider extends ChangeNotifier {
             ),
           ),
     ];
+  }
+
+  Future<void> _deleteDocuments(
+    Iterable<DocumentReference<Map<String, dynamic>>> references,
+  ) async {
+    final docs = references.toList();
+    for (var start = 0; start < docs.length; start += 400) {
+      final batch = _authorizedDb().batch();
+      for (final ref in docs.skip(start).take(400)) {
+        batch.delete(ref);
+      }
+      await batch.commit();
+    }
+  }
+
+  Future<void> deleteStudent(String uid) async {
+    final db = _authorizedDb();
+    final role = await db.collection('admins').doc(uid).get();
+    if (uid == _uid || role.data()?['active'] == true) {
+      throw StateError('Administrator profiles cannot be deleted');
+    }
+    final user = db.collection('users').doc(uid);
+    // The marker blocks offline clients from uploading the deleted data again.
+    await user.set({'deleted': true, 'cleanupPending': true});
+    for (final name in [
+      'results',
+      'recommendations',
+      'notifications',
+      'transactions',
+      'courses',
+    ]) {
+      final snapshot = await user.collection(name).get();
+      await _deleteDocuments(snapshot.docs.map((doc) => doc.reference));
+    }
+    await user.set({'deleted': true, 'cleanupPending': false});
+  }
+
+  Future<void> deleteCareer(String id) async {
+    final db = _authorizedDb();
+    final document = db.collection('catalog').doc(id);
+    final stored = await document.get();
+    final career = careerById(id);
+    final labs = stored.data()?['deleted'] == true
+        ? ManagedCareer.strings(stored.data()!['labIds'])
+        : career?.labs.map((lab) => lab.id).toList();
+    if (labs == null) throw StateError('Career not found');
+    final batch = db.batch();
+    batch.set(document, {
+      'id': id,
+      'deleted': true,
+      'labIds': labs,
+      'cleanupPending': true,
+    });
+    for (final labId in labs) {
+      batch.set(db.collection('deletedLabs').doc(labId), {'deleted': true});
+    }
+    await batch.commit();
+    final users = await db.collection('users').get();
+    for (final user in users.docs) {
+      final resultIds = <String>{};
+      final refs = <DocumentReference<Map<String, dynamic>>>[];
+      for (final name in [
+        'results',
+        'recommendations',
+        'courses',
+        'notifications',
+      ]) {
+        final records = await user.reference.collection(name).get();
+        for (final record in records.docs) {
+          final data = record.data();
+          if (referencesCareer(data, id, labs.toSet(), resultIds)) {
+            refs.add(record.reference);
+            if (name == 'results') resultIds.add(record.id);
+          }
+        }
+      }
+      await _deleteDocuments(refs);
+    }
+    await document.set({
+      'id': id,
+      'deleted': true,
+      'labIds': labs,
+      'cleanupPending': false,
+    });
+  }
+
+  Future<void> retryDeletions() async {
+    final db = _authorizedDb();
+    final users = await db.collection('users').get();
+    for (final user in users.docs) {
+      if (user.data()['deleted'] == true &&
+          user.data()['cleanupPending'] == true) {
+        await deleteStudent(user.id);
+      }
+    }
+    final catalog = await db.collection('catalog').get();
+    for (final career in catalog.docs) {
+      if (career.data()['deleted'] == true &&
+          career.data()['cleanupPending'] == true) {
+        await deleteCareer(career.id);
+      }
+    }
+  }
+
+  static bool referencesCareer(
+    Map<String, dynamic> data,
+    String careerId,
+    Set<String> labIds,
+    Set<String> resultIds,
+  ) {
+    final notificationData = data['data'] is Map
+        ? ManagedCareer.object(data['data'])
+        : const <String, dynamic>{};
+    return data['careerId'] == careerId ||
+        labIds.contains(data['labId']) ||
+        labIds.contains(notificationData['labId']) ||
+        notificationData['topCareerId'] == careerId ||
+        resultIds.contains(data['resultId']);
   }
 
   Future<void> saveStudent(AdminStudent student) async {

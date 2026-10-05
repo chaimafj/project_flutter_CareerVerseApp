@@ -8,6 +8,7 @@ import '../data/managed_catalog.dart';
 import '../l10n/l10n.dart';
 import '../models/managed_career.dart';
 import '../providers/admin_provider.dart';
+import '../widgets/admin_ui.dart';
 import '../widgets/form_fields.dart';
 import 'admin_career_editor.dart';
 
@@ -28,12 +29,28 @@ class AdminScreen extends StatelessWidget {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(loc.adminTitle),
+          centerTitle: false,
+          title: Text(loc.adminTitle, style: const TextStyle(fontWeight: FontWeight.w800)),
+          actions: [
+            Padding(
+              padding: const EdgeInsetsDirectional.only(end: 16),
+              child: Icon(Icons.verified_user_outlined, color: Theme.of(context).colorScheme.primary),
+            ),
+          ],
           bottom: TabBar(
+            dividerColor: Colors.transparent,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicator: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            indicatorPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+            labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
             tabs: [
-              Tab(text: loc.adminContent),
-              Tab(text: loc.adminStudents),
-              Tab(text: loc.adminStatistics),
+              Tab(icon: const Icon(Icons.dashboard_customize_outlined, size: 20), text: loc.adminContent),
+              Tab(icon: const Icon(Icons.people_outline, size: 20), text: loc.adminStudents),
+              Tab(icon: const Icon(Icons.insights_outlined, size: 20), text: loc.adminStatistics),
             ],
           ),
         ),
@@ -46,7 +63,11 @@ class AdminScreen extends StatelessWidget {
               ),
             const Expanded(
               child: TabBarView(
-                children: [_ContentTab(), _StudentsTab(), _StatisticsTab()],
+                children: [
+                  AdminPageBody(child: _ContentTab()),
+                  AdminPageBody(child: _StudentsTab()),
+                  AdminPageBody(child: _StatisticsTab()),
+                ],
               ),
             ),
           ],
@@ -92,8 +113,26 @@ class _ContentTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(loc.adminContentHelp),
-        const SizedBox(height: 12),
+        AdminSectionHeader(
+          icon: Icons.auto_stories_outlined,
+          title: loc.adminContent,
+          description: loc.adminContentHelp,
+        ),
+        ListTile(
+          title: Text(loc.adminRetryDeletions),
+          subtitle: Text(loc.adminRetryDeletionsHelp),
+          trailing: AdminDeleteButton(
+            message: loc.adminRetryDeletionsHelp,
+            onDelete: admin.retryDeletions,
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(child: AdminMetric(icon: Icons.work_outline, label: loc.adminPublished, value: '${activeCareers.length}')),
+            const SizedBox(width: 12),
+            Expanded(child: AdminMetric(icon: Icons.archive_outlined, label: loc.adminArchived, value: '${careers.length - activeCareers.length}')),
+          ],
+        ),
         FilledButton.icon(
           key: const Key('admin-add-career'),
           onPressed: () => Navigator.of(context).push(
@@ -104,13 +143,37 @@ class _ContentTab extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: Text(loc.adminAddCareer),
         ),
+        const SizedBox(height: 20),
         for (final career in careers)
-          ListTile(
-            title: Text(career.title),
-            subtitle: Text(
-              managedCareers[career.id]?.archived == true
-                  ? loc.adminArchived
-                  : loc.adminPublished,
+          AdminPanel(
+            padding: EdgeInsets.zero,
+            child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            leading: CircleAvatar(
+              backgroundColor: career.color.withValues(alpha: 0.12),
+              child: Icon(career.icon, color: career.color),
+            ),
+            title: Text(career.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                Text('${career.labs.length} ${loc.labs} · ${career.labs.length} ${loc.courseLabel}'),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isCareerArchived(career.id)
+                        ? Theme.of(context).colorScheme.surfaceContainerHighest
+                        : Theme.of(context).colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    isCareerArchived(career.id) ? loc.adminArchived : loc.adminPublished,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+              ],
             ),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
@@ -119,7 +182,15 @@ class _ContentTab extends StatelessWidget {
                 ),
               ),
             ),
-            trailing: IconButton(
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AdminDeleteButton(
+                  key: ValueKey('delete-career-${career.id}'),
+                  message: loc.adminDeleteCareerMessage(career.title),
+                  onDelete: () => admin.deleteCareer(career.id),
+                ),
+                IconButton(
               tooltip: loc.adminArchive,
               icon: Icon(
                 managedCareers[career.id]?.archived == true
@@ -159,6 +230,9 @@ class _ContentTab extends StatelessWidget {
                 }
               },
             ),
+              ],
+            ),
+          ),
           ),
       ],
     );
@@ -209,13 +283,41 @@ class _StudentsTabState extends State<_StudentsTab> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             children: [
-              Text(loc.adminStudentHelp),
-              if (students.isEmpty) Text(loc.adminNoStudents),
+              AdminSectionHeader(
+                icon: Icons.school_outlined,
+                title: '${loc.adminStudents} (${students.length})',
+                description: loc.adminStudentHelp,
+              ),
+              if (students.isEmpty)
+                AdminPanel(child: Column(
+                  children: [
+                    Icon(Icons.people_outline, size: 48, color: Theme.of(context).colorScheme.primary),
+                    const SizedBox(height: 16),
+                    Text(loc.adminNoStudents, textAlign: TextAlign.center),
+                  ],
+                )),
               for (final student in students)
-                ListTile(
-                  title: Text(student.profile.name),
+                AdminPanel(
+                  padding: EdgeInsets.zero,
+                  child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  leading: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                    child: Text(student.profile.initials),
+                  ),
+                  title: Text(student.profile.name, style: const TextStyle(fontWeight: FontWeight.w700)),
                   subtitle: Text(student.profile.email),
-                  trailing: const Icon(Icons.edit_outlined),
+                  trailing: AdminDeleteButton(
+                    key: ValueKey('delete-student-${student.uid}'),
+                    message: loc.adminDeleteStudentMessage(student.profile.name),
+                    onDelete: () async {
+                      await context.read<AdminProvider>().deleteStudent(student.uid);
+                      if (mounted) {
+                        setState(() => _students = context.read<AdminProvider>().students());
+                      }
+                    },
+                  ),
                   onTap: () async {
                     await Navigator.of(context).push(
                       MaterialPageRoute<void>(
@@ -224,6 +326,7 @@ class _StudentsTabState extends State<_StudentsTab> {
                     );
                     if (mounted) setState(() => _students = context.read<AdminProvider>().students());
                   },
+                ),
                 ),
             ],
           ),
@@ -379,18 +482,50 @@ class _StatisticsTabState extends State<_StatisticsTab> {
         return ListView(
           padding: const EdgeInsets.all(24),
           children: [
+            AdminSectionHeader(
+              icon: Icons.insights_outlined,
+              title: loc.adminStatistics,
+              description: loc.adminAverage,
+            ),
             if (snapshot.connectionState != ConnectionState.done)
               const Center(child: CircularProgressIndicator())
             else if (snapshot.hasError)
               Text(loc.adminOperationError('${snapshot.error}'))
             else ...[
-              ListTile(title: Text(loc.adminStudents), trailing: Text('${snapshot.data!.students}')),
-              ListTile(title: Text(loc.adminAttempts), trailing: Text('${snapshot.data!.attempts}')),
-              ListTile(title: Text(loc.adminAverage), trailing: Text(snapshot.data!.average == null ? '--' : '${snapshot.data!.average!.toStringAsFixed(1)}%')),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final width = constraints.maxWidth > 600
+                      ? (constraints.maxWidth - 24) / 3
+                      : constraints.maxWidth;
+                  final stats = snapshot.data!;
+                  return Wrap(
+                    spacing: 12,
+                    children: [
+                      SizedBox(width: width, child: AdminMetric(
+                        icon: Icons.school_outlined,
+                        label: loc.adminStudents,
+                        value: '${stats.students}',
+                      )),
+                      SizedBox(width: width, child: AdminMetric(
+                        icon: Icons.science_outlined,
+                        label: loc.adminAttempts,
+                        value: '${stats.attempts}',
+                      )),
+                      SizedBox(width: width, child: AdminMetric(
+                        icon: Icons.trending_up,
+                        label: loc.adminAverage,
+                        value: stats.average == null ? '--' : '${stats.average!.toStringAsFixed(1)}%',
+                        progress: stats.average == null ? null : stats.average! / 100,
+                      )),
+                    ],
+                  );
+                },
+              ),
             ],
-            TextButton(
+            OutlinedButton.icon(
               onPressed: () => setState(() => _statistics = context.read<AdminProvider>().statistics()),
-              child: Text(loc.escoRetry),
+              icon: const Icon(Icons.refresh),
+              label: Text(loc.escoRetry),
             ),
           ],
         );

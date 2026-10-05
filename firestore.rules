@@ -9,7 +9,7 @@ service cloud.firestore {
     }
 
     match /admins/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
       allow write: if false;
     }
 
@@ -17,10 +17,22 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow create, update: if isAdmin()
         && request.resource.data.id == careerId
+        && (
+          (request.resource.data.get('deleted', false) == true
+            && request.resource.data.labIds is list
+            && request.resource.data.keys().hasOnly(['id', 'deleted', 'labIds', 'cleanupPending']))
+          || (
+        (!exists(/databases/$(database)/documents/catalog/$(careerId))
+          || resource.data.get('deleted', false) != true)
         && request.resource.data.archived is bool
         && request.resource.data.variants is map
-        && request.resource.data.variants.keys().hasAll(['en', 'fr', 'ar']);
+        && request.resource.data.variants.keys().hasAll(['en'])));
       // Archive instead: existing result/lab references must remain readable.
+      allow delete: if false;
+    }
+    match /deletedLabs/{labId} {
+      allow read: if request.auth != null;
+      allow create, update: if isAdmin() && request.resource.data.deleted == true;
       allow delete: if false;
     }
 
@@ -34,24 +46,51 @@ service cloud.firestore {
       function isOwner() {
         return request.auth != null && request.auth.uid == uid;
       }
+      function notDeleted() {
+        return !exists(/databases/$(database)/documents/users/$(uid))
+          || get(/databases/$(database)/documents/users/$(uid)).data.get('deleted', false) != true;
+      }
+      function deletableStudent() {
+        return isAdmin() && request.auth.uid != uid
+          && (!exists(/databases/$(database)/documents/admins/$(uid))
+            || get(/databases/$(database)/documents/admins/$(uid)).data.active != true);
+      }
+      function validContent(data) {
+        return (!('careerId' in data)
+            || !exists(/databases/$(database)/documents/catalog/$(data.careerId))
+            || get(/databases/$(database)/documents/catalog/$(data.careerId)).data.get('deleted', false) != true)
+          && (!('labId' in data)
+            || !exists(/databases/$(database)/documents/deletedLabs/$(data.labId)));
+      }
 
       allow read: if isOwner() || isAdmin();
-      allow create, delete: if isOwner();
-      allow update: if isOwner() || (
+      allow create: if isOwner() && request.resource.data.get('deleted', false) != true;
+      allow delete: if isOwner() && notDeleted();
+      allow update: if (isOwner() && notDeleted() && request.resource.data.get('deleted', false) != true) || (
+        deletableStudent() && request.resource.data.deleted == true
+          && request.resource.data.keys().hasOnly(['deleted', 'cleanupPending'])
+      ) || (
         isAdmin()
+        && notDeleted()
         && request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['profile', 'updatedAt'])
         && request.resource.data.profile.email == resource.data.profile.email
       );
 
       match /{collection}/{docId} {
-        allow read: if isOwner();
-        allow write: if isOwner() && collection != 'transactions';
+        allow read: if (isOwner() && notDeleted()) || isAdmin();
+        allow create, update: if isOwner() && notDeleted()
+          && collection != 'transactions' && validContent(request.resource.data)
+          && (collection != 'notifications'
+            || validContent(request.resource.data.get('data', {})));
+        allow delete: if (isOwner() && notDeleted() && collection != 'transactions')
+          || (isAdmin() && collection in ['results', 'recommendations', 'notifications', 'courses'])
+          || (deletableStudent() && !notDeleted());
       }
 
       // Payment records are write-once: they cannot be edited or deleted.
       match /transactions/{paymentId} {
-        allow create: if isOwner()
+        allow create: if isOwner() && notDeleted()
           && request.resource.data.id == paymentId
           && request.resource.data.amountCents is int
           && request.resource.data.amountCents > 0

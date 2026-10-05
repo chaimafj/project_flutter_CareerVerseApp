@@ -30,7 +30,10 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
         body: Center(child: Text(loc.noCareerFound)),
       );
     }
-    final career = careerById(_careerId!)!;
+    final career = careerById(_careerId!);
+    if (career == null) {
+      return Scaffold(appBar: AppBar(), body: Center(child: Text(loc.noCareerFound)));
+    }
     final current = state.currentLab(career);
     final done = state.completedLabs(career);
     final coursesRead = state.completedCourses(career);

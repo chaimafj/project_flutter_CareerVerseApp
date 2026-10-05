@@ -12,9 +12,11 @@ class CloudSnapshot {
     this.notifications = const [],
     this.transactions = const [],
     this.courses = const [],
+    this.deleted = false,
   });
 
   final Map<String, dynamic>? profile;
+  final bool deleted;
   final List<Map<String, dynamic>> results;
   final List<Map<String, dynamic>> recommendations;
   final List<Map<String, dynamic>> notifications;
@@ -107,8 +109,11 @@ class FirestoreService implements CloudStore {
   Future<CloudSnapshot?> load(String uid) async {
     try {
       final user = _user(uid);
+      final profileDoc = await user.get().timeout(const Duration(seconds: 8));
+      if (profileDoc.data()?['deleted'] == true) {
+        return const CloudSnapshot(deleted: true);
+      }
       final docs = await Future.wait([
-        user.get(),
         user.collection(results).get(),
         user.collection(recommendations).get(),
         user.collection(notifications).get(),
@@ -120,15 +125,14 @@ class FirestoreService implements CloudStore {
             in (snapshot as QuerySnapshot<Map<String, dynamic>>).docs)
           doc.data(),
       ];
-      final profileDoc = docs[0] as DocumentSnapshot<Map<String, dynamic>>;
       final profile = profileDoc.data()?['profile'];
       return CloudSnapshot(
         profile: profile is Map ? Map<String, dynamic>.from(profile) : null,
-        results: data(docs[1]),
-        recommendations: data(docs[2]),
-        notifications: data(docs[3]),
-        transactions: data(docs[4]),
-        courses: data(docs[5]),
+        results: data(docs[0]),
+        recommendations: data(docs[1]),
+        notifications: data(docs[2]),
+        transactions: data(docs[3]),
+        courses: data(docs[4]),
       );
     } catch (e) {
       debugPrint('Firestore load failed: $e');

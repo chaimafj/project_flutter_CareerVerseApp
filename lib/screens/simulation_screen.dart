@@ -22,6 +22,7 @@ class _SimulationScreenState extends State<SimulationScreen> {
   late final Career _career;
   late final Lab _lab;
   bool _initialized = false;
+  bool _unavailable = false;
 
   /// Advanced lab opened without Premium: show the paywall instead.
   bool _locked = false;
@@ -39,7 +40,12 @@ class _SimulationScreenState extends State<SimulationScreen> {
     super.didChangeDependencies();
     if (_initialized) return;
     final labId = ModalRoute.of(context)!.settings.arguments as String;
-    final found = findLab(labId)!;
+    final found = findLab(labId);
+    if (found == null) {
+      _initialized = true;
+      _unavailable = true;
+      return;
+    }
     _career = found.$1;
     _lab = found.$2;
     _initialized = true;
@@ -83,6 +89,10 @@ class _SimulationScreenState extends State<SimulationScreen> {
   }
 
   Future<void> _next() async {
+    if (findLab(_lab.id) == null) {
+      setState(() => _unavailable = true);
+      return;
+    }
     if (!_isLast) {
       setState(() {
         _index++;
@@ -190,6 +200,9 @@ class _SimulationScreenState extends State<SimulationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_unavailable) {
+      return Scaffold(appBar: AppBar(), body: Center(child: Text(context.l10n.noCareerFound)));
+    }
     if (_locked) return _buildLocked(context);
     final loc = context.l10n;
     final total = _lab.questions.length;

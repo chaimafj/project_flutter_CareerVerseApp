@@ -15,7 +15,13 @@ class CareerLabDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final careerId = ModalRoute.of(context)!.settings.arguments as String;
-    final career = careerById(careerId)!;
+    final career = careerById(careerId);
+    if (career == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(child: Text(context.l10n.noCareerFound)),
+      );
+    }
     final state = context.watch<AppState>();
     final match = state.matchForCareer(career);
     final current = state.currentLab(career);

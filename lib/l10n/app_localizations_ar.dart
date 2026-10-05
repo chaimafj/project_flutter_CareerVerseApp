@@ -13,6 +13,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adminTitle => 'الإدارة';
 
   @override
+  String get adminDelete => 'حذف نهائي';
+
+  @override
+  String adminDeleteCareerMessage(String name) {
+    return 'حذف $name ودروسها ومحاكاتها وجميع النتائج والتوصيات والإشعارات المرتبطة بها؟ لا يمكن التراجع عن هذا الإجراء.';
+  }
+
+  @override
+  String adminDeleteStudentMessage(String name) {
+    return 'حذف ملف $name وجميع بيانات Firestore بما فيها النتائج والمدفوعات؟ يبقى حساب Firebase Auth موجودًا. لا تُمسح النسخ المحلية على الأجهزة الأخرى عن بُعد. لا يمكن التراجع عن هذا الإجراء.';
+  }
+
+  @override
+  String get adminRetryDeletions => 'استئناف عمليات الحذف المنقطعة';
+
+  @override
+  String get adminRetryDeletionsHelp =>
+      'إذا انقطعت عملية الحذف بسبب الاتصال، استأنف إزالة البيانات المتبقية. لا يمكن إعادة استخدام المعرّفات المحذوفة.';
+
+  @override
   String accuracyWeightValue(int percent) {
     return 'الدقة ($percent%)';
   }
@@ -82,7 +102,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adminTranslationHelp =>
-      'أكمل الإنجليزية والفرنسية والعربية قبل النشر. المهارات والوسوم والإجابات والمعايير مشتركة بين اللغات.';
+      'املأ المحتوى الإنجليزي فقط للنشر. عند عدم توفر ترجمة فرنسية أو عربية، يُعرض المحتوى الإنجليزي للطلاب. تُحفظ الترجمات الموجودة.';
+
+  @override
+  String get adminEnglishContent => 'المحتوى بالإنجليزية';
 
   @override
   String get adminOnePerLine => 'عنصر واحد في كل سطر';

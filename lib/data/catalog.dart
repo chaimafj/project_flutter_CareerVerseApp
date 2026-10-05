@@ -900,13 +900,14 @@ List<Career> get _builtInCareers => _localizedCatalogs.putIfAbsent(
 
 List<Career> get careers => [
   for (final career in _builtInCareers)
+    if (!deletedCareerIds.contains(career.id))
     managedCareers[career.id]?.career(
       _language,
       icon: career.icon,
       color: career.color,
     ) ?? career,
   for (final career in managedCareers.values)
-    if (!_careersEn.any((original) => original.id == career.id))
+    if (!deletedCareerIds.contains(career.id) && !_careersEn.any((original) => original.id == career.id))
       career.career(_language),
 ];
 

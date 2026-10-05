@@ -29,7 +29,11 @@ class ResultsScreen extends StatelessWidget {
       );
     }
     final loc = context.l10n;
-    final (career, lab) = findLab(result.labId)!;
+    final found = findLab(result.labId);
+    if (found == null) {
+      return Scaffold(appBar: AppBar(), body: Center(child: Text(loc.resultNotFound)));
+    }
+    final (career, lab) = found;
     final previous = state
         .resultsForLab(lab.id)
         .where(
