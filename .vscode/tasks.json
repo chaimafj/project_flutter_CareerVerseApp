@@ -1,0 +1,78 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CareerVerse Android emulator",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"run",
+				"-d",
+				"emulator-5554",
+				"--dart-define-from-file=stripe_keys.json"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "CareerVerse build Android icon",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"build",
+				"apk",
+				"--debug",
+				"--dart-define-from-file=stripe_keys.json"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "CareerVerse Web frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"CareerVerseAppWeb\\frontend",
+				"start"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "CareerVerse Web Django API",
+			"type": "shell",
+			"command": "Set-Location .\\CareerVerseAppWeb\\backend; . .\\local-settings.ps1; & .\\.venv\\Scripts\\python.exe manage.py runserver 127.0.0.1:8000 --noreload",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "CareerVerse Web Push worker",
+			"type": "shell",
+			"command": "Set-Location .\\CareerVerseAppWeb\\backend; . .\\local-settings.ps1; while ($true) { & .\\.venv\\Scripts\\python.exe manage.py send_push_notifications --limit 100; if ($LASTEXITCODE -ne 0) { throw 'Push delivery worker failed' }; Start-Sleep -Seconds 30 }",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "CareerVerse Stripe test webhook",
+			"type": "shell",
+			"command": "$stripe = Join-Path $env:LOCALAPPDATA Microsoft\\WinGet\\Links\\stripe.exe; & $stripe listen --events checkout.session.completed,checkout.session.async_payment_succeeded --forward-to http://127.0.0.1:8000/api/billing/webhook/ 2>&1 | ForEach-Object { ([string]$_) -replace 'whsec_[A-Za-z0-9]+', '[hidden signing secret]' }",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "CareerVerse Samsung A21s USB",
+			"type": "shell",
+			"command": "flutter",
+			"args": [
+				"run",
+				"-d",
+				"R58N91PD3EA",
+				"--dart-define-from-file=stripe_keys.json"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
