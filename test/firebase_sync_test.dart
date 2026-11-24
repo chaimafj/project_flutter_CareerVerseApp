@@ -1,11 +1,11 @@
 import 'package:careerverseapp/app.dart';
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/providers/app_state.dart';
-import 'package:careerverseapp/services/auth_service.dart';
-import 'package:careerverseapp/services/firestore_service.dart';
-import 'package:careerverseapp/services/local_store.dart';
-import 'package:careerverseapp/services/notification_service.dart';
-import 'package:careerverseapp/screens/results_screen.dart';
+import 'package:careerverseapp/services/auth/auth_service.dart';
+import 'package:careerverseapp/services/auth/firestore_service.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
+import 'package:careerverseapp/services/notifications/notification_service.dart';
+import 'package:careerverseapp/features/learning/results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

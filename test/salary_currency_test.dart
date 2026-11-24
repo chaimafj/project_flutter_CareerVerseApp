@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:careerverseapp/l10n/app_localizations.dart';
+import 'package:careerverseapp/l10n/generated/app_localizations.dart';
 import 'package:careerverseapp/models/user_profile.dart';
 import 'package:careerverseapp/providers/salary_currency_provider.dart';
-import 'package:careerverseapp/services/exchange_rate_service.dart';
+import 'package:careerverseapp/services/payments/exchange_rate_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;

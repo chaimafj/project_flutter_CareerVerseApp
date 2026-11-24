@@ -1,5 +1,5 @@
-import '../l10n/courses_ar.dart';
-import '../l10n/courses_fr.dart';
+import '../l10n/catalog/courses_ar.dart';
+import '../l10n/catalog/courses_fr.dart';
 import '../models/course.dart';
 import 'catalog.dart';
 import 'managed_catalog.dart';

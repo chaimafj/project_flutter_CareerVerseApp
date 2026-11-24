@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../l10n/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 
 class AppValidators {
   static FormFieldValidator<String> name(AppLocalizations l) => (value) {

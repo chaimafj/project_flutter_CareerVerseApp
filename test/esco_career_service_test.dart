@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:careerverseapp/l10n/app_localizations.dart';
+import 'package:careerverseapp/l10n/generated/app_localizations.dart';
 import 'package:careerverseapp/models/esco_occupation.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/providers/salary_currency_provider.dart';
-import 'package:careerverseapp/screens/esco_career_detail_screen.dart';
-import 'package:careerverseapp/screens/explore_screen.dart';
-import 'package:careerverseapp/services/esco_career_service.dart';
-import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/features/learning/esco_career_detail_screen.dart';
+import 'package:careerverseapp/features/learning/explore_screen.dart';
+import 'package:careerverseapp/services/catalog/esco_career_service.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;

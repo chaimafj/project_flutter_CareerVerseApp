@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:careerverseapp/data/catalog.dart';
-import 'package:careerverseapp/l10n/app_localizations.dart';
+import 'package:careerverseapp/l10n/generated/app_localizations.dart';
 import 'package:careerverseapp/models/chat_message.dart';
 import 'package:careerverseapp/providers/app_state.dart';
 import 'package:careerverseapp/providers/chat_provider.dart';
-import 'package:careerverseapp/services/career_assistant.dart';
-import 'package:careerverseapp/services/chat_service.dart';
-import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/services/ai/career_assistant.dart';
+import 'package:careerverseapp/services/ai/chat_service.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;

@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/salary_countries.dart';
-import '../l10n/app_localizations.dart';
-import '../services/exchange_rate_service.dart';
+import '../l10n/generated/app_localizations.dart';
+import '../services/payments/exchange_rate_service.dart';
 
 class SalaryCurrencyProvider extends ChangeNotifier {
   SalaryCurrencyProvider(

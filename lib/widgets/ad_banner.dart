@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-import '../services/ad_service.dart';
+import '../services/ads/ad_service.dart';
 
 /// Anchored adaptive AdMob banner (test unit). Takes no space until an ad
 /// is loaded, and nothing at all when ads are disabled.

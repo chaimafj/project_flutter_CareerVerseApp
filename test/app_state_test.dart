@@ -1,7 +1,7 @@
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/models/lab_result.dart';
 import 'package:careerverseapp/providers/app_state.dart';
-import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

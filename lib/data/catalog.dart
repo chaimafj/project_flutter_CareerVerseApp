@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/content_ar.dart';
-import '../l10n/content_fr.dart';
+import '../l10n/catalog/content_ar.dart';
+import '../l10n/catalog/content_fr.dart';
 import '../models/career.dart';
 import '../models/career_pack.dart';
 import 'careers/ai_career.dart';

@@ -13,12 +13,12 @@ import '../models/career.dart';
 import '../models/lab_result.dart';
 import '../models/payment_transaction.dart';
 import '../models/user_profile.dart';
-import '../services/auth_service.dart';
-import '../services/firestore_service.dart';
-import '../services/local_store.dart';
-import '../services/payment_service.dart';
+import '../services/auth/auth_service.dart';
+import '../services/auth/firestore_service.dart';
+import '../services/auth/local_store.dart';
+import '../services/payments/payment_service.dart';
 
-export '../services/auth_service.dart' show AuthError;
+export '../services/auth/auth_service.dart' show AuthError;
 
 class CareerMatch {
   const CareerMatch({

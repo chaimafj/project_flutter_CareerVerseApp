@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 import '../data/catalog.dart';
 import '../models/app_notification.dart';
 import '../providers/app_state.dart';
-import '../services/payment_service.dart';
-import 'app_localizations.dart';
+import '../services/payments/payment_service.dart';
+import 'generated/app_localizations.dart';
 
-export 'app_localizations.dart';
+export 'generated/app_localizations.dart';
 
 extension L10nContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);

@@ -13,13 +13,13 @@ import 'providers/chat_provider.dart';
 import 'providers/locale_provider.dart';
 import 'providers/salary_currency_provider.dart';
 import 'providers/theme_provider.dart';
-import 'services/ad_service.dart';
-import 'services/auth_service.dart';
-import 'services/chat_service.dart';
-import 'services/firestore_service.dart';
-import 'services/local_store.dart';
-import 'services/notification_service.dart';
-import 'services/payment_service.dart';
+import 'services/ads/ad_service.dart';
+import 'services/auth/auth_service.dart';
+import 'services/ai/chat_service.dart';
+import 'services/auth/firestore_service.dart';
+import 'services/auth/local_store.dart';
+import 'services/notifications/notification_service.dart';
+import 'services/payments/payment_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

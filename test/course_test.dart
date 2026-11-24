@@ -1,8 +1,8 @@
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/data/courses.dart';
 import 'package:careerverseapp/providers/app_state.dart';
-import 'package:careerverseapp/screens/learning_path_screen.dart';
-import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/features/learning/learning_path_screen.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';

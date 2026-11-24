@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../l10n/app_localizations.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../models/chat_message.dart';
-import '../services/career_assistant.dart';
-import '../services/chat_service.dart';
+import '../services/ai/career_assistant.dart';
+import '../services/ai/chat_service.dart';
 import 'app_state.dart';
 
 /// Conversation with the career assistant, kept on the device per user.

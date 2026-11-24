@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:careerverseapp/data/catalog.dart';
 import 'package:careerverseapp/providers/app_state.dart';
-import 'package:careerverseapp/services/ad_service.dart';
-import 'package:careerverseapp/services/local_store.dart';
+import 'package:careerverseapp/services/ads/ad_service.dart';
+import 'package:careerverseapp/services/auth/local_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
